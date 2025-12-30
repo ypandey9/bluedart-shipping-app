@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
@@ -39,6 +39,15 @@ export default function Home() {
     itemQty: "1",
     itemValue: "",
   });
+
+  const [waybills, setWaybills] = useState<any[]>([]);
+
+useEffect(() => {
+  fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bluedart/waybills`)
+    .then(res => res.json())
+    .then(setWaybills);
+}, []);
+
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -268,6 +277,36 @@ export default function Home() {
           ❌ {error}
         </div>
       )}
+
+      <table className="mt-8 w-full border">
+  <thead>
+    <tr className="bg-gray-100">
+      <th className="p-2 border">AWB</th>
+      <th className="p-2 border">Reference</th>
+      <th className="p-2 border">Date</th>
+      <th className="p-2 border">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {waybills.map(w => (
+      <tr key={w.awbNo}>
+        <td className="border p-2">{w.awbNo}</td>
+        <td className="border p-2">{w.creditReferenceNo}</td>
+        <td className="border p-2">
+          {new Date(w.createdAt).toLocaleDateString()}
+        </td>
+        <td className="border p-2">
+          <a
+            href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bluedart/waybill/${w.awbNo}/pdf`}
+            className="text-blue-600 underline"
+          >
+            Download PDF
+          </a>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
     </main>
   );
 }
