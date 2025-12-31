@@ -8,8 +8,10 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import org.springframework.stereotype.Service;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,54 +24,86 @@ public class WaybillPdfService {
             DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     @SuppressWarnings("unchecked")
-    public byte[] generatePdf(WaybillRecord record) throws Exception {
+    public byte[] generatePdf(WaybillRecord record,String size) throws Exception {
 
-        Document document = new Document(PageSize.A4, 20, 20, 20, 20);
+        //Document document = new Document(PageSize.A4, 20, 20, 20, 20);
+        Document document = createDocument(size);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         PdfWriter.getInstance(document, out);
         document.open();
 
-        /* ---------- Fonts ---------- */
-        Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 11);
-        Font sectionFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 9);
-        Font labelFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8);
-        Font valueFont = FontFactory.getFont(FontFactory.HELVETICA, 8);
+        if("LABEL_4X6".equals(size)){
+            //Single label
+            document.add(createWaybillBlock(record));
+        } else {
+            //A4 with 4 labels
+           PdfPTable grid = new PdfPTable(2);
+           grid.setWidthPercentage(100);
+           grid.setWidths(new float[]{1f, 1f});
 
-        /* ---------- Parent Grid (2 x 2) ---------- */
-        PdfPTable grid = new PdfPTable(2);
-        grid.setWidthPercentage(100);
-        grid.setWidths(new float[]{1f, 1f});
+           for (int i = 0; i < 4; i++) {
+               PdfPCell cell = new PdfPCell(createWaybillBlock(record));
+               cell.setPadding(6);
+               cell.setBorderWidth(0.5f);
+               grid.addCell(cell);
+           } 
 
-        for (int i = 0; i < 4; i++) {
-            PdfPTable waybill = createWaybillBlock(
-                    record, titleFont, sectionFont, labelFont, valueFont
-            );
-
-            PdfPCell cell = new PdfPCell(waybill);
-            cell.setPadding(6);
-            cell.setBorderWidth(0.5f);
-            cell.setBorderColor(BaseColor.GRAY);
-            grid.addCell(cell);
+              document.add(grid);   
         }
-
-        document.add(grid);
         document.close();
         return out.toByteArray();
     }
+
+  
+
+    //     /* ---------- Parent Grid (2 x 2) ---------- */
+    //     PdfPTable grid = new PdfPTable(2);
+    //     grid.setWidthPercentage(100);
+    //     grid.setWidths(new float[]{1f, 1f});
+
+    //     for (int i = 0; i < 4; i++) {
+    //         PdfPTable waybill = createWaybillBlock(
+    //                 record, titleFont, sectionFont, labelFont, valueFont
+    //         );
+
+    //         PdfPCell cell = new PdfPCell(waybill);
+    //         cell.setPadding(6);
+    //         cell.setBorderWidth(0.5f);
+    //         cell.setBorderColor(BaseColor.GRAY);
+    //         grid.addCell(cell);
+    //     }
+
+    //     document.add(grid);
+    //     document.close();
+    //     return out.toByteArray();
+    // }
 
     /* ================= ONE WAYBILL COPY ================= */
 
     @SuppressWarnings("unchecked")
     private PdfPTable createWaybillBlock(
-            WaybillRecord record,
-            Font titleFont,
-            Font sectionFont,
-            Font labelFont,
-            Font valueFont
+            WaybillRecord record
     ) throws Exception {
+
+              /* ---------- Fonts ---------- */
+        Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 11);
+        Font sectionFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 9);
+        Font labelFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8);
+        Font valueFont = FontFactory.getFont(FontFactory.HELVETICA, 8);
 
         PdfPTable block = new PdfPTable(1);
         block.setWidthPercentage(100);
+
+        /* ---------- Logo ---------- */
+
+        Image logo=loadLogo();
+        logo.scaleToFit(100, 40);
+        logo.setAlignment(Image.ALIGN_CENTER);
+
+        PdfPCell logoCell = new PdfPCell(logo);
+        logoCell.setBorder(Rectangle.NO_BORDER);
+        logoCell.setPadding(4);
+        block.addCell(logoCell);
 
         /* ---------- Title ---------- */
         PdfPCell titleCell = new PdfPCell(
@@ -225,5 +259,19 @@ private String getItemName(Map<String, Object> services) {
         if (map == null) return "NA";
         Object val = map.get(key);
         return val == null ? "NA" : val.toString();
+    }
+
+    private Image loadLogo() throws Exception {
+        // Load logo from resources
+        InputStream is=new ClassPathResource("static/logo.png").getInputStream();
+        return Image.getInstance(is.readAllBytes());
+    }
+
+    private Document createDocument(String size) {
+        if("LABEL_4X6".equals(size)){
+            return new Document(new Rectangle(288f, 432f), 8, 8, 8, 8); // 4x6 inches in points
+        } else {
+            return new Document(PageSize.A4, 20, 20, 20, 20);
+        }
     }
 }

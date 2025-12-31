@@ -6,6 +6,9 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [awb, setAwb] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [labelSize, setLabelSize] = useState<Record<string, string>>({});
+
+
 
   const [form, setForm] = useState({
     // Shipper
@@ -257,7 +260,7 @@ useEffect(() => {
         <input name="declaredValue" placeholder="Declared Value" onChange={handleChange} />
         <input name="itemName" placeholder="Item Name" onChange={handleChange} />
       </div>
-
+       
       <button
         onClick={generateWaybill}
         disabled={loading}
@@ -285,6 +288,7 @@ useEffect(() => {
       <th className="p-2 border">Reference</th>
       <th className="p-2 border">Date</th>
       <th className="p-2 border">Action</th>
+      <th className="p-2 border">Size</th>
     </tr>
   </thead>
   <tbody>
@@ -297,11 +301,20 @@ useEffect(() => {
         </td>
         <td className="border p-2">
           <a
-            href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bluedart/waybill/${w.awbNo}/pdf`}
+            href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bluedart/waybill/${w.awbNo}/pdf?size=${labelSize[w.awbNo] || "A4"}`}
             className="text-blue-600 underline"
           >
             Download PDF
           </a>
+        </td>
+        <td>
+          <select 
+      value={labelSize[w.awbNo] || "A4"} 
+      onChange={e => setLabelSize(prev=>({...prev,[w.awbNo]:e.target.value}))} 
+      className="mt-6 border p-2 rounded">
+        <option value="A4">lbl-A4</option>
+        <option value="LABEL_4X6">lbl-4x6</option>
+      </select>
         </td>
       </tr>
     ))}

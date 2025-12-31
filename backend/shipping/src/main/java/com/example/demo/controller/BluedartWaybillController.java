@@ -43,14 +43,14 @@ public Map<String, Object> createWaybill(@RequestBody Map<String, Object> reques
 
 
 @GetMapping("/waybill/{awb}/pdf")
-public ResponseEntity<byte[]> downloadPdf(@PathVariable String awb) throws Exception {
+public ResponseEntity<byte[]> downloadPdf(@PathVariable String awb, @RequestParam(defaultValue = "A4") String size) throws Exception {
 
     WaybillRecord record = repository.findAll().stream()
             .filter(w -> w.getAwbNo().equals(awb))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Waybill not found"));
 
-    byte[] pdf = pdfService.generatePdf(record);
+    byte[] pdf = pdfService.generatePdf(record, size);
 
     return ResponseEntity.ok()
             .header(HttpHeaders.CONTENT_DISPOSITION,
