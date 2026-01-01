@@ -55,29 +55,6 @@ public class WaybillPdfService {
     }
 
   
-
-    //     /* ---------- Parent Grid (2 x 2) ---------- */
-    //     PdfPTable grid = new PdfPTable(2);
-    //     grid.setWidthPercentage(100);
-    //     grid.setWidths(new float[]{1f, 1f});
-
-    //     for (int i = 0; i < 4; i++) {
-    //         PdfPTable waybill = createWaybillBlock(
-    //                 record, titleFont, sectionFont, labelFont, valueFont
-    //         );
-
-    //         PdfPCell cell = new PdfPCell(waybill);
-    //         cell.setPadding(6);
-    //         cell.setBorderWidth(0.5f);
-    //         cell.setBorderColor(BaseColor.GRAY);
-    //         grid.addCell(cell);
-    //     }
-
-    //     document.add(grid);
-    //     document.close();
-    //     return out.toByteArray();
-    // }
-
     /* ================= ONE WAYBILL COPY ================= */
 
     @SuppressWarnings("unchecked")
@@ -91,19 +68,32 @@ public class WaybillPdfService {
         Font labelFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 8);
         Font valueFont = FontFactory.getFont(FontFactory.HELVETICA, 8);
 
-        PdfPTable block = new PdfPTable(1);
+      PdfPTable block = new PdfPTable(1);
         block.setWidthPercentage(100);
 
-        /* ---------- Logo ---------- */
+        PdfPTable headerTable=new PdfPTable(2);
+        headerTable.setWidthPercentage(100);
+
+ /* ---------- Logo ---------- */
 
         Image logo=loadLogo();
-        logo.scaleToFit(100, 40);
-        logo.setAlignment(Image.ALIGN_CENTER);
+        logo.scaleToFit(60, 40);
+        logo.setAlignment(Image.ALIGN_LEFT);
 
         PdfPCell logoCell = new PdfPCell(logo);
         logoCell.setBorder(Rectangle.NO_BORDER);
         logoCell.setPadding(4);
-        block.addCell(logoCell);
+        headerTable.addCell(logoCell);
+
+        PdfPCell companyNameCell = new PdfPCell(new Paragraph("Development Talkies", titleFont));
+        companyNameCell.setBorder(Rectangle.NO_BORDER);
+        companyNameCell.setPadding(4);
+        headerTable.addCell(companyNameCell);
+
+        PdfPCell headerCell = new PdfPCell(headerTable);
+        headerCell.setBorder(Rectangle.NO_BORDER);
+        block.addCell(headerCell);
+
 
         /* ---------- Title ---------- */
         PdfPCell titleCell = new PdfPCell(
@@ -126,8 +116,8 @@ public class WaybillPdfService {
         meta.setWidthPercentage(100);
         meta.setWidths(new float[]{1f, 2f});
 
-        addCell(meta, "AWB No", labelFont);
-        addCell(meta, record.getAwbNo(), valueFont);
+        addCell(meta, "OrderType", labelFont);
+        addCell(meta, getOrderType(services).equals("C") ? "COD" : "Prepaid", valueFont);
         addCell(meta, "Reference", labelFont);
         addCell(meta, record.getCreditReferenceNo(), valueFont);
         addCell(meta, "Pickup Date", labelFont);
@@ -145,8 +135,8 @@ public class WaybillPdfService {
         party.addCell(sectionCell("SHIPPER", sectionFont));
         party.addCell(sectionCell("CONSIGNEE", sectionFont));
 
-        party.addCell(detailsCell(shipper, valueFont));
-        party.addCell(detailsCell(consignee, valueFont));
+        party.addCell(shipperDetailsCell(shipper, valueFont));
+        party.addCell(consigneeDetailsCell(consignee, valueFont));
 
         block.addCell(party);
 
@@ -159,16 +149,24 @@ public class WaybillPdfService {
 
         block.addCell(service);
 
+        block.addCell(getCODAmountMessageCell(services, valueFont));
+
         /* ---------- Barcode ---------- */
         Image barcode = barcodeImage(record.getAwbNo());
         barcode.scaleToFit(200, 50);
         barcode.setAlignment(Image.ALIGN_CENTER);
 
-        PdfPCell barcodeCell = new PdfPCell(barcode);
+        /*----AWB text below barcode----------*/
+        Paragraph awbText = new Paragraph(record.getAwbNo(), valueFont);
+        awbText.setAlignment(Element.ALIGN_CENTER);
+
+        PdfPCell barcodeCell = new PdfPCell();
         barcodeCell.setBorder(Rectangle.NO_BORDER);
         barcodeCell.setPadding(4);
+        /* Stack barcode + text */
+        barcodeCell.addElement(barcode);
+        barcodeCell.addElement(awbText);
         block.addCell(barcodeCell);
-
         return block;
     }
 
@@ -187,31 +185,75 @@ public class WaybillPdfService {
         return cell;
     }
 
-    private PdfPCell detailsCell(Map<String, Object> map, Font font) {
+    private PdfPCell shipperDetailsCell(Map<String, Object> shipper, Font font) {
         String text =
-                safe(map, "CustomerName") + "\n" +
-                "Mob: " + safe(map, "CustomerMobile") + "\n" +
-                safe(map, "CustomerAddress1") + ", " +
-                safe(map, "CustomerCity") + " - " +
-                safe(map, "CustomerPincode");
+                safe(shipper, "CustomerName") + "\n" +
+                "Mob: " + safe(shipper, "CustomerMobile") + "\n" +
+                safe(shipper, "CustomerAddress1") + ", " +
+                safe(shipper, "CustomerCity") + " - " +
+                safe(shipper, "CustomerPincode");
 
         PdfPCell cell = new PdfPCell(new Phrase(text, font));
         cell.setPadding(4);
         return cell;
     }
 
-    private PdfPCell serviceDetailsCell(Map<String, Object> map, Font font) {
+    private PdfPCell consigneeDetailsCell(Map<String, Object> consignee, Font font) {
         String text =
-                "Weight: " + safe(map, "ActualWeight") + "\n" +
-                "DeclaredValue: " + safe(map, "DeclaredValue") + "\n" +
-                "PieceCount: " + safe(map, "PieceCount") + "\n " +
-                "ItemName: " + getItemName(map) + " \n " +
-                "CollectableAmount: " + safe(map, "CollectableAmount");
+                safe(consignee, "ConsigneeName") + "\n" +
+                "Mob: " + safe(consignee, "ConsigneeMobile") + "\n" +
+                safe(consignee, "ConsigneeAddress1") + ", " +
+                safe(consignee, "ConsigneeCity") + " - " +
+                safe(consignee, "ConsigneePincode");
 
         PdfPCell cell = new PdfPCell(new Phrase(text, font));
         cell.setPadding(4);
         return cell;
     }
+
+
+
+    private PdfPCell serviceDetailsCell(Map<String, Object> services, Font font) {
+        String text =
+                "Weight: " + safe(services, "ActualWeight") + "\n" +
+                "DeclaredValue: " + safe(services, "DeclaredValue") + "\n" +
+                "PieceCount: " + safe(services, "PieceCount") + "\n" +
+                "ItemName: " + getItemName(services);
+
+        PdfPCell cell = new PdfPCell(new Phrase(text, font));
+        cell.setPadding(4);
+        return cell;
+    }
+
+    private PdfPCell getCODAmountMessageCell(Map<String, Object> services, Font font) {
+
+    String orderType = getOrderType(services);
+    double codAmount = parseDoubleSafe(services.get("CollectableAmount"));
+
+    boolean isCOD = "C".equalsIgnoreCase(orderType) && codAmount > 0;
+
+    if (!isCOD) {
+        return new PdfPCell(new Phrase("", font));
+    }
+
+    Font fontBold = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 9);
+
+    //String text = "Amount to be collected : ₹" + codAmount;
+
+    PdfPCell cell = new PdfPCell(new Phrase("Amount to be collected : ₹" + codAmount, fontBold));
+    cell.setPadding(4);
+    return cell;
+}
+
+
+    private double parseDoubleSafe(Object value) {
+    try {
+        return value == null ? 0 : Double.parseDouble(value.toString());
+    } catch (Exception e) {
+        return 0;
+    }
+}
+
 
 
     @SuppressWarnings("unchecked")
@@ -232,6 +274,11 @@ private String getItemName(Map<String, Object> services) {
 
     Object itemName = itemList.get(0).get("ItemName");
     return itemName == null ? "NA" : itemName.toString();
+}
+
+private String getOrderType(Map<String, Object> services) {   
+    Object subProductCode = services.get("SubProductCode");
+    return subProductCode == null ? "NA" : subProductCode.toString(); 
 }
 
 

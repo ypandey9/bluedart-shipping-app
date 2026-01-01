@@ -311,7 +311,7 @@ useEffect(() => {
           <select 
       value={labelSize[w.awbNo] || "A4"} 
       onChange={e => setLabelSize(prev=>({...prev,[w.awbNo]:e.target.value}))} 
-      className="mt-6 border p-2 rounded">
+      className="m-2 border p-2 rounded">
         <option value="A4">lbl-A4</option>
         <option value="LABEL_4X6">lbl-4x6</option>
       </select>
