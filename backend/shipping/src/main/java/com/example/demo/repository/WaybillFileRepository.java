@@ -48,6 +48,39 @@ public class WaybillFileRepository {
         }
     }
 
+    public WaybillRecord findByAwbNo(String awbNo) {
+    return findAll().stream()
+            .filter(w -> awbNo.equals(w.getAwbNo()))
+            .findFirst()
+            .orElse(null);
+}
+
+
+public synchronized void saveAll(List<WaybillRecord> records) {
+    try {
+        File file = new File(FILE_PATH);
+
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
+        }
+
+        List<WaybillRecord> existing =
+                file.exists() && file.length() > 0
+                        ? mapper.readValue(file, new TypeReference<>() {})
+                        : new ArrayList<>();
+
+        existing.addAll(records);
+
+        mapper.writerWithDefaultPrettyPrinter()
+              .writeValue(file, existing);
+
+    } catch (Exception e) {
+        throw new RuntimeException("Failed to save waybills", e);
+    }
+}
+
+
+
     public List<WaybillRecord> findAll() {
         try {
             File file = new File(FILE_PATH);

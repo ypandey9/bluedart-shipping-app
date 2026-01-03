@@ -223,6 +223,12 @@ useEffect(() => {
       <h1 className="text-2xl font-bold mb-6">
         Bluedart Waybill Generator
       </h1>
+<a
+  href="/bulk-waybill"
+  className="text-blue-600 underline text-sm"
+>
+  → Switch to Bulk Waybill Generator
+</a>
 
       <div className="grid grid-cols-2 gap-4">
         <input name="consigneeName" placeholder="Consignee Name" onChange={handleChange} />

@@ -54,6 +54,33 @@ public class WaybillPdfService {
         return out.toByteArray();
     }
 
+
+    public byte[] generateBulkPdf(List<WaybillRecord> records ,String size) throws Exception {
+
+        Document document=createDocument(size);
+        ByteArrayOutputStream out=new ByteArrayOutputStream();
+        PdfWriter.getInstance(document,out);
+        document.open();
+
+        if("LABEL_4X6".equals(size)) {
+
+            for(WaybillRecord record:records){
+                document.add(createWaybillBlock(record));
+                document.newPage(); 
+            }
+        } else {
+
+            for(WaybillRecord record:records) {
+                document.add(createWaybillBlock(record));
+                document.newPage();
+            }
+        }
+
+        document.close();
+        return out.toByteArray();
+    }
+
+    
   
     /* ================= ONE WAYBILL COPY ================= */
 
@@ -78,7 +105,7 @@ public class WaybillPdfService {
 
         Image logo=loadLogo();
         logo.scaleToFit(60, 40);
-        logo.setAlignment(Image.ALIGN_LEFT);
+        logo.setAlignment(Image.ALIGN_CENTER);
 
         PdfPCell logoCell = new PdfPCell(logo);
         logoCell.setBorder(Rectangle.NO_BORDER);
