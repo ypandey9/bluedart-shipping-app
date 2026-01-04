@@ -5,6 +5,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDate;
 
 @Service
 public class BulkWaybillTemplateService {
@@ -59,9 +60,11 @@ public class BulkWaybillTemplateService {
         sample.createCell(21).setCellValue("100");
         sample.createCell(22).setCellValue("1");
         sample.createCell(23).setCellValue("0");
-        sample.createCell(24).setCellValue("2026-01-02");
+        sample.createCell(24).setCellValue(LocalDate.now().toString());
         sample.createCell(25).setCellValue("1600");
-        sample.createCell(26).setCellValue("CR12345");
+        long epochSeconds = System.currentTimeMillis() / 1000;
+        String ref = "CR" + epochSeconds + "26";
+        sample.createCell(26).setCellValue(ref);
         sample.createCell(27).setCellValue("Test Item1");
         sample.createCell(28).setCellValue("100");
         sample.createCell(29).setCellValue("1");

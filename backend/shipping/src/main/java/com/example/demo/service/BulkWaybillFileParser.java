@@ -7,16 +7,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.time.LocalDate;
-import java.time.ZoneId;
-
 
 @Service
 public class BulkWaybillFileParser {
@@ -26,9 +25,10 @@ public class BulkWaybillFileParser {
         String filename = file.getOriginalFilename().toLowerCase();
 
         if (filename.endsWith(".csv")) {
+            System.out.println("Parsing CSV file");
             return parseCsv(file);
         } else if (filename.endsWith(".xlsx")) {
-            return parseXlsx(file); // (we add this later)
+            return parseXlsx(file); 
         }
 
         throw new IllegalArgumentException("Unsupported file type");
@@ -38,99 +38,66 @@ public class BulkWaybillFileParser {
 
     private List<Map<String, Object>> parseCsv(MultipartFile file) throws Exception {
 
-        List<Map<String, Object>> requests = new ArrayList<>();
+    List<Map<String, Object>> requests = new ArrayList<>();
 
-        CSVParser parser = CSVFormat.DEFAULT
-                .withFirstRecordAsHeader()
-                .withIgnoreHeaderCase()
-                .withTrim()
-                .parse(new InputStreamReader(file.getInputStream()));
+    CSVParser parser = CSVFormat.DEFAULT
+            .withFirstRecordAsHeader()
+            .withIgnoreHeaderCase()
+            .withTrim()
+            .parse(new InputStreamReader(file.getInputStream()));
 
-        for (CSVRecord row : parser) {
+    for (CSVRecord record : parser) {
 
-            Map<String, Object> request = buildWaybillRequestFromCsv(row);
+        Map<String, String> rowData = new HashMap<>();
 
-            requests.add(request);
-        }
+        // for (String header : parser.getHeaderMap().keySet()) {
+        //     rowData.put(header, record.get(header).trim());
+        // }
 
-        return requests;
-    }
+for (String header : parser.getHeaderMap().keySet()) {
 
+    String normalizedKey = header
+            .replace("\uFEFF", "")   // remove BOM
+            .replace(" ", "")        // remove spaces
+            .trim();
 
-    private Map<String, Object> buildWaybillRequestFromCsv(CSVRecord row) {
-
-    Map<String, Object> shipper = new HashMap<>();
-    shipper.put("CustomerCode", row.get("CustomerCode"));
-    shipper.put("CustomerName", row.get("CustomerName"));
-    shipper.put("CustomerMobile", row.get("CustomerMobile"));
-    shipper.put("CustomerAddress1", row.get("CustomerAddress1"));
-    shipper.put("CustomerPincode", row.get("CustomerPincode"));
-    shipper.put("OriginArea", row.get("OriginArea"));
-
-    Map<String, Object> consignee = new HashMap<>();
-    consignee.put("ConsigneeName", row.get("ConsigneeName"));
-    consignee.put("ConsigneeMobile", row.get("ConsigneeMobile"));
-    consignee.put("ConsigneeAddress1", row.get("ConsigneeAddress1"));
-    consignee.put("ConsigneeAddress2", "Thsi is a test consinee addr2");
-    consignee.put("ConsigneeAddress3", "Thsi is a test consinee addr3");
-    consignee.put("ConsigneePincode", row.get("ConsigneePincode"));
-    consignee.put("ConsigneeAttention", "ABCD");
-    consignee.put("ConsigneeEmailID", "testemail@bluedart.com");
-
-    Map<String, Object> services = new HashMap<>();
-    services.put("SubProductCode", row.get("SubProductCode"));
-    services.put("ProductCode", row.get("ProductCode"));
-    services.put("ActualWeight", row.get("ActualWeight"));
-    services.put("DeclaredValue", row.get("DeclaredValue"));
-    services.put("PieceCount", row.get("PieceCount"));
-    services.put("CollectableAmount", row.get("CollectableAmount"));
-    services.put("CreditReferenceNo", row.get("CreditReferenceNo"));
-    services.put("PickupDate",toBluedartDate(row.get("PickupDate")));
-    services.put("PickupTime", "1600");
-    services.put("ProductType", 1);
-    services.put("RegisterPickup", true);
-    services.put("PDFOutputNotRequired", true);
-
-    services.put("PackType", "");
-    services.put("PickupMode", "");
-    services.put("PayableAt", "");
-    services.put("ParcelShopCode", "");
-
-    Map<String, Object> commodity = new HashMap<>();
-    commodity.put("CommodityDetail1", "test1");
-    commodity.put("CommodityDetail2", "test2");
-    commodity.put("CommodityDetail3", "test3");
-
-    services.put("Commodity", List.of(commodity));
-
-    Map<String,Object> dimensions = new HashMap<>();
-    dimensions.put("Length", "10");
-    dimensions.put("Breadth", "10");
-    dimensions.put("Height", "10");
-    dimensions.put("Count", "1");
-    services.put("Dimensions", List.of(dimensions));
-
-    Map<String,Object> profile = new HashMap<>();
-    profile.put("LoginId","GG940111");
-    profile.put("LicenceKey", "kh7mnhqkmgegoksipxr0urmqesesseup");
-    profile.put("Api_type", "S");
-
-    Map<String, Object> request = new HashMap<>();
-    request.put("Shipper", shipper);
-    request.put("Consignee", consignee);
-    request.put("Services", services);
-    request.put("Profile", profile);
-
-    return Map.of("Request", request);
+    rowData.put(normalizedKey, record.get(header).trim());
 }
 
-private String toBluedartDate(String yyyyMMdd) {
 
-    if (yyyyMMdd == null || yyyyMMdd.isBlank()) {
+        requests.add(buildWaybillRequest(rowData));
+    }
+
+    return requests;
+}
+
+    /* ================= DATE CONVERSION ================= */   
+
+private String toBluedartDate(String dateStr) {
+
+    if (dateStr == null || dateStr.isBlank()) {
         throw new RuntimeException("PickupDate is mandatory");
     }
 
-    LocalDate date = LocalDate.parse(yyyyMMdd);
+    dateStr = dateStr.trim();
+
+    LocalDate date;
+
+    // Support multiple formats
+    if (dateStr.matches("\\d{4}-\\d{2}-\\d{2}")) {
+        // yyyy-MM-dd
+        date = LocalDate.parse(dateStr);
+    } else if (dateStr.matches("\\d{2}-\\d{2}-\\d{4}")) {
+        // dd-MM-yyyy
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        date = LocalDate.parse(dateStr, formatter);
+    } else {
+        throw new RuntimeException(
+            "Invalid PickupDate format. Use yyyy-MM-dd or dd-MM-yyyy"
+        );
+    }
+
     long millis = date
             .atStartOfDay(ZoneId.systemDefault())
             .toInstant()
@@ -223,11 +190,11 @@ private Map<String, Object> buildWaybillRequest(Map<String, String> row) {
     services.put("ProductCode", row.get("ProductCode"));
     services.put("SubProductCode", row.get("SubProductCode"));
     services.put("ProductType", 1);
-    services.put("ActualWeight", row.get("ActualWeight"));
-    services.put("DeclaredValue", Integer.parseInt(row.get("DeclaredValue")));
-    services.put("PieceCount", row.get("PieceCount"));
-    services.put("ItemCount", Integer.parseInt(row.get("PieceCount")));
-    services.put("CollectableAmount", Integer.parseInt(row.get("CollectableAmount")));
+    services.put("ActualWeight", safeDouble(row.get("ActualWeight")));
+    services.put("DeclaredValue", safeDouble(row.get("DeclaredValue")));
+    services.put("PieceCount", safeInt(row.get("PieceCount")));
+    services.put("ItemCount", safeInt(row.get("PieceCount")));
+    services.put("CollectableAmount", safeDouble(row.get("CollectableAmount")));
     services.put("CreditReferenceNo", row.get("CreditReferenceNo"));
     services.put("CreditReferenceNo2", "");
     services.put("CreditReferenceNo3", "");
@@ -275,9 +242,9 @@ private Map<String, Object> buildWaybillRequest(Map<String, String> row) {
     /* ---------- ITEM ---------- */
     Map<String, Object> item = new HashMap<>();
     item.put("ItemName", row.get("ItemName"));
-    item.put("ItemValue", Integer.parseInt(row.get("ItemValue")));
-    item.put("Itemquantity", Integer.parseInt(row.get("Itemquantity")));
-    item.put("TotalValue", Integer.parseInt(row.get("ItemValue")));
+    item.put("ItemValue", safeDouble(row.get("ItemValue")));
+    item.put("Itemquantity", safeInt(row.get("Itemquantity")));
+    item.put("TotalValue", safeDouble(row.get("ItemValue")));
     item.put("InvoiceNumber", "");
     item.put("InvoiceDate", toBluedartDate(row.get("PickupDate")));
     services.put("itemdtl", List.of(item));
@@ -301,4 +268,16 @@ private Map<String, Object> buildWaybillRequest(Map<String, String> row) {
 
     return finalPayload;
 }
+
+private int safeInt(String value) {
+    if (value == null || value.isBlank()) return 0;
+    return (int) Double.parseDouble(value);
+}
+
+private double safeDouble(String value) {
+    if (value == null || value.isBlank()) return 0.0;
+    return Double.parseDouble(value);
+}
+
+
 }

@@ -2,9 +2,12 @@ package com.example.demo.controller;
 
 import com.example.demo.repository.WaybillFileRepository;
 import com.example.demo.service.BluedartWaybillService;
+import com.example.demo.service.BulkWaybillExcelService;
 import com.example.demo.service.BulkWaybillTemplateService;
 import com.example.demo.service.BulkWaybillFileParser;
 import org.springframework.web.multipart.MultipartFile; 
+import com.example.demo.dto.BulkWaybillResult;
+import com.example.demo.service.BulkWaybillExcelService;
 
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.model.WaybillRecord;
@@ -12,8 +15,12 @@ import com.example.demo.service.WaybillPdfService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/bluedart")
@@ -25,14 +32,16 @@ public class BluedartWaybillController {
     private final WaybillPdfService pdfService;
     private final BulkWaybillTemplateService templateService;   
     private final BulkWaybillFileParser bulkFileParser;
+    private final BulkWaybillExcelService excelService;
     
     public BluedartWaybillController(BluedartWaybillService waybillService, WaybillFileRepository repository, 
-        WaybillPdfService pdfService,BulkWaybillTemplateService  templateService, BulkWaybillFileParser bulkFileParser) {
+        WaybillPdfService pdfService,BulkWaybillTemplateService  templateService, BulkWaybillFileParser bulkFileParser, BulkWaybillExcelService excelService) {
         this.waybillService = waybillService;
         this.repository = repository;
         this.pdfService = pdfService;
         this.templateService=templateService;
         this.bulkFileParser=bulkFileParser;
+        this.excelService=excelService;
     }
 
     @PostMapping("/waybill")
@@ -69,18 +78,28 @@ if (record == null) {
 
 
     @PostMapping("/waybill/bulk")    
-    public ResponseEntity<byte[]>uploadBulkWaybill(
+    public ResponseEntity<Map<String,Object>> uploadBulkWaybill(
         @RequestParam("file") MultipartFile file,
         @RequestParam(defaultValue="A4") String size
     ) throws Exception {
         List<Map<String,Object>> requests=bulkFileParser.parse(file);
-        List<WaybillRecord> records=waybillService.generateBulkWaybills(requests);
-        byte[] pdf=pdfService.generateBulkPdf(records, size);
-        return ResponseEntity.ok()
-        .header(HttpHeaders.CONTENT_DISPOSITION,
-        "attachment; filename=bulk-waybills.pdf")
-        .contentType(MediaType.APPLICATION_PDF)
-        .body(pdf);
+        //List<WaybillRecord> records=waybillService.generateBulkWaybills(requests);
+        BulkWaybillResult result=waybillService.generateBulkWaybills(requests);
+
+        if(!result.getSuccessRecords().isEmpty()){
+            byte[] pdf=pdfService.generateBulkPdf(result.getSuccessRecords(), size);
+            Files.write(Path.of("data/bulk.pdf"), pdf);
+        }
+
+        Files.write(Path.of("data/success.xlsx"),excelService.generateSuccessExcel(result.getSuccessRecords()));
+
+        Files.write(Path.of("data/failure.xlsx"),excelService.generateFailureExcel(result.getFailures()));
+
+        Map<String,Object> response=new HashMap<>();
+        response.put("total", result.getTotal());
+        response.put("success", result.getSuccess());
+        response.put("failed",result.getFailed());
+        return ResponseEntity.ok(response);
     }
 
 
@@ -94,6 +113,29 @@ public ResponseEntity<byte[]> downloadTemplate() throws Exception {
                     "attachment; filename=Bluedart_Bulk_Waybill_Template.xlsx")
             .contentType(MediaType.APPLICATION_OCTET_STREAM)
             .body(file);
+}
+
+@GetMapping("/waybill/bulk/success")
+public ResponseEntity<byte[]> downloadSuccessExcel() throws Exception {
+     return fileResponse("success.xlsx");
+}
+
+@GetMapping("/waybill/bulk/failure")
+public ResponseEntity<byte[]> downloadFailureExcel() throws Exception {
+    return fileResponse("failure.xlsx");
+}
+
+@GetMapping("/waybill/bulk/pdf")
+public ResponseEntity<byte[]> downloadPdfBulk() throws Exception {
+    return fileResponse("bulk.pdf");
+}
+
+private ResponseEntity<byte[]> fileResponse(String name) throws Exception {
+
+    byte[] data=Files.readAllBytes(Path.of("data/"+name));
+    return ResponseEntity.ok()
+    .header(HttpHeaders.CONTENT_DISPOSITION,"attachment;filename="+name)
+    .body(data);
 }
 
 }

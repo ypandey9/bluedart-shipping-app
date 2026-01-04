@@ -2,16 +2,22 @@
 
 import { useState } from "react";
 
+type BulkResult = {
+  total: number;
+  success: number;
+  failed: number;
+};
+
 export default function BulkWaybillPage() {
+  const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   const [file, setFile] = useState<File | null>(null);
   const [labelSize, setLabelSize] = useState("A4");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [result, setResult] = useState<BulkResult | null>(null);
 
-  const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL;
-
-  /* ---------------- DOWNLOAD TEMPLATE ---------------- */
+  /* ---------------- TEMPLATE ---------------- */
 
   const downloadTemplate = () => {
     window.location.href =
@@ -28,7 +34,7 @@ export default function BulkWaybillPage() {
 
     setLoading(true);
     setError(null);
-    setSuccessMsg(null);
+    setResult(null);
 
     const formData = new FormData();
     formData.append("file", file);
@@ -44,36 +50,17 @@ export default function BulkWaybillPage() {
       );
 
       if (!res.ok) {
-        const errText = await res.text();
-        throw new Error(errText || "Bulk upload failed");
+        throw new Error("Bulk upload failed. Please check the file.");
       }
 
-      // ✅ PDF response
-      const blob = await res.blob();
+      const data: BulkResult = await res.json();
+      setResult(data);
 
-      // Try to extract filename from header
-      const disposition = res.headers.get("Content-Disposition");
-      let filename = "bulk-waybills.pdf";
-
-      if (disposition?.includes("filename=")) {
-        filename = disposition.split("filename=")[1].replace(/"/g, "");
-      }
-
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(url);
-
-      setSuccessMsg("Waybills generated successfully. PDF downloaded.");
-
-      // Reset file input
+      // reset file after success
       setFile(null);
+
     } catch (err: any) {
-      setError(err.message || "Unexpected error during bulk upload");
+      setError(err.message || "Unexpected error occurred");
     } finally {
       setLoading(false);
     }
@@ -97,45 +84,43 @@ export default function BulkWaybillPage() {
         </button>
       </div>
 
-      {/* UPLOAD */}
+      {/* UPLOAD CARD */}
       <div className="border p-4 rounded bg-gray-50">
         <h3 className="font-semibold mb-4">
           Upload Filled Template
         </h3>
 
+        {/* FILE PICKER */}
         <div className="mb-4">
-  <label className="block font-medium mb-2">
-    Upload File (XLSX / CSV)
-  </label>
+          <label className="block font-medium mb-2">
+            Upload File (XLSX / CSV)
+          </label>
 
-  <div className="flex items-center gap-3">
-    {/* Hidden file input */}
-    <input
-      id="bulkFile"
-      type="file"
-      accept=".xlsx,.csv"
-      onChange={(e) =>
-        setFile(e.target.files?.[0] || null)
-      }
-      className="hidden"
-    />
+          <div className="flex items-center gap-3">
+            <input
+              id="bulkFile"
+              type="file"
+              accept=".xlsx,.csv"
+              onChange={(e) =>
+                setFile(e.target.files?.[0] || null)
+              }
+              className="hidden"
+            />
 
-    {/* Custom browse button */}
-    <label
-      htmlFor="bulkFile"
-      className="cursor-pointer bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded border"
-    >
-      Browse…
-    </label>
+            <label
+              htmlFor="bulkFile"
+              className="cursor-pointer bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded border"
+            >
+              Browse…
+            </label>
 
-    {/* File name display */}
-    <span className="text-sm text-gray-700 truncate max-w-xs">
-      {file ? file.name : "No file selected"}
-    </span>
-  </div>
-</div>
+            <span className="text-sm text-gray-700 truncate max-w-xs">
+              {file ? file.name : "No file selected"}
+            </span>
+          </div>
+        </div>
 
-
+        {/* LABEL SIZE */}
         <div className="mb-4">
           <label className="mr-2 font-medium">
             Label Size:
@@ -150,6 +135,7 @@ export default function BulkWaybillPage() {
           </select>
         </div>
 
+        {/* SUBMIT */}
         <button
           onClick={uploadBulkFile}
           disabled={loading}
@@ -164,14 +150,56 @@ export default function BulkWaybillPage() {
             ❌ {error}
           </div>
         )}
-
-        {/* SUCCESS */}
-        {successMsg && (
-          <div className="mt-4 bg-green-100 text-green-700 p-3 rounded">
-            ✅ {successMsg}
-          </div>
-        )}
       </div>
+
+      {/* RESULT */}
+      {result && (
+        <div className="mt-6 border p-4 rounded bg-green-50">
+          <h3 className="font-semibold mb-3">
+            Bulk Processing Result
+          </h3>
+
+          <p>Total Records: <b>{result.total}</b></p>
+          <p className="text-green-700">
+            Success: <b>{result.success}</b>
+          </p>
+          <p className="text-red-700">
+            Failed: <b>{result.failed}</b>
+          </p>
+
+          <div className="mt-4 space-y-2">
+            {result.success > 0 && (
+              <>
+                <a
+                  href={`${BACKEND}/api/bluedart/waybill/bulk/pdf`}
+                  className="block text-blue-600 underline"
+                  target="_blank"
+                >
+                  📄 Download Success Labels (PDF)
+                </a>
+
+                <a
+                  href={`${BACKEND}/api/bluedart/waybill/bulk/success`}
+                  className="block text-blue-600 underline"
+                  target="_blank"
+                >
+                  📊 Download Success Records (Excel)
+                </a>
+              </>
+            )}
+
+            {result.failed > 0 && (
+              <a
+                href={`${BACKEND}/api/bluedart/waybill/bulk/failure`}
+                className="block text-blue-600 underline"
+                target="_blank"
+              >
+                📊 Download Failure Records (Excel)
+              </a>
+            )}
+          </div>
+        </div>
+      )}
     </main>
   );
 }

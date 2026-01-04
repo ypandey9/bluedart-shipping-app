@@ -1,10 +1,12 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.BulkWaybillResult;
 import com.example.demo.model.WaybillRecord;
 import com.example.demo.repository.WaybillFileRepository;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import com.example.demo.dto.FailureRow;
 
 import java.util.List;
 import java.util.Map;
@@ -109,28 +111,45 @@ public Map<String, Object> generateWaybill(Map<String, Object> requestBody) {
         }
     }
 
-    public List<WaybillRecord> generateBulkWaybills(List<Map<String,Object>> requests) {
+    public BulkWaybillResult generateBulkWaybills(List<Map<String,Object>> requests) {
 
-        List<WaybillRecord> records=new ArrayList<>();
+        BulkWaybillResult result=new BulkWaybillResult();
+        result.setTotal(requests.size());
+
+
+        //List<WaybillRecord> successRecords=new ArrayList<>();
+
+        int rowNo=1;
 
         for(Map<String,Object> request:requests){
 
-            Map<String,Object> response = generateWaybill(request);
+            try {
+                Map<String,Object> response = generateWaybill(request);
 
-Map<String,Object> result =
-    (Map<String,Object>) response.get("GenerateWayBillResult");
+                Map<String,Object> gwb=
+                        (Map<String,Object>) response.get("GenerateWayBillResult");
 
-String awbNo = result.get("AWBNo").toString();
+                String awbNo = gwb.get("AWBNo").toString();
 
-WaybillRecord record = repository.findByAwbNo(awbNo);
+                WaybillRecord record = repository.findByAwbNo(awbNo);
 
+                if(record!=null) {
+                    //successRecords.add(record);
+                    result.getSuccessRecords().add(record);
+                }
 
-            if(record!=null) {
-            records.add(record);
+            } catch (Exception e) {
+               String ref=extractCreditRef(request);
+               result.getFailures().add(
+                   new FailureRow(rowNo, ref, e.getMessage())
+               );
             }
+            rowNo++;
         }
-        repository.saveAll(records);
-        
-        return records;
+        result.setSuccess(result.getSuccessRecords().size());
+        result.setFailed(result.getFailures().size());  
+        // repository.saveAll(successRecords);
+        return result;
     }
+
 }
