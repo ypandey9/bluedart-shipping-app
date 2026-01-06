@@ -271,7 +271,7 @@ private Map<String, Object> buildWaybillRequest(Map<String, String> row) {
 
 private int safeInt(String value) {
     if (value == null || value.isBlank()) return 0;
-    return (int) Double.parseDouble(value);
+    return Integer.parseInt(value);
 }
 
 private double safeDouble(String value) {

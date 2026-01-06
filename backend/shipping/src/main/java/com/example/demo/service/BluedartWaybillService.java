@@ -7,6 +7,9 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import com.example.demo.dto.FailureRow;
+import org.springframework.web.client.HttpStatusCodeException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 import java.util.List;
 import java.util.Map;
@@ -57,13 +60,30 @@ public Map<String, Object> generateWaybill(Map<String, Object> requestBody) {
             throw new RuntimeException("Empty response from Bluedart");
         }
 
-    } catch (Exception e) {
-        System.err.println("❌ Bluedart API FAILED");
-        System.err.println("➡️ Payload that caused failure:");
-        System.err.println(requestBody);
-        e.printStackTrace();
-        throw new RuntimeException("Bluedart API error", e);
-    }
+    // } catch (Exception e) {
+    //     System.err.println("❌ Bluedart API FAILED");
+    //     System.err.println("➡️ Payload that caused failure:");
+    //     System.err.println(requestBody);
+    //     e.printStackTrace();
+    //     throw new RuntimeException("Bluedart API error", e);
+    // }
+    } catch (HttpStatusCodeException ex) {
+
+    String errorBody = ex.getResponseBodyAsString();
+
+    System.err.println("❌ Bluedart API FAILED");
+    System.err.println("➡️ Bluedart error response:");
+    System.err.println(errorBody);
+
+    String message = extractBluedartErrorMessage(errorBody);
+
+    throw new RuntimeException(message);
+
+} catch (Exception e) {
+    throw new RuntimeException("Unexpected error while calling Bluedart", e);
+}
+
+
 
     /* ---------- VALIDATE RESPONSE ---------- */
 
@@ -151,5 +171,43 @@ public Map<String, Object> generateWaybill(Map<String, Object> requestBody) {
         // repository.saveAll(successRecords);
         return result;
     }
+
+    @SuppressWarnings("unchecked")
+private String extractBluedartErrorMessage(String responseBody) {
+
+    try {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> root = mapper.readValue(responseBody, Map.class);
+
+        Object errObj = root.get("error-response");
+
+        if (errObj instanceof List<?> errors && !errors.isEmpty()) {
+
+            Object first = errors.get(0);
+
+            if (first instanceof Map<?, ?> errMap) {
+
+                Object statusObj = errMap.get("Status");
+
+                if (statusObj instanceof List<?> statuses && !statuses.isEmpty()) {
+
+                    Object st = statuses.get(0);
+
+                    if (st instanceof Map<?, ?> statusMap) {
+
+                        Object info = statusMap.get("StatusInformation");
+
+                        if (info != null) {
+                            return info.toString();
+                        }
+                    }
+                }
+            }
+        }
+    } catch (Exception ignored) {}
+
+    return "Bluedart rejected the request";
+}
+
 
 }
