@@ -1,0 +1,5 @@
+image: gitpod/workspace-java-17
+
+tasks:
+  - name: Run Spring Boot App
+    command: cd backend/shipping && ./mvnw spring-boot:run
