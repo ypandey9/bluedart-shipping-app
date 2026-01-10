@@ -1,5 +1,10 @@
-image: gitpod/workspace-java-17
+image:
+  file: .devcontainer/Dockerfile
 
 tasks:
-  - name: Run Spring Boot App
+  - name: Run Shipping App
     command: cd backend/shipping && ./mvnw spring-boot:run
+
+ports:
+  - port: 8080
+    onOpen: open-preview
