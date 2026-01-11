@@ -1,4 +1,4 @@
-"use client";
+ "use client";
 
 import { useEffect, useState } from "react";
 
@@ -82,6 +82,10 @@ useEffect(() => {
       if (!form.codAmount) return "COD amount is required";
       if (Number(form.codAmount) <= 0)
         return "COD amount must be greater than 0";
+    }
+
+    if (form.subProductCode === "B") {
+      return "FODDOD service is currently unavailable";
     }
 
     return null;
@@ -229,6 +233,14 @@ useEffect(() => {
 >
   → Switch to Bulk Waybill Generator
 </a>
+
+<a
+  href="/cancel-waybill"
+  className="text-blue-600 underline text-sm m-10"
+>
+  → Go to cancel waybills
+</a>
+
 
       <div className="grid grid-cols-2 gap-4">
         <input name="consigneeName" placeholder="Consignee Name" onChange={handleChange} />

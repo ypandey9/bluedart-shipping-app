@@ -7,7 +7,7 @@ import com.example.demo.service.BulkWaybillTemplateService;
 import com.example.demo.service.BulkWaybillFileParser;
 import org.springframework.web.multipart.MultipartFile; 
 import com.example.demo.dto.BulkWaybillResult;
-import com.example.demo.service.BulkWaybillExcelService;
+import com.example.demo.dto.CancelWaybillResponse;
 
 import org.springframework.web.bind.annotation.*;
 import com.example.demo.model.WaybillRecord;
@@ -15,6 +15,8 @@ import com.example.demo.service.WaybillPdfService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import com.example.demo.service.WaybillCancellationService;
+
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,15 +35,17 @@ public class BluedartWaybillController {
     private final BulkWaybillTemplateService templateService;   
     private final BulkWaybillFileParser bulkFileParser;
     private final BulkWaybillExcelService excelService;
+    private final WaybillCancellationService cancellationService;
     
     public BluedartWaybillController(BluedartWaybillService waybillService, WaybillFileRepository repository, 
-        WaybillPdfService pdfService,BulkWaybillTemplateService  templateService, BulkWaybillFileParser bulkFileParser, BulkWaybillExcelService excelService) {
+        WaybillPdfService pdfService,BulkWaybillTemplateService  templateService, BulkWaybillFileParser bulkFileParser, BulkWaybillExcelService excelService, WaybillCancellationService cancellationService) {
         this.waybillService = waybillService;
         this.repository = repository;
         this.pdfService = pdfService;
         this.templateService=templateService;
         this.bulkFileParser=bulkFileParser;
         this.excelService=excelService;
+        this.cancellationService=cancellationService;
     }
 
     @PostMapping("/waybill")
@@ -136,6 +140,14 @@ private ResponseEntity<byte[]> fileResponse(String name) throws Exception {
     return ResponseEntity.ok()
     .header(HttpHeaders.CONTENT_DISPOSITION,"attachment;filename="+name)
     .body(data);
+}
+
+@PostMapping("/cancel")
+public ResponseEntity<?> cancelWaybill(@RequestParam String awbNo) {
+    System.out.println("✅ Backend received cancel waybill request for AWB No: " + awbNo);
+
+    CancelWaybillResponse response = cancellationService.cancelWaybill(awbNo);
+    return ResponseEntity.ok(response);
 }
 
 }
