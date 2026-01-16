@@ -1,33 +1,19 @@
 package com.example.demo.dto;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+
+@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Profile {
 
-    @JsonProperty("LoginId")
-    private String LoginId;
+    @JsonProperty("LoginID")
+    private String loginId;
 
-    @JsonProperty("LicenseKey")
-    private String LicenseKey;
+    @JsonProperty("LicenceKey")
+    private String licenceKey;
 
-    @JsonProperty("Api_type")   
-    private String Api_type;
-
-    public String getLoginId() {
-        return LoginId;
-    }
-    public void setLoginId(String loginId) {
-        LoginId = loginId;
-    }
-    public String getLicenseKey() {
-        return LicenseKey;
-    }
-    public void setLicenseKey(String licenseKey) {
-        LicenseKey = licenseKey;            
+    @JsonProperty("Api_type")
+    private String apiType;
 }
-    public String getApi_type() {
-        return Api_type;
-    }
-    public void setApi_type(String api_type) {
-        Api_type = api_type;
-    }
-}   
