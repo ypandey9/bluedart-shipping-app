@@ -10,6 +10,36 @@ function BulkCancelWaybill() {
 
   const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL;
 
+  const downloadTemplate = async () => {
+  try {
+    const response = await axios.get(
+      `${BACKEND}/api/bluedart/waybill/cancel/template`,
+      {
+        responseType: "blob"   // 🔴 REQUIRED
+      }
+    );
+
+    const url = window.URL.createObjectURL(
+      new Blob([response.data])
+    );
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute(
+      "download",
+      "Bluedart_Cancel_Waybill_Template.xlsx"
+    );
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch (error) {
+    alert("Failed to download template");
+  }
+};
+
+
+
   const handleUpload = async () => {
     if (!file) {
       alert("Please select a file");
@@ -52,9 +82,14 @@ function BulkCancelWaybill() {
 
   return (
     <div>
-      <h2>Bulk Waybill Cancellation</h2>
+      <h2 className="text-xl font-bold ml-10">Bulk Waybill Cancellation</h2>
+        <div>
+        <button onClick={downloadTemplate} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-green-700 ml-10">⬇️Download Bulk Template</button>
+        
 
+<div className="flex items-center gap-3 mt-5">
       <input
+        id="bulkFile"
         type="file"
         accept=".xlsx"
         onChange={(e) => {
@@ -63,13 +98,25 @@ function BulkCancelWaybill() {
             setFile(selectedFile);
           }
         }}
+        className="hidden"
       />
 
-      <br /><br />
+      <label
+              htmlFor="bulkFile"
+              className="cursor-pointer bg-gray-200 hover:bg-gray-300 px-4 py-2 ml-10 rounded border"
+            >
+              Browse…
+            </label>
 
-      <button onClick={handleUpload} disabled={loading}>
+             <span className="text-sm text-gray-700 truncate max-w-xs">
+              {file ? file.name : "No file selected"}
+            </span>
+            </div>
+
+      <button onClick={handleUpload} disabled={loading} className="bg-blue-600 text-white px-6 py-2 mt-5 ml-15 rounded hover:bg-blue-700 disabled:opacity-60">
         Upload & Cancel
       </button>
+      </div>
 
       {loading && <p>Uploading... {progress}%</p>}
 

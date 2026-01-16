@@ -1,12 +1,16 @@
 package com.example.demo.service;
 
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.dto.CancelWaybillRequest;
 import com.example.demo.dto.CancelWaybillResponse;
+
 
 
 
@@ -35,37 +39,99 @@ public class WaybillCancellationService {
         return bluedartAuthService.getJwtToken();
     }
 
-    public CancelWaybillResponse cancelWaybill(String awbNo) {
+//     public CancelWaybillResponse cancelWaybill(String awbNo) {
 
-    CancelWaybillRequest request=new CancelWaybillRequest();
-    CancelWaybillRequest.Request req=new CancelWaybillRequest.Request();
-    req.setAwbNo(awbNo);
+//     CancelWaybillRequest request=new CancelWaybillRequest();
+//     CancelWaybillRequest.Request req=new CancelWaybillRequest.Request();
+//     req.setAwbNo(awbNo);
 
+//     CancelWaybillRequest.Profile profile=new CancelWaybillRequest.Profile();
+//     profile.setApiType("S");
+//     profile.setLicenceKey(licenceKey);
+//     profile.setLoginId(loginId);
+
+//     request.setRequest(req);
+//     request.setProfile(profile);
+
+//     String jwtToken = getJwtToken();
+//     System.out.println("JWT = " + jwtToken);
+
+//     System.out.println("Request : "+request);
+
+//     HttpHeaders headers = new HttpHeaders();
+//     headers.set("JWTToken", jwtToken);
+
+
+
+//     headers.setContentType(MediaType.APPLICATION_JSON);
+
+//     HttpEntity<CancelWaybillRequest> entity =
+//             new HttpEntity<>(request, headers);
+
+//     try {
+
+//     ResponseEntity<CancelWaybillResponse> response = restTemplate.exchange(
+//             baseUrl, HttpMethod.POST, entity, CancelWaybillResponse.class); 
+
+//     CancelWaybillResponse body= response.getBody();  
+//     boolean isError=body.getCancelWaybillResult().getIsError();
+//     String message=body.getCancelWaybillResult().getStatus().get(0).getStatusInformation();
+
+//     cancelWaybillFileRepository.save(
+//         new CancelHistoryRecord (
+//             awbNo,
+//             isError ? "Failed":"Success",
+//             message,
+//             LocalDateTime.now(),
+//             "Single",
+//             "System"
+//         ));
+
+//     return body;
+
+//     } catch(Exception ex) {
+//         // 6️⃣ Save failure history (API / network error)
+//         cancelWaybillFileRepository.save(
+//                 new CancelHistoryRecord(
+//                         awbNo,
+//                         "FAILED",
+//                         ex.getMessage(),
+//                         LocalDateTime.now(),
+//                         "SINGLE",
+//                         "SYSTEM"
+//                 ));
+
+//                 throw ex;
+//     }
+// }
+
+public CancelWaybillResponse cancelWaybillInternal(String awb) {
+
+    CancelWaybillRequest  request=new CancelWaybillRequest();
+    CancelWaybillRequest.Request req= new CancelWaybillRequest.Request();
+    req.setAwbNo(awb);
     CancelWaybillRequest.Profile profile=new CancelWaybillRequest.Profile();
     profile.setApiType("S");
     profile.setLicenceKey(licenceKey);
     profile.setLoginId(loginId);
-
     request.setRequest(req);
     request.setProfile(profile);
 
-    String jwtToken = getJwtToken();
-    System.out.println("JWT = " + jwtToken);
-
-    System.out.println("Request : "+request);
-
-    HttpHeaders headers = new HttpHeaders();
-    headers.set("JWTToken", jwtToken);
-
-
-
+    HttpHeaders headers=new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-    HttpEntity<CancelWaybillRequest> entity =
-            new HttpEntity<>(request, headers);
-    ResponseEntity<CancelWaybillResponse> response = restTemplate.exchange(
-            baseUrl, HttpMethod.POST, entity, CancelWaybillResponse.class); 
+    headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+    headers.set("JWTToken", getJwtToken());
 
-    return response.getBody();  
-    }    
+    HttpEntity<CancelWaybillRequest> entity=new HttpEntity<>(request,headers);
 
+    ResponseEntity<CancelWaybillResponse> response=restTemplate.exchange(
+        baseUrl,
+        HttpMethod.POST,
+        entity,
+        CancelWaybillResponse.class
+        );
+
+        return response.getBody();
+}
+        
 }

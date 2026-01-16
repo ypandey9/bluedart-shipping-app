@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.repository.CancelWaybillFileRepository;
 import com.example.demo.repository.WaybillFileRepository;
 import com.example.demo.service.BluedartWaybillService;
 import com.example.demo.service.BulkCancelService;
@@ -10,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.dto.BulkCancelResponse;
 import com.example.demo.dto.BulkWaybillResult;
+import com.example.demo.dto.CancelHistoryRecord;
+import com.example.demo.dto.CancelStatus;
 import com.example.demo.dto.CancelWaybillResponse;
 
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,7 @@ import com.example.demo.service.WaybillCancellationService;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -40,9 +44,15 @@ public class BluedartWaybillController {
     private final BulkWaybillExcelService excelService;
     private final WaybillCancellationService cancellationService;
     private BulkCancelService bulkCancelService;
+    private final CancelWaybillFileRepository cancelRepository;
+
     
     public BluedartWaybillController(BluedartWaybillService waybillService, WaybillFileRepository repository, 
-        WaybillPdfService pdfService,BulkWaybillTemplateService  templateService, BulkWaybillFileParser bulkFileParser, BulkWaybillExcelService excelService, WaybillCancellationService cancellationService,BulkCancelService bulkCancelService) {
+        WaybillPdfService pdfService,BulkWaybillTemplateService  templateService, 
+        BulkWaybillFileParser bulkFileParser, BulkWaybillExcelService excelService, 
+        WaybillCancellationService cancellationService,
+        BulkCancelService bulkCancelService,
+    CancelWaybillFileRepository cancelRepository) {
         this.waybillService = waybillService;
         this.repository = repository;
         this.pdfService = pdfService;
@@ -51,6 +61,7 @@ public class BluedartWaybillController {
         this.excelService=excelService;
         this.cancellationService=cancellationService;
         this.bulkCancelService=bulkCancelService;
+        this.cancelRepository=cancelRepository;
     }
 
     @PostMapping("/waybill")
@@ -162,7 +173,25 @@ private ResponseEntity<byte[]> fileResponse(String name) throws Exception {
 public ResponseEntity<?> cancelWaybill(@RequestParam String awbNo) {
     System.out.println("✅ Backend received cancel waybill request for AWB No: " + awbNo);
 
-    CancelWaybillResponse response = cancellationService.cancelWaybill(awbNo);
+    CancelWaybillResponse response = cancellationService.cancelWaybillInternal(awbNo);
+
+    boolean isError=response.getCancelWaybillResult().getIsError();
+
+    String message=response.getCancelWaybillResult().getStatus().get(0).getStatusInformation();
+
+    CancelStatus status=isError ? CancelStatus.FAILED : CancelStatus.SUCCESS;
+
+    System.out.println("Saving records to the file...");
+
+    cancelRepository.save(new CancelHistoryRecord(
+        awbNo,
+        status,
+        message,
+        LocalDateTime.now(),
+        "SINGLE",
+        "SYSTEM"
+    ));
+
     return ResponseEntity.ok(response);
 }
 
@@ -179,6 +208,5 @@ public ResponseEntity<BulkCancelResponse> bulkCancelExcel(
 
     return ResponseEntity.ok(response);
 }
-
 
 }

@@ -265,7 +265,7 @@ useEffect(() => {
         </select>
 
         {/* ✅ Show COD field ONLY when COD selected */}
-        {form.subProductCode === "C" || form.subProductCode === "B" || form.subProductCode === "D" && (
+        {(form.subProductCode === "C" || form.subProductCode === "B" || form.subProductCode === "D") && (
           <input
             name="codAmount"
             placeholder="COD Amount"
