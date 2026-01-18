@@ -1,13 +1,19 @@
 package com.example.demo.service;
 import org.springframework.http.MediaType;
+
+import java.time.Instant;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.example.demo.dto.PickupRegistrationRequest;
+import com.example.demo.repository.PickupFileRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import reactor.core.publisher.Mono;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import com.fasterxml.jackson.databind.JsonNode;
 
 
@@ -21,83 +27,76 @@ public class PickupRegistrationService {
 
     private final WebClient webClient;
     private final BluedartAuthService authService;
+    private final PickupFileRepository pickupRepository;
 
-    public PickupRegistrationService(WebClient webClient,BluedartAuthService authService) {
+    public PickupRegistrationService(WebClient webClient,BluedartAuthService authService,PickupFileRepository pickupRepository) {
         this.webClient=webClient;
         this.authService=authService;
+        this.pickupRepository=pickupRepository;
     }
 
     
     public Mono<String> registerPickup(PickupRegistrationRequest request) {
 
-        // 🔍 DEBUG: log outgoing payload (TEMPORARY)
-        try {
-            System.out.println(
-                new com.fasterxml.jackson.databind.ObjectMapper()
-                    .writerWithDefaultPrettyPrinter()
-                    .writeValueAsString(request)
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     String jwtToken = authService.getJwtToken();
 
     return webClient.post()
-            .uri(baseUrl + endPoint)
-            .header("JWTToken", jwtToken)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(request)
-            .exchangeToMono(response -> {
+        .uri(baseUrl + endPoint)
+        .header("JWTToken", jwtToken)
+        .contentType(MediaType.APPLICATION_JSON)
+        .bodyValue(request)
+        .exchangeToMono(response -> {
 
-                if (response.statusCode().is2xxSuccessful()) {
-    return response.bodyToMono(String.class)
-        .map(body -> {
-            try {
-                ObjectMapper mapper = new ObjectMapper();
-                JsonNode root = mapper.readTree(body);
+            if (response.statusCode().is2xxSuccessful()) {
+                return response.bodyToMono(String.class)
+                    .map(body -> {
 
-                JsonNode result = root.path("RegisterPickupResult");
-                String tokenNumber = result.path("TokenNumber").asText();
+                        try {
+                            ObjectMapper mapper = new ObjectMapper();
+                            JsonNode responseJson = mapper.readTree(body);
 
-                JsonNode statusArray = result.path("Status");
-                String statusInfo = "";
+                            JsonNode result = responseJson.path("RegisterPickupResult");
+                            String tokenNumber = result.path("TokenNumber").asText();
 
-                if (statusArray.isArray() && statusArray.size() > 0) {
-                    statusInfo = statusArray.get(0)
-                            .path("StatusInformation")
-                            .asText();
-                }
+                            String statusInfo = "";
+                            JsonNode statusArray = result.path("Status");
+                            if (statusArray.isArray() && statusArray.size() > 0) {
+                                statusInfo = statusArray.get(0)
+                                        .path("StatusInformation")
+                                        .asText();
+                            }
 
-                // ✅ PRINT REQUIRED DETAILS
-                System.out.println("✅ Pickup Status : " + statusInfo);
-                System.out.println("📦 Token Number  : " + tokenNumber);
+                            // build history object
+                            ObjectNode history = mapper.createObjectNode();
+                            history.put("timestamp", Instant.now().toString());
+                            history.put("tokenNumber", tokenNumber);
+                            history.put("status", statusInfo);
 
-            } catch (Exception e) {
-                System.err.println("❌ Failed to parse pickup response");
-                e.printStackTrace();
+                            history.set("pickupRequest", mapper.valueToTree(request));
+                            history.set("pickupResponse", responseJson);
+
+                            // save history
+                            pickupRepository.save(history);
+
+                            System.out.println("📦 Pickup saved. Token: " + tokenNumber);
+
+                        } catch (Exception e) {
+                            System.err.println("❌ Failed to save pickup history");
+                            e.printStackTrace();
+                        }
+
+                        return body;
+                    });
             }
 
-            // still return full response to controller
-            return body;
+            return response.bodyToMono(String.class)
+                .flatMap(errorBody -> {
+                    System.err.println("❌ Blue Dart Error Status: " + response.statusCode());
+                    System.err.println("❌ Blue Dart Error Body: " + errorBody);
+                    return Mono.error(new RuntimeException(errorBody));
+                });
         });
 }
 
-
-                
-
-                return response.bodyToMono(String.class)
-                        .flatMap(errorBody -> {
-                            System.err.println("❌ Blue Dart Error Status: "
-                                    + response.statusCode());
-                            System.err.println("❌ Blue Dart Error Body: "
-                                    + errorBody);
-
-                            return Mono.error(
-                                    new RuntimeException(errorBody)
-                            );
-                        });
-            });
-}
 
 }

@@ -1,0 +1,107 @@
+[ {
+  "timestamp" : "2026-01-17T19:20:45.089214500Z",
+  "tokenNumber" : "31288737DEMO",
+  "status" : "",
+  "pickupRequest" : {
+    "request" : {
+      "AWBNo" : [ "" ],
+      "AreaCode" : "DEL",
+      "CISDDN" : false,
+      "ContactPersonName" : "SoBHA anuram",
+      "CustomerAddress1" : "This is my firsy address",
+      "CustomerAddress2" : "Test address 2",
+      "CustomerAddress3" : "Test address 3",
+      "CustomerCode" : "099960",
+      "CustomerName" : "SoBHA anuram",
+      "CustomerPincode" : "110020",
+      "CustomerTelephoneNumber" : "",
+      "DoxNDox" : "?",
+      "EmailID" : "",
+      "IsForcePickup" : false,
+      "IsReversePickup" : false,
+      "MobileTelNo" : "7060756957",
+      "NumberofPieces" : "2",
+      "OfficeCloseTime" : "1600",
+      "PackType" : "",
+      "ProductCode" : "A",
+      "ReferenceNo" : "",
+      "Remarks" : "",
+      "RouteCode" : "",
+      "ShipmentPickupDate" : "/Date(1768761000000)/",
+      "ShipmentPickupTime" : "1600",
+      "SubProducts" : [ "E-Tailing" ],
+      "VolumeWeight" : 2.0,
+      "WeightofShipment" : 2.0,
+      "isToPayShipper" : false
+    },
+    "profile" : {
+      "LoginID" : "GG940111",
+      "LicenceKey" : "kh7mnhqkmgegoksipxr0urmqesesseup",
+      "Api_type" : "S"
+    }
+  },
+  "pickupResponse" : {
+    "RegisterPickupResult" : {
+      "IsError" : false,
+      "ShipmentPickupDate" : "/Date(1768674600000+0530)/",
+      "Status" : [ {
+        "StatusCode" : "InsertSuccess",
+        "StatusInformation" : ""
+      } ],
+      "TokenNumber" : "31288737DEMO"
+    }
+  }
+}, {
+  "timestamp" : "2026-01-17T19:39:08.414252900Z",
+  "tokenNumber" : "31288738DEMO",
+  "status" : "",
+  "pickupRequest" : {
+    "request" : {
+      "AWBNo" : [ "" ],
+      "AreaCode" : "DEL",
+      "CISDDN" : false,
+      "ContactPersonName" : "anush",
+      "CustomerAddress1" : "adddddd",
+      "CustomerAddress2" : "Test add1",
+      "CustomerAddress3" : "Test addre 3",
+      "CustomerCode" : "099960",
+      "CustomerName" : "xyzzz",
+      "CustomerPincode" : "110015",
+      "CustomerTelephoneNumber" : "",
+      "DoxNDox" : "?",
+      "EmailID" : "",
+      "IsForcePickup" : false,
+      "IsReversePickup" : false,
+      "MobileTelNo" : "7060756957",
+      "NumberofPieces" : "2",
+      "OfficeCloseTime" : "1600",
+      "PackType" : "",
+      "ProductCode" : "A",
+      "ReferenceNo" : "",
+      "Remarks" : "",
+      "RouteCode" : "",
+      "ShipmentPickupDate" : "/Date(1768588200000)/",
+      "ShipmentPickupTime" : "1600",
+      "SubProducts" : [ "E-Tailing" ],
+      "VolumeWeight" : 2.0,
+      "WeightofShipment" : 2.0,
+      "isToPayShipper" : false
+    },
+    "profile" : {
+      "LoginID" : "GG940111",
+      "LicenceKey" : "kh7mnhqkmgegoksipxr0urmqesesseup",
+      "Api_type" : "S"
+    }
+  },
+  "pickupResponse" : {
+    "RegisterPickupResult" : {
+      "IsError" : false,
+      "ShipmentPickupDate" : "/Date(1768674600000+0530)/",
+      "Status" : [ {
+        "StatusCode" : "InsertSuccess",
+        "StatusInformation" : ""
+      } ],
+      "TokenNumber" : "31288738DEMO"
+    }
+  }
+} ]

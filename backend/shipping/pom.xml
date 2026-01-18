@@ -107,6 +107,14 @@
         <artifactId>spring-boot-starter-webflux</artifactId>
     </dependency>
 
+	<!-- For xml to json -->
+
+	<dependency>
+  <groupId>com.fasterxml.jackson.dataformat</groupId>
+  <artifactId>jackson-dataformat-xml</artifactId>
+</dependency>
+
+
 		
 	</dependencies>
 
