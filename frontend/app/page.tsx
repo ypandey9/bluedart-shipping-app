@@ -44,6 +44,12 @@ export default function Home() {
     creditReferenceNo:"",
     pieceCount:"",
     labelSize: "A4",
+    isChequeDD:"",
+    favouringName:"",
+    payableAt:"",
+    invoiceDate:"",
+    InvoiceNumber:"",
+
 
 
     // COD
@@ -183,6 +189,11 @@ useEffect(() => {
           ProductType: 1,
           RegisterPickup: true,
           SubProductCode: form.subProductCode,
+          FavouringName:form.favouringName,
+          IsChequeDD:form.isChequeDD,
+          PayableAt:form.payableAt,
+          InvoiceDate:form.invoiceDate,
+          InvoiceNumber:form.invoiceNo,
 
           itemdtl: [
             {
@@ -363,6 +374,15 @@ useEffect(() => {
 //     </main>
 //   );
 
+
+const isCOD = form.subProductCode === "C";
+const isDOD = form.subProductCode === "D";
+const isFODDOD = form.subProductCode === "B";
+
+const needsCollectable = isCOD || isDOD || isFODDOD;
+const needsChequeDetails = isDOD || isFODDOD;
+
+
 return (
   <main className="max-w-7xl mx-auto p-6 text-sm">
     <h1 className="text-2xl font-bold text-center mb-6">
@@ -406,7 +426,7 @@ return (
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <input placeholder="Telephone No" />
+          <input name="shipperTelephone" placeholder="Telephone No" onChange={handleChange} />
           <input name="shipperMobile" placeholder="Mobile No" onChange={handleChange} />
         </div>
       </fieldset>
@@ -432,7 +452,7 @@ return (
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <input placeholder="Telephone No" />
+          <input name="consigneeTelephone" placeholder="Telephone No" onChange={handleChange}/>
           <input name="consigneeMobile" placeholder="Mobile No" onChange={handleChange} />
         </div>
       </fieldset>
@@ -442,7 +462,7 @@ return (
     <fieldset className="border p-4 mb-4">
       <legend className="font-semibold px-2">Shipment Details</legend>
 
-      <div className="grid grid-cols-6 gap-3">
+      <div className="grid grid-cols-7 gap-2">
         <input name="creditReferenceNo" placeholder="Ref No" onChange={handleChange}/>
         <input name="invoiceNo" placeholder="Invoice No" onChange={handleChange} />
         <input name="invoiceDate" type="date" onChange={handleChange}/>
@@ -450,13 +470,75 @@ return (
         <input name="declaredValue" placeholder="Dec. Value" onChange={handleChange} />
         <input name="weight" placeholder="Weight" onChange={handleChange} />
 
-             {(form.subProductCode === "C" || form.subProductCode === "B" || form.subProductCode === "D") && (
+             {needsCollectable && (
           <input
             name="codAmount"
+            type="number"
+            min="1"
+            value={form.codAmount}
             placeholder="COD Amount"
             onChange={handleChange}
+            required
+            className="border px-2 py-1 rounded"
           />
         )}
+
+        {needsChequeDetails && (
+  <fieldset className="border p-3 rounded flex flex-col gap-2">
+    <legend className="font-semibold px-2">
+      DOD / FOD Details
+    </legend>
+
+    <div className="items-center flex items-center gap-1">
+      {/* Favouring Name */}
+      <input
+        name="favouringName"
+        placeholder="Favouring Name"
+        value={form.favouringName}
+        onChange={handleChange}
+        required
+        className="border px-2 py-1 rounded"
+      />
+
+      {/* Cheque / DD */}
+      <div className="flex gap-3 items-center">
+        <label className="flex items-center gap-1">
+          <input
+            type="radio"
+            name="isChequeDD"
+            value="Q"
+            checked={form.isChequeDD === "Q"}
+            onChange={handleChange}
+          />
+          Cheque
+        </label>
+
+        <label className="flex items-center gap-1">
+          <input
+            type="radio"
+            name="isChequeDD"
+            value="D"
+            checked={form.isChequeDD === "D"}
+            onChange={handleChange}
+          />
+          DD
+        </label>
+      </div>
+
+      {/* Payable At */}
+      <input
+        name="payableAt"
+        placeholder="Payable At"
+        value={form.payableAt}
+        onChange={handleChange}
+        required
+        className="border px-2 py-1 rounded flex items-center gap-1"
+      />
+    </div>
+  </fieldset>
+)}
+
+
 
 
       </div>
@@ -533,9 +615,10 @@ return (
         <legend>Action</legend>
         <button
           onClick={generateWaybill}
+          disabled={loading}
           className="bg-blue-600 text-white px-3 py-1 rounded"
         >
-          Submit
+          {loading ? "Generating..." : "Submit" }
         </button>
         <button className="bg-gray-400 text-white px-3 py-1 rounded">
           Reset
@@ -548,9 +631,18 @@ return (
       <legend className="font-semibold px-2">Response</legend>
 
       {awb && (
+        <div>
         <p className="text-green-700 font-semibold">
           ✅ Waybill Generated Successfully : {awb}
         </p>
+        
+        <a
+        href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bluedart/waybill/${awb}/pdf?size=${form.labelSize}`}
+        className="text-blue-600 underline ml-3"
+        >
+          Click to Download
+        </a>
+        </div>
       )}
 
       {error && (
@@ -561,6 +653,5 @@ return (
     </fieldset>
   </main>
 );
-
 
 }

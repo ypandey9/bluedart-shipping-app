@@ -3924,4 +3924,339 @@
       "TransactionAmount" : 0
     }
   }
+}, {
+  "awbNo" : "80149517066",
+  "creditReferenceNo" : "xxxyyy18",
+  "createdAt" : "2026-01-21T22:40:24.87621",
+  "request" : {
+    "Request" : {
+      "Consignee" : {
+        "AvailableDays" : "",
+        "AvailableTiming" : "",
+        "ConsigneeAddress1" : "kh no 546",
+        "ConsigneeAddress2" : "Rama road ",
+        "ConsigneeAddress3" : "new delhi",
+        "ConsigneeAttention" : "Surndra Kumar",
+        "ConsigneeEmailID" : "",
+        "ConsigneeMobile" : "9528013045",
+        "ConsigneeName" : "Surndra Kumar",
+        "ConsigneePincode" : "110020",
+        "ConsigneeTelephone" : ""
+      },
+      "Returnadds" : {
+        "ReturnAddress1" : "Test RTO Addr1",
+        "ReturnAddress2" : "Test RTO Addr2",
+        "ReturnAddress3" : "Test RTO Addr3",
+        "ReturnContact" : "Test RTO",
+        "ReturnMobile" : "9995554447",
+        "ReturnPincode" : "400057"
+      },
+      "Services" : {
+        "AWBNo" : "",
+        "ActualWeight" : "2",
+        "CollectableAmount" : 200,
+        "Commodity" : {
+          "CommodityDetail1" : "General Goods"
+        },
+        "CreditReferenceNo" : "xxxyyy18",
+        "DeclaredValue" : 100,
+        "Dimensions" : [ {
+          "Breadth" : 32.7,
+          "Count" : 1,
+          "Height" : 3.2,
+          "Length" : 28.9
+        } ],
+        "IsReversePickup" : false,
+        "ItemCount" : 1,
+        "PDFOutputNotRequired" : true,
+        "PackType" : "",
+        "PickupDate" : "/Date(1742978555000)/",
+        "PickupTime" : "1600",
+        "PieceCount" : "1",
+        "ProductCode" : "A",
+        "ProductType" : 1,
+        "RegisterPickup" : true,
+        "SubProductCode" : "C",
+        "itemdtl" : [ {
+          "ItemName" : "tewst",
+          "Itemquantity" : 1,
+          "ItemValue" : 0,
+          "TotalValue" : 0
+        } ],
+        "noOfDCGiven" : 0
+      },
+      "Shipper" : {
+        "CustomerAddress1" : "Opp ITI Collage ",
+        "CustomerAddress2" : "Niranjanpur mandhi",
+        "CustomerAddress3" : "Dehradun",
+        "CustomerCode" : "940111",
+        "CustomerMobile" : "7060756956",
+        "CustomerName" : "Bluedart Express Ltd",
+        "CustomerPincode" : "248001",
+        "IsToPayCustomer" : false,
+        "OriginArea" : "GGN",
+        "Sender" : "Yogesh Pandey"
+      }
+    },
+    "Profile" : {
+      "LoginID" : "GG940111",
+      "LicenceKey" : "kh7mnhqkmgegoksipxr0urmqesesseup",
+      "Api_type" : "S"
+    }
+  },
+  "response" : {
+    "GenerateWayBillResult" : {
+      "AWBNo" : "80149517066",
+      "AWBPrintContent" : null,
+      "AvailableAmountForBooking" : 0,
+      "AvailableBalance" : 0,
+      "CCRCRDREF" : "xxxyyy18",
+      "ClusterCode" : "NFC",
+      "DestinationArea" : "DEL",
+      "DestinationLocation" : "NFC",
+      "InvoicePrintContent" : null,
+      "IsError" : false,
+      "IsErrorInPU" : false,
+      "MPSDetails" : [ {
+        "MPSNumber" : "80149517066-0001",
+        "MPSRefNumber" : null
+      } ],
+      "MPSLabelPrintContent" : null,
+      "ShipmentPickupDate" : "/Date(1769020200000+0530)/",
+      "Status" : [ {
+        "StatusCode" : "Valid",
+        "StatusInformation" : "Waybill Generation Successful"
+      }, {
+        "StatusCode" : "Pickup Registration:Valid",
+        "StatusInformation" : "31347718DEMO"
+      } ],
+      "TokenNumber" : "31347718DEMO",
+      "TransactionAmount" : 0
+    }
+  }
+}, {
+  "awbNo" : "90001518821",
+  "creditReferenceNo" : "xxxyyy20",
+  "createdAt" : "2026-01-21T22:50:03.4541769",
+  "request" : {
+    "Request" : {
+      "Consignee" : {
+        "AvailableDays" : "",
+        "AvailableTiming" : "",
+        "ConsigneeAddress1" : "kh no 546",
+        "ConsigneeAddress2" : "Rama road ",
+        "ConsigneeAddress3" : "new delhi",
+        "ConsigneeAttention" : "Surndra Kumarm",
+        "ConsigneeEmailID" : "",
+        "ConsigneeMobile" : "9528013045",
+        "ConsigneeName" : "Surndra Kumarm",
+        "ConsigneePincode" : "110020",
+        "ConsigneeTelephone" : ""
+      },
+      "Returnadds" : {
+        "ReturnAddress1" : "Test RTO Addr1",
+        "ReturnAddress2" : "Test RTO Addr2",
+        "ReturnAddress3" : "Test RTO Addr3",
+        "ReturnContact" : "Test RTO",
+        "ReturnMobile" : "9995554447",
+        "ReturnPincode" : "400057"
+      },
+      "Services" : {
+        "AWBNo" : "",
+        "ActualWeight" : "2",
+        "CollectableAmount" : 0,
+        "Commodity" : {
+          "CommodityDetail1" : "General Goods"
+        },
+        "CreditReferenceNo" : "xxxyyy20",
+        "DeclaredValue" : 100,
+        "Dimensions" : [ {
+          "Breadth" : 32.7,
+          "Count" : 1,
+          "Height" : 3.2,
+          "Length" : 28.9
+        } ],
+        "IsReversePickup" : false,
+        "ItemCount" : 1,
+        "PDFOutputNotRequired" : true,
+        "PackType" : "",
+        "PickupDate" : "/Date(1742978555000)/",
+        "PickupTime" : "1600",
+        "PieceCount" : "1",
+        "ProductCode" : "A",
+        "ProductType" : 1,
+        "RegisterPickup" : true,
+        "SubProductCode" : "P",
+        "itemdtl" : [ {
+          "ItemName" : "tewst",
+          "Itemquantity" : 1,
+          "ItemValue" : 0,
+          "TotalValue" : 0
+        } ],
+        "noOfDCGiven" : 0
+      },
+      "Shipper" : {
+        "CustomerAddress1" : "Opp ITI Collage ",
+        "CustomerAddress2" : "Niranjanpur mandhi",
+        "CustomerAddress3" : "Dehradun",
+        "CustomerCode" : "940111",
+        "CustomerMobile" : "7060756956",
+        "CustomerName" : "Bluedart Express Ltd",
+        "CustomerPincode" : "248001",
+        "IsToPayCustomer" : false,
+        "OriginArea" : "GGN",
+        "Sender" : "Yogesh Pandey"
+      }
+    },
+    "Profile" : {
+      "LoginID" : "GG940111",
+      "LicenceKey" : "kh7mnhqkmgegoksipxr0urmqesesseup",
+      "Api_type" : "S"
+    }
+  },
+  "response" : {
+    "GenerateWayBillResult" : {
+      "AWBNo" : "90001518821",
+      "AWBPrintContent" : null,
+      "AvailableAmountForBooking" : 0,
+      "AvailableBalance" : 0,
+      "CCRCRDREF" : "xxxyyy20",
+      "ClusterCode" : "NFC",
+      "DestinationArea" : "DEL",
+      "DestinationLocation" : "NFC",
+      "InvoicePrintContent" : null,
+      "IsError" : false,
+      "IsErrorInPU" : false,
+      "MPSDetails" : [ {
+        "MPSNumber" : "90001518821-0001",
+        "MPSRefNumber" : null
+      } ],
+      "MPSLabelPrintContent" : null,
+      "ShipmentPickupDate" : "/Date(1769020200000+0530)/",
+      "Status" : [ {
+        "StatusCode" : "Valid",
+        "StatusInformation" : "Waybill Generation Successful"
+      }, {
+        "StatusCode" : "Pickup Registration:InsertFailure",
+        "StatusInformation" : "PickupIsAlreadyRegister"
+      } ],
+      "TokenNumber" : "31347718DEMO",
+      "TransactionAmount" : 0
+    }
+  }
+}, {
+  "awbNo" : "80149517081",
+  "creditReferenceNo" : "xyz",
+  "createdAt" : "2026-01-22T00:17:15.2243932",
+  "request" : {
+    "Request" : {
+      "Consignee" : {
+        "AvailableDays" : "",
+        "AvailableTiming" : "",
+        "ConsigneeAddress1" : "kh no 546",
+        "ConsigneeAddress2" : "Rama road ",
+        "ConsigneeAddress3" : "new delhi",
+        "ConsigneeAttention" : "Surndra Kumarm",
+        "ConsigneeEmailID" : "",
+        "ConsigneeMobile" : "9528013045",
+        "ConsigneeName" : "Surndra Kumarm",
+        "ConsigneePincode" : "110020",
+        "ConsigneeTelephone" : "9528013045"
+      },
+      "Returnadds" : {
+        "ReturnAddress1" : "Test RTO Addr1",
+        "ReturnAddress2" : "Test RTO Addr2",
+        "ReturnAddress3" : "Test RTO Addr3",
+        "ReturnContact" : "Test RTO",
+        "ReturnMobile" : "9995554447",
+        "ReturnPincode" : "400057"
+      },
+      "Services" : {
+        "AWBNo" : "",
+        "ActualWeight" : "2",
+        "CollectableAmount" : 200,
+        "Commodity" : {
+          "CommodityDetail1" : "General Goods"
+        },
+        "CreditReferenceNo" : "xyz",
+        "DeclaredValue" : 100,
+        "Dimensions" : [ {
+          "Breadth" : 32.7,
+          "Count" : 1,
+          "Height" : 3.2,
+          "Length" : 28.9
+        } ],
+        "IsReversePickup" : false,
+        "ItemCount" : 1,
+        "PDFOutputNotRequired" : true,
+        "PackType" : "",
+        "PickupDate" : "/Date(1742978555000)/",
+        "PickupTime" : "1600",
+        "PieceCount" : "1",
+        "ProductCode" : "A",
+        "ProductType" : 1,
+        "RegisterPickup" : true,
+        "SubProductCode" : "C",
+        "FavouringName" : "",
+        "IsChequeDD" : "",
+        "PayableAt" : "",
+        "InvoiceDate" : "2026-01-21",
+        "InvoiceNumber" : "12234",
+        "itemdtl" : [ {
+          "ItemName" : "tewst",
+          "Itemquantity" : 1,
+          "ItemValue" : 0,
+          "TotalValue" : 0
+        } ],
+        "noOfDCGiven" : 0
+      },
+      "Shipper" : {
+        "CustomerAddress1" : "Opp ITI Collage ",
+        "CustomerAddress2" : "Niranjanpur mandhi",
+        "CustomerAddress3" : "Dehradun",
+        "CustomerCode" : "940111",
+        "CustomerMobile" : "7060756956",
+        "CustomerName" : "Bluedart Express Ltd",
+        "CustomerPincode" : "248001",
+        "IsToPayCustomer" : false,
+        "OriginArea" : "GGN",
+        "Sender" : "Yogesh Pandey"
+      }
+    },
+    "Profile" : {
+      "LoginID" : "GG940111",
+      "LicenceKey" : "kh7mnhqkmgegoksipxr0urmqesesseup",
+      "Api_type" : "S"
+    }
+  },
+  "response" : {
+    "GenerateWayBillResult" : {
+      "AWBNo" : "80149517081",
+      "AWBPrintContent" : null,
+      "AvailableAmountForBooking" : 0,
+      "AvailableBalance" : 0,
+      "CCRCRDREF" : "xyz",
+      "ClusterCode" : "NFC",
+      "DestinationArea" : "DEL",
+      "DestinationLocation" : "NFC",
+      "InvoicePrintContent" : null,
+      "IsError" : false,
+      "IsErrorInPU" : false,
+      "MPSDetails" : [ {
+        "MPSNumber" : "80149517081-0001",
+        "MPSRefNumber" : null
+      } ],
+      "MPSLabelPrintContent" : null,
+      "ShipmentPickupDate" : "/Date(1769020200000+0530)/",
+      "Status" : [ {
+        "StatusCode" : "Valid",
+        "StatusInformation" : "Waybill Generation Successful"
+      }, {
+        "StatusCode" : "Pickup Registration:InsertFailure",
+        "StatusInformation" : "PickupIsAlreadyRegister"
+      } ],
+      "TokenNumber" : "31347718DEMO",
+      "TransactionAmount" : 0
+    }
+  }
 } ]
