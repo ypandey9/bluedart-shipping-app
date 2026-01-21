@@ -23,15 +23,15 @@ public class BlueDartTrackingService {
     private String licenseKey;
 
     private final RestTemplate restTemplate = new RestTemplate();
-    private final BluedartAuthService authService;
+    private final BlueDartTrackingAuthService authService;
 
-    public BlueDartTrackingService(BluedartAuthService authService) {
+    public BlueDartTrackingService(BlueDartTrackingAuthService authService) {
         this.authService=authService;
     }
 
 
     public String trackShipment(String awbNumber) {
-        String jwtToken="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdWJqZWN0LXN1YmplY3QiLCJhdWQiOlsiYXVkaWVuY2UxIiwiYXVkaWVuY2UyIl0sImlzcyI6InVybjovL2FwaWdlZS1lZGdlLUpXVC1wb2xpY3ktdGVzdCIsImV4cCI6MTc2ODgwMDYzMSwiaWF0IjoxNzY4NzE0MjMxLCJqdGkiOiI5ZGJiMjMyYS1hN2FlLTRlMjktYTg0Ny1kNzc1NzgzNTZhOWYifQ.1h4w7-6uzEZauJ0vxZNOxGLKuX1jujG-RHCbJOYP3QA";//authService.getJwtToken();
+        String jwtToken= authService.getJwtToken(); //"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzdWJqZWN0LXN1YmplY3QiLCJhdWQiOlsiYXVkaWVuY2UxIiwiYXVkaWVuY2UyIl0sImlzcyI6InVybjovL2FwaWdlZS1lZGdlLUpXVC1wb2xpY3ktdGVzdCIsImV4cCI6MTc2ODgwMDYzMSwiaWF0IjoxNzY4NzE0MjMxLCJqdGkiOiI5ZGJiMjMyYS1hN2FlLTRlMjktYTg0Ny1kNzc1NzgzNTZhOWYifQ.1h4w7-6uzEZauJ0vxZNOxGLKuX1jujG-RHCbJOYP3QA";//authService.getJwtToken();
        UriComponentsBuilder uriBuilder = UriComponentsBuilder
                 .fromUriString(baseUrl + trackingPath)
                 .queryParam("handler", "tnt")

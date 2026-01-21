@@ -15,8 +15,12 @@ export default function Home() {
     customerCode: "940111",
     originArea: "GGN",
     shipperName: "Test Cust Name",
+    shipperAddress1:"",
+    shipperAddress2:"",
+    shipperAddress3:"",
     shipperMobile: "9996665554",
     shipperPincode: "122002",
+    sender:"",
 
     // Consignee
     consigneeName: "",
@@ -25,6 +29,9 @@ export default function Home() {
     consigneeAddr1: "",
     consigneeAddr2: "",
     consigneeAddr3: "",
+    consigneeTelephone:"",
+    receiver: "",
+
 
     // Shipment
     productCode: "",
@@ -33,6 +40,11 @@ export default function Home() {
     weight: "",
     declaredValue: "",
     pickupTime: "1600",
+    isTopay:false,
+    creditReferenceNo:"",
+    pieceCount:"",
+    labelSize: "A4",
+
 
     // COD
     codAmount: "",
@@ -53,10 +65,15 @@ useEffect(() => {
 
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+) => {
+  const { name, value, type } = e.target;
+
+  setForm(prev => ({
+    ...prev,
+    [name]: type === "number" ? Number(value) : value,
+  }));
+};
 
   /* ---------------- VALIDATION ---------------- */
 
@@ -110,14 +127,14 @@ useEffect(() => {
           AvailableDays: "",
           AvailableTiming: "",
           ConsigneeAddress1: form.consigneeAddr1,
-          ConsigneeAddress2: form.consigneeAddr2 || "NA",
-          ConsigneeAddress3: form.consigneeAddr3 || "NA",
-          ConsigneeAttention: "ABCD",
-          ConsigneeEmailID: "testemail@bluedart.com",
+          ConsigneeAddress2: form.consigneeAddr2 || "",
+          ConsigneeAddress3: form.consigneeAddr3 || "",
+          ConsigneeAttention: form.consigneeName,
+          ConsigneeEmailID: "",
           ConsigneeMobile: form.consigneeMobile,
           ConsigneeName: form.consigneeName,
           ConsigneePincode: form.consigneePincode,
-          ConsigneeTelephone: "",
+          ConsigneeTelephone: form.consigneeTelephone,
         },
 
         Returnadds: {
@@ -143,7 +160,7 @@ useEffect(() => {
             CommodityDetail1: "General Goods",
           },
 
-          CreditReferenceNo: "CR-" + Date.now(),
+          CreditReferenceNo: form.creditReferenceNo || "CR-" + Date.now(),
           DeclaredValue: Number(form.declaredValue),
 
           Dimensions: [
@@ -161,7 +178,7 @@ useEffect(() => {
           PackType: form.packType,
           PickupDate: "/Date(1742978555000)/",
           PickupTime: form.pickupTime,
-          PieceCount: "1",
+          PieceCount: form.pieceCount,
           ProductCode: form.productCode,
           ProductType: 1,
           RegisterPickup: true,
@@ -180,15 +197,16 @@ useEffect(() => {
         },
 
         Shipper: {
-          CustomerAddress1: "Test Cust Addr1",
-          CustomerAddress2: "Test Cust Addr2",
-          CustomerAddress3: "Test Cust Addr3",
+          CustomerAddress1: form.shipperAddress1,
+          CustomerAddress2: form.shipperAddress2 || "",
+          CustomerAddress3: form.shipperAddress3,
           CustomerCode: form.customerCode,
           CustomerMobile: form.shipperMobile,
           CustomerName: form.shipperName,
           CustomerPincode: form.shipperPincode,
-          IsToPayCustomer: false,
+          IsToPayCustomer: form.isTopay,
           OriginArea: form.originArea,
+          Sender:form.sender,
         },
       },
 
@@ -222,12 +240,136 @@ useEffect(() => {
 
   /* ---------------- UI ---------------- */
 
-  return (
-    <main className="max-w-4xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">
-        Bluedart Waybill Generator
-      </h1>
-<a
+//   return (
+//     <main className="max-w-4xl mx-auto p-6">
+//       <h1 className="text-2xl font-bold mb-6">
+//         Bluedart Waybill Generator
+//       </h1>
+// <a
+//   href="/bulk-waybill"
+//   className="text-blue-600 underline text-sm"
+// >
+//   → Switch to Bulk Waybill Generator
+// </a>
+
+// <a
+//   href="/cancel-waybill"
+//   className="text-blue-600 underline text-sm m-10"
+// >
+//   → Go to cancel waybills
+// </a>
+
+
+//       <div className="grid grid-cols-2 gap-4">
+//         <input name="consigneeName" placeholder="Consignee Name" onChange={handleChange} />
+//         <input name="consigneeMobile" placeholder="Consignee Mobile" onChange={handleChange} />
+//         <input name="consigneePincode" placeholder="Consignee Pincode" onChange={handleChange} />
+//         <input name="consigneeAddr1" placeholder="Address Line 1" onChange={handleChange} />
+
+//         <select name="productCode" onChange={handleChange}>
+//           <option value="">Select Product Code</option>
+//           <option value="A">A – Air Express</option>
+//           <option value="E">E – Express (Road)</option>
+//           <option value="D">Domestic Priority</option>
+//         </select>
+
+//         <select name="subProductCode" onChange={handleChange}>
+//           <option value="">Select Sub Product</option>
+//           <option value="P">P-PREPAID</option>
+//           <option value="C">C-COD</option>
+//           <option value="A">A-FODPREPAID</option>
+//           <option value="B">B-FODDOD</option>
+//           <option value="D">D-DOD</option>
+//         </select>
+
+        {/* ✅ Show COD field ONLY when COD selected */}
+        // {(form.subProductCode === "C" || form.subProductCode === "B" || form.subProductCode === "D") && (
+        //   <input
+        //     name="codAmount"
+        //     placeholder="COD Amount"
+        //     onChange={handleChange}
+        //   />
+        // )}
+
+//         <select name="packType" onChange={handleChange}>
+//           <option value="">Select Pack Type (Optional)</option>
+//           <option value="L">L</option>
+//         </select>
+
+//         <input name="weight" placeholder="Weight (kg)" onChange={handleChange} />
+//         <input name="declaredValue" placeholder="Declared Value" onChange={handleChange} />
+//         <input name="itemName" placeholder="Item Name" onChange={handleChange} />
+//       </div>
+       
+//       <button
+//         onClick={generateWaybill}
+//         disabled={loading}
+//         className="mt-6 bg-blue-600 text-white px-6 py-2 rounded"
+//       >
+//         {loading ? "Generating..." : "Generate Waybill"}
+//       </button>
+
+//       {awb && (
+//         <div className="mt-6 bg-green-100 p-4 rounded">
+//           ✅ Waybill Generated: <b>{awb}</b>
+//         </div>
+//       )}
+
+//       {error && (
+//         <div className="mt-6 bg-red-100 p-4 rounded">
+//           ❌ {error}
+//         </div>
+//       )}
+
+//       <table className="mt-8 w-full border">
+//   <thead>
+//     <tr className="bg-gray-100">
+//       <th className="p-2 border">AWB</th>
+//       <th className="p-2 border">Reference</th>
+//       <th className="p-2 border">Date</th>
+//       <th className="p-2 border">Action</th>
+//       <th className="p-2 border">Size</th>
+//     </tr>
+//   </thead>
+//   <tbody>
+//     {waybills.map(w => (
+//       <tr key={w.awbNo}>
+//         <td className="border p-2">{w.awbNo}</td>
+//         <td className="border p-2">{w.creditReferenceNo}</td>
+//         <td className="border p-2">
+//           {new Date(w.createdAt).toLocaleDateString()}
+//         </td>
+//         <td className="border p-2">
+//           <a
+//             href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bluedart/waybill/${w.awbNo}/pdf?size=${labelSize[w.awbNo] || "A4"}`}
+//             className="text-blue-600 underline"
+//           >
+//             Download PDF
+//           </a>
+//         </td>
+//         <td>
+//           <select 
+//       value={labelSize[w.awbNo] || "A4"} 
+//       onChange={e => setLabelSize(prev=>({...prev,[w.awbNo]:e.target.value}))} 
+//       className="m-2 border p-2 rounded">
+//         <option value="A4">lbl-A4</option>
+//         <option value="LABEL_4X6">lbl-4x6</option>
+//       </select>
+//         </td>
+//       </tr>
+//     ))}
+//   </tbody>
+// </table>
+//     </main>
+//   );
+
+return (
+  <main className="max-w-7xl mx-auto p-6 text-sm">
+    <h1 className="text-2xl font-bold text-center mb-6">
+      Book A Shipment
+    </h1>
+
+    <a
   href="/bulk-waybill"
   className="text-blue-600 underline text-sm"
 >
@@ -242,30 +384,73 @@ useEffect(() => {
 </a>
 
 
-      <div className="grid grid-cols-2 gap-4">
+
+    {/* ================= SHIPPER ================= */}
+    <fieldset className="border p-4 mb-4">
+      <legend className="font-semibold px-2">Shipper</legend>
+
+      <div className="grid grid-cols-3 gap-3 mb-3">
+        <input name="customerCode" placeholder="Customer Code" onChange={handleChange} />
+        <input name="shipperName" placeholder="Shipper Name" onChange={handleChange} />
+        <input name="sender" placeholder="Sender Name" onChange={handleChange} />
+      </div>
+
+      <fieldset className="border p-3">
+        <legend className="px-2">Pickup Address</legend>
+
+        <div className="grid grid-cols-4 gap-3 mb-3">
+          <input name="shipperAddress1" placeholder="Address1" onChange={handleChange} />
+          <input name="shipperAddress2" placeholder="Address2" onChange={handleChange} />
+          <input name="shipperAddress3" placeholder="Address3" onChange={handleChange} />
+          <input name="shipperPincode" placeholder="Pincode" onChange={handleChange} />
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <input placeholder="Telephone No" />
+          <input name="shipperMobile" placeholder="Mobile No" onChange={handleChange} />
+        </div>
+      </fieldset>
+    </fieldset>
+
+    {/* ================= CONSIGNEE ================= */}
+    <fieldset className="border p-4 mb-4">
+      <legend className="font-semibold px-2">Consignee</legend>
+
+      <div className="grid grid-cols-2 gap-3 mb-3">
         <input name="consigneeName" placeholder="Consignee Name" onChange={handleChange} />
-        <input name="consigneeMobile" placeholder="Consignee Mobile" onChange={handleChange} />
-        <input name="consigneePincode" placeholder="Consignee Pincode" onChange={handleChange} />
-        <input name="consigneeAddr1" placeholder="Address Line 1" onChange={handleChange} />
+        <input name="receiver" placeholder="Receiver Name" onChange={handleChange}/>
+      </div>
 
-        <select name="productCode" onChange={handleChange}>
-          <option value="">Select Product Code</option>
-          <option value="A">A – Air Express</option>
-          <option value="E">E – Express (Road)</option>
-          <option value="D">Domestic Priority</option>
-        </select>
+      <fieldset className="border p-3">
+        <legend className="px-2">Delivery Address</legend>
 
-        <select name="subProductCode" onChange={handleChange}>
-          <option value="">Select Sub Product</option>
-          <option value="P">P-PREPAID</option>
-          <option value="C">C-COD</option>
-          <option value="A">A-FODPREPAID</option>
-          <option value="B">B-FODDOD</option>
-          <option value="D">D-DOD</option>
-        </select>
+        <div className="grid grid-cols-4 gap-3 mb-3">
+          <input name="consigneeAddr1" placeholder="Address1" onChange={handleChange} />
+          <input name="consigneeAddr2" placeholder="Address2" onChange={handleChange} />
+          <input name="consigneeAddr3" placeholder="Address3" onChange={handleChange} />
+          <input name="consigneePincode" placeholder="Pincode" onChange={handleChange} />
+        </div>
 
-        {/* ✅ Show COD field ONLY when COD selected */}
-        {(form.subProductCode === "C" || form.subProductCode === "B" || form.subProductCode === "D") && (
+        <div className="grid grid-cols-2 gap-3">
+          <input placeholder="Telephone No" />
+          <input name="consigneeMobile" placeholder="Mobile No" onChange={handleChange} />
+        </div>
+      </fieldset>
+    </fieldset>
+
+    {/* ================= SHIPMENT DETAILS ================= */}
+    <fieldset className="border p-4 mb-4">
+      <legend className="font-semibold px-2">Shipment Details</legend>
+
+      <div className="grid grid-cols-6 gap-3">
+        <input name="creditReferenceNo" placeholder="Ref No" onChange={handleChange}/>
+        <input name="invoiceNo" placeholder="Invoice No" onChange={handleChange} />
+        <input name="invoiceDate" type="date" onChange={handleChange}/>
+        <input name="pieceCount" value={form.pieceCount} placeholder="No Of Box" onChange={handleChange} />
+        <input name="declaredValue" placeholder="Dec. Value" onChange={handleChange} />
+        <input name="weight" placeholder="Weight" onChange={handleChange} />
+
+             {(form.subProductCode === "C" || form.subProductCode === "B" || form.subProductCode === "D") && (
           <input
             name="codAmount"
             placeholder="COD Amount"
@@ -273,75 +458,109 @@ useEffect(() => {
           />
         )}
 
-        <select name="packType" onChange={handleChange}>
-          <option value="">Select Pack Type (Optional)</option>
-          <option value="L">L</option>
-        </select>
 
-        <input name="weight" placeholder="Weight (kg)" onChange={handleChange} />
-        <input name="declaredValue" placeholder="Declared Value" onChange={handleChange} />
-        <input name="itemName" placeholder="Item Name" onChange={handleChange} />
       </div>
-       
-      <button
-        onClick={generateWaybill}
-        disabled={loading}
-        className="mt-6 bg-blue-600 text-white px-6 py-2 rounded"
-      >
-        {loading ? "Generating..." : "Generate Waybill"}
-      </button>
+    </fieldset>
+
+    {/* ================= ITEM DETAILS ================= */}
+    <fieldset className="border p-4 mb-4">
+      <legend className="font-semibold px-2">Item Details</legend>
+
+      <div className="grid grid-cols-4 gap-3">
+        {/* <input name="refNo" placeholder="Ref No" /> */}
+        <input name="itemName" placeholder="Item Name" onChange={handleChange} />
+        <input placeholder="Product Desc1" />
+        <input placeholder="Product Desc2" />
+      </div>
+    </fieldset>
+
+    {/* ================= OPTIONS ROW ================= */}
+    <div className="grid grid-cols-6 gap-3 mb-4">
+
+      <fieldset className="border p-2">
+        <legend>Product Code</legend>
+        <select name="productCode" onChange={handleChange}>
+          <option value="">Select</option>
+          <option value="A">A – Air</option>
+          <option value="E">E – Road</option>
+          <option value="D">D – Priority</option>
+        </select>
+      </fieldset>
+
+      <fieldset className="border p-2">
+        <legend>SubProduct Code</legend>
+        <select name="subProductCode" value={form.subProductCode} onChange={handleChange}>
+          <option value="">Select</option>
+          <option value="P">P-PREPAID</option>
+          <option value="C">C-COD</option>
+          <option value="B">B-FODDOD</option>
+          <option value="D">D-DOD</option>
+        </select>
+      </fieldset>
+
+      
+
+      <fieldset className="border p-2">
+        <legend>IsToPay</legend>
+        <label className="mr-2">
+          <input type="radio" name="isTopay" checked={form.isTopay===true} onChange={()=>setForm({...form,isTopay:true})} /> Yes
+        </label>
+        <label>
+          <input type="radio" name="isTopay" checked={form.isTopay===false} onChange={()=>setForm({...form,isTopay:false})} /> No
+        </label>
+      </fieldset>
+
+      <fieldset className="border p-2">
+        <legend>Label Size</legend>
+        <select name="labelSize"
+        value={form.labelSize}
+        onChange={handleChange}
+        >
+          <option value="A4">A4</option>
+          <option value="LABEL_4X6">4x6</option>
+        </select>
+      </fieldset>
+
+      <fieldset className="border p-2">
+        <legend>ShipmentType</legend>
+        <select>
+          <option value="DOC">DOC</option>
+          <option value="NDOX">NDOX</option>
+        </select>
+      </fieldset>
+
+      <fieldset className="border p-2 flex gap-2 items-center">
+        <legend>Action</legend>
+        <button
+          onClick={generateWaybill}
+          className="bg-blue-600 text-white px-3 py-1 rounded"
+        >
+          Submit
+        </button>
+        <button className="bg-gray-400 text-white px-3 py-1 rounded">
+          Reset
+        </button>
+      </fieldset>
+    </div>
+
+    {/* ================= RESPONSE ================= */}
+    <fieldset className="border p-4">
+      <legend className="font-semibold px-2">Response</legend>
 
       {awb && (
-        <div className="mt-6 bg-green-100 p-4 rounded">
-          ✅ Waybill Generated: <b>{awb}</b>
-        </div>
+        <p className="text-green-700 font-semibold">
+          ✅ Waybill Generated Successfully : {awb}
+        </p>
       )}
 
       {error && (
-        <div className="mt-6 bg-red-100 p-4 rounded">
+        <p className="text-red-600 font-semibold">
           ❌ {error}
-        </div>
+        </p>
       )}
+    </fieldset>
+  </main>
+);
 
-      <table className="mt-8 w-full border">
-  <thead>
-    <tr className="bg-gray-100">
-      <th className="p-2 border">AWB</th>
-      <th className="p-2 border">Reference</th>
-      <th className="p-2 border">Date</th>
-      <th className="p-2 border">Action</th>
-      <th className="p-2 border">Size</th>
-    </tr>
-  </thead>
-  <tbody>
-    {waybills.map(w => (
-      <tr key={w.awbNo}>
-        <td className="border p-2">{w.awbNo}</td>
-        <td className="border p-2">{w.creditReferenceNo}</td>
-        <td className="border p-2">
-          {new Date(w.createdAt).toLocaleDateString()}
-        </td>
-        <td className="border p-2">
-          <a
-            href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bluedart/waybill/${w.awbNo}/pdf?size=${labelSize[w.awbNo] || "A4"}`}
-            className="text-blue-600 underline"
-          >
-            Download PDF
-          </a>
-        </td>
-        <td>
-          <select 
-      value={labelSize[w.awbNo] || "A4"} 
-      onChange={e => setLabelSize(prev=>({...prev,[w.awbNo]:e.target.value}))} 
-      className="m-2 border p-2 rounded">
-        <option value="A4">lbl-A4</option>
-        <option value="LABEL_4X6">lbl-4x6</option>
-      </select>
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-    </main>
-  );
+
 }
