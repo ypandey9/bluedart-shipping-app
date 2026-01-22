@@ -48,7 +48,8 @@ export default function Home() {
     favouringName:"",
     payableAt:"",
     invoiceDate:"",
-    InvoiceNumber:"",
+    invoiceNumber:"",
+    pickupDate:"",
 
 
 
@@ -164,6 +165,8 @@ useEffect(() => {
 
           Commodity: {
             CommodityDetail1: "General Goods",
+            CommodityDetail2: "General Goods",
+            CommodityDetail3: "General Goods",
           },
 
           CreditReferenceNo: form.creditReferenceNo || "CR-" + Date.now(),
@@ -182,7 +185,7 @@ useEffect(() => {
           ItemCount: 1,
           PDFOutputNotRequired: true,
           PackType: form.packType,
-          PickupDate: "/Date(1742978555000)/",
+          PickupDate: form.pickupDate,
           PickupTime: form.pickupTime,
           PieceCount: form.pieceCount,
           ProductCode: form.productCode,
@@ -193,7 +196,7 @@ useEffect(() => {
           IsChequeDD:form.isChequeDD,
           PayableAt:form.payableAt,
           InvoiceDate:form.invoiceDate,
-          InvoiceNumber:form.invoiceNo,
+          InvoiceNumber:form.invoiceNumber,
 
           itemdtl: [
             {
@@ -462,13 +465,22 @@ return (
     <fieldset className="border p-4 mb-4">
       <legend className="font-semibold px-2">Shipment Details</legend>
 
-      <div className="grid grid-cols-7 gap-2">
+      <div className="grid grid-cols-7 gap-2 items-center">
         <input name="creditReferenceNo" placeholder="Ref No" onChange={handleChange}/>
-        <input name="invoiceNo" placeholder="Invoice No" onChange={handleChange} />
-        <input name="invoiceDate" type="date" onChange={handleChange}/>
+        <input name="invoiceNumber" placeholder="Invoice No" onChange={handleChange} />
+        <div className="flex items-center gap-1">
+          <label className="text-xs whitespace-nowrap font-bold">InvDt : </label>
+          <input name="invoiceDate" type="date" id="invDt" onChange={handleChange}/>
+        </div>
+        
         <input name="pieceCount" value={form.pieceCount} placeholder="No Of Box" onChange={handleChange} />
         <input name="declaredValue" placeholder="Dec. Value" onChange={handleChange} />
         <input name="weight" placeholder="Weight" onChange={handleChange} />
+          <div className="flex items-center gap-1">
+          <label className="text-xs whitespace-nowrap font-bold">PickupDt : </label>
+          <input name="pickupDate" type="date" onChange={handleChange} />
+          </div>
+        
 
              {needsCollectable && (
           <input
@@ -551,8 +563,8 @@ return (
       <div className="grid grid-cols-4 gap-3">
         {/* <input name="refNo" placeholder="Ref No" /> */}
         <input name="itemName" placeholder="Item Name" onChange={handleChange} />
-        <input placeholder="Product Desc1" />
-        <input placeholder="Product Desc2" />
+        <input name="commodity1" placeholder="Product Desc1" onChange={handleChange} />
+        <input name="commodity2" placeholder="Product Desc2" onChange={handleChange} />
       </div>
     </fieldset>
 
