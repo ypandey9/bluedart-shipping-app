@@ -1,26 +1,39 @@
- "use client";
+"use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
+import { toBluedartDate } from "./lib/date";
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
   const [awb, setAwb] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [labelSize, setLabelSize] = useState<Record<string, string>>({});
+  const [isReturnAddressDiffrent,setIsReturnAddressDiffrent]=useState(false);
 
-
+  const refs = useRef<(HTMLInputElement | HTMLSelectElement | null)[]>([]);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const [form, setForm] = useState({
     // Shipper
     customerCode: "940111",
     originArea: "GGN",
-    shipperName: "Test Cust Name",
-    shipperAddress1:"",
-    shipperAddress2:"",
-    shipperAddress3:"",
+    shipperName: "XYZ Compnay.com",
+    shipperAddress1:"123, 2nd Floor, Sai Residency",
+    shipperAddress2:"4th Cross, 5th Main, Koramangala 4th Block",
+    shipperAddress3:"Gurgaon, Haryana – 122001",
     shipperMobile: "9996665554",
-    shipperPincode: "122002",
-    sender:"",
+    shipperTelephone:"",
+    shipperPincode: "122001",
+    sender:"Mr. Rahul Sharma",
+
+    // return address
+
+          returnAddress1: "",
+          returnAddress2: "",
+          returnAddress3: "",
+          returnContact: "",
+          returnMobile: "",
+          returnPincode: "",
 
     // Consignee
     consigneeName: "",
@@ -31,7 +44,6 @@ export default function Home() {
     consigneeAddr3: "",
     consigneeTelephone:"",
     receiver: "",
-
 
     // Shipment
     productCode: "",
@@ -50,7 +62,11 @@ export default function Home() {
     invoiceDate:"",
     invoiceNumber:"",
     pickupDate:"",
-
+    comodityDetails1:"",
+    comodityDetails2:"",
+    comodityDetails3:"",
+    productType:"",
+    
 
 
     // COD
@@ -69,7 +85,6 @@ useEffect(() => {
     .then(res => res.json())
     .then(setWaybills);
 }, []);
-
 
   const handleChange = (
   e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -96,8 +111,7 @@ useEffect(() => {
     //if (!form.subProductCode) return "Select Sub Product Code";
 
     if (Number(form.weight) <= 0) return "Weight must be greater than 0";
-    if (Number(form.declaredValue) <= 0)
-      return "Declared value must be greater than 0";
+    if (form.productType==="1" && Number(form.declaredValue) <= 0) return "Declared value must be greater than 0";
 
     if (!form.itemName) return "Item name is required";
 
@@ -108,9 +122,9 @@ useEffect(() => {
         return "COD amount must be greater than 0";
     }
 
-    if (form.subProductCode === "B") {
-      return "FODDOD service is currently unavailable";
-    }
+    // if (form.subProductCode === "B") {
+    //   return "FODDOD service is currently unavailable";
+    // }
 
     return null;
   };
@@ -128,14 +142,33 @@ useEffect(() => {
     setError(null);
     setAwb(null);
 
+    const Returnadds = isReturnAddressDiffrent
+  ? {
+      ReturnAddress1: form.returnAddress1,
+      ReturnAddress2: form.returnAddress2,
+      ReturnAddress3: form.returnAddress3,
+      ReturnContact: form.returnContact,
+      ReturnMobile: form.returnMobile,
+      ReturnPincode: form.returnPincode,
+    }
+  : {
+      ReturnAddress1: form.shipperAddress1,
+      ReturnAddress2: form.shipperAddress2,
+      ReturnAddress3: form.shipperAddress3,
+      ReturnContact: form.shipperName,
+      ReturnMobile: form.shipperMobile,
+      ReturnPincode: form.shipperPincode,
+    };
+
+    
     const payload = {
       Request: {
         Consignee: {
           AvailableDays: "",
           AvailableTiming: "",
           ConsigneeAddress1: form.consigneeAddr1,
-          ConsigneeAddress2: form.consigneeAddr2 || "",
-          ConsigneeAddress3: form.consigneeAddr3 || "",
+          ConsigneeAddress2: form.consigneeAddr2,
+          ConsigneeAddress3: form.consigneeAddr3,
           ConsigneeAttention: form.consigneeName,
           ConsigneeEmailID: "",
           ConsigneeMobile: form.consigneeMobile,
@@ -144,14 +177,7 @@ useEffect(() => {
           ConsigneeTelephone: form.consigneeTelephone,
         },
 
-        Returnadds: {
-          ReturnAddress1: "Test RTO Addr1",
-          ReturnAddress2: "Test RTO Addr2",
-          ReturnAddress3: "Test RTO Addr3",
-          ReturnContact: "Test RTO",
-          ReturnMobile: "9995554447",
-          ReturnPincode: "400057",
-        },
+        Returnadds: Returnadds,
 
         Services: {
           AWBNo: "",
@@ -164,9 +190,9 @@ useEffect(() => {
               : 0,
 
           Commodity: {
-            CommodityDetail1: "General Goods",
-            CommodityDetail2: "General Goods",
-            CommodityDetail3: "General Goods",
+            CommodityDetail1: form.comodityDetails1,
+            CommodityDetail2: form.comodityDetails2,
+            CommodityDetail3: form.comodityDetails3,
           },
 
           CreditReferenceNo: form.creditReferenceNo || "CR-" + Date.now(),
@@ -185,17 +211,17 @@ useEffect(() => {
           ItemCount: 1,
           PDFOutputNotRequired: true,
           PackType: form.packType,
-          PickupDate: form.pickupDate,
+          PickupDate: toBluedartDate(form.pickupDate),
           PickupTime: form.pickupTime,
           PieceCount: form.pieceCount,
           ProductCode: form.productCode,
-          ProductType: 1,
+          ProductType: Number(form.productType),
           RegisterPickup: true,
           SubProductCode: form.subProductCode,
           FavouringName:form.favouringName,
           IsChequeDD:form.isChequeDD,
           PayableAt:form.payableAt,
-          InvoiceDate:form.invoiceDate,
+          InvoiceDate:toBluedartDate(form.invoiceDate),
           InvoiceNumber:form.invoiceNumber,
 
           itemdtl: [
@@ -216,6 +242,7 @@ useEffect(() => {
           CustomerAddress3: form.shipperAddress3,
           CustomerCode: form.customerCode,
           CustomerMobile: form.shipperMobile,
+          CustomerTelephone:form.shipperTelephone,
           CustomerName: form.shipperName,
           CustomerPincode: form.shipperPincode,
           IsToPayCustomer: form.isTopay,
@@ -223,13 +250,13 @@ useEffect(() => {
           Sender:form.sender,
         },
       },
-
       Profile: {
         LoginID: "GG940111",
         LicenceKey: "kh7mnhqkmgegoksipxr0urmqesesseup",
         Api_type: "S",
       },
     };
+    
 
     try {
       const res = await fetch(
@@ -239,7 +266,10 @@ useEffect(() => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         }
+        
       );
+
+      
 
       if (!res.ok) throw new Error(await res.text());
 
@@ -252,142 +282,55 @@ useEffect(() => {
     }
   };
 
+// const handleKeyDown = (
+//   e: React.KeyboardEvent<
+//     HTMLInputElement | HTMLSelectElement
+//   >,
+//   index: number
+// ) => {
+//   if (e.key === "Enter") {
+//     e.preventDefault();
+
+//     const next = refs.current[index + 1];
+//     if (next) {
+//       next.focus();
+//     }
+//   }
+// };
+
+const handleKeyDown = (
+  e: React.KeyboardEvent<HTMLInputElement | HTMLSelectElement>,
+  index: number
+) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    const next = inputRefs.current[index + 1];
+    next?.focus();
+  }
+};
+
+
+
   /* ---------------- UI ---------------- */
-
-//   return (
-//     <main className="max-w-4xl mx-auto p-6">
-//       <h1 className="text-2xl font-bold mb-6">
-//         Bluedart Waybill Generator
-//       </h1>
-// <a
-//   href="/bulk-waybill"
-//   className="text-blue-600 underline text-sm"
-// >
-//   → Switch to Bulk Waybill Generator
-// </a>
-
-// <a
-//   href="/cancel-waybill"
-//   className="text-blue-600 underline text-sm m-10"
-// >
-//   → Go to cancel waybills
-// </a>
-
-
-//       <div className="grid grid-cols-2 gap-4">
-//         <input name="consigneeName" placeholder="Consignee Name" onChange={handleChange} />
-//         <input name="consigneeMobile" placeholder="Consignee Mobile" onChange={handleChange} />
-//         <input name="consigneePincode" placeholder="Consignee Pincode" onChange={handleChange} />
-//         <input name="consigneeAddr1" placeholder="Address Line 1" onChange={handleChange} />
-
-//         <select name="productCode" onChange={handleChange}>
-//           <option value="">Select Product Code</option>
-//           <option value="A">A – Air Express</option>
-//           <option value="E">E – Express (Road)</option>
-//           <option value="D">Domestic Priority</option>
-//         </select>
-
-//         <select name="subProductCode" onChange={handleChange}>
-//           <option value="">Select Sub Product</option>
-//           <option value="P">P-PREPAID</option>
-//           <option value="C">C-COD</option>
-//           <option value="A">A-FODPREPAID</option>
-//           <option value="B">B-FODDOD</option>
-//           <option value="D">D-DOD</option>
-//         </select>
-
-        {/* ✅ Show COD field ONLY when COD selected */}
-        // {(form.subProductCode === "C" || form.subProductCode === "B" || form.subProductCode === "D") && (
-        //   <input
-        //     name="codAmount"
-        //     placeholder="COD Amount"
-        //     onChange={handleChange}
-        //   />
-        // )}
-
-//         <select name="packType" onChange={handleChange}>
-//           <option value="">Select Pack Type (Optional)</option>
-//           <option value="L">L</option>
-//         </select>
-
-//         <input name="weight" placeholder="Weight (kg)" onChange={handleChange} />
-//         <input name="declaredValue" placeholder="Declared Value" onChange={handleChange} />
-//         <input name="itemName" placeholder="Item Name" onChange={handleChange} />
-//       </div>
-       
-//       <button
-//         onClick={generateWaybill}
-//         disabled={loading}
-//         className="mt-6 bg-blue-600 text-white px-6 py-2 rounded"
-//       >
-//         {loading ? "Generating..." : "Generate Waybill"}
-//       </button>
-
-//       {awb && (
-//         <div className="mt-6 bg-green-100 p-4 rounded">
-//           ✅ Waybill Generated: <b>{awb}</b>
-//         </div>
-//       )}
-
-//       {error && (
-//         <div className="mt-6 bg-red-100 p-4 rounded">
-//           ❌ {error}
-//         </div>
-//       )}
-
-//       <table className="mt-8 w-full border">
-//   <thead>
-//     <tr className="bg-gray-100">
-//       <th className="p-2 border">AWB</th>
-//       <th className="p-2 border">Reference</th>
-//       <th className="p-2 border">Date</th>
-//       <th className="p-2 border">Action</th>
-//       <th className="p-2 border">Size</th>
-//     </tr>
-//   </thead>
-//   <tbody>
-//     {waybills.map(w => (
-//       <tr key={w.awbNo}>
-//         <td className="border p-2">{w.awbNo}</td>
-//         <td className="border p-2">{w.creditReferenceNo}</td>
-//         <td className="border p-2">
-//           {new Date(w.createdAt).toLocaleDateString()}
-//         </td>
-//         <td className="border p-2">
-//           <a
-//             href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bluedart/waybill/${w.awbNo}/pdf?size=${labelSize[w.awbNo] || "A4"}`}
-//             className="text-blue-600 underline"
-//           >
-//             Download PDF
-//           </a>
-//         </td>
-//         <td>
-//           <select 
-//       value={labelSize[w.awbNo] || "A4"} 
-//       onChange={e => setLabelSize(prev=>({...prev,[w.awbNo]:e.target.value}))} 
-//       className="m-2 border p-2 rounded">
-//         <option value="A4">lbl-A4</option>
-//         <option value="LABEL_4X6">lbl-4x6</option>
-//       </select>
-//         </td>
-//       </tr>
-//     ))}
-//   </tbody>
-// </table>
-//     </main>
-//   );
 
 
 const isCOD = form.subProductCode === "C";
 const isDOD = form.subProductCode === "D";
 const isFODDOD = form.subProductCode === "B";
+const isDuts=form.productType==="1";
 
 const needsCollectable = isCOD || isDOD || isFODDOD;
 const needsChequeDetails = isDOD || isFODDOD;
 
-
 return (
-  <main className="max-w-7xl mx-auto p-6 text-sm">
+  <form
+  className="max-w-7xl mx-auto p-6 text-sm"
+  onSubmit={(e) => {
+    e.preventDefault();
+    generateWaybill();
+  }}
+>
+
     <h1 className="text-2xl font-bold text-center mb-6">
       Book A Shipment
     </h1>
@@ -407,32 +350,84 @@ return (
 </a>
 
 
-
     {/* ================= SHIPPER ================= */}
     <fieldset className="border p-4 mb-4">
       <legend className="font-semibold px-2">Shipper</legend>
 
       <div className="grid grid-cols-3 gap-3 mb-3">
-        <input name="customerCode" placeholder="Customer Code" onChange={handleChange} />
-        <input name="shipperName" placeholder="Shipper Name" onChange={handleChange} />
-        <input name="sender" placeholder="Sender Name" onChange={handleChange} />
+        <input
+  ref={(el) => {inputRefs.current[0] = el;}}
+  onKeyDown={e => handleKeyDown(e, 0)}
+  name="customerCode"
+  placeholder="Customer Code"
+  value={form.customerCode}
+  onChange={handleChange}
+/>
+        <input
+  ref={(el) => {
+    inputRefs.current[1] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 1)}
+  name="shipperName"
+  value={form.shipperName}
+  onChange={handleChange}
+/>
+        <input
+         ref={(el) => {
+    inputRefs.current[2] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 2)}
+        name="sender" placeholder="Sender Name" value={form.sender} onChange={handleChange} />
       </div>
 
       <fieldset className="border p-3">
         <legend className="px-2">Pickup Address</legend>
 
         <div className="grid grid-cols-4 gap-3 mb-3">
-          <input name="shipperAddress1" placeholder="Address1" onChange={handleChange} />
-          <input name="shipperAddress2" placeholder="Address2" onChange={handleChange} />
-          <input name="shipperAddress3" placeholder="Address3" onChange={handleChange} />
-          <input name="shipperPincode" placeholder="Pincode" onChange={handleChange} />
+          <input name="shipperAddress1" value={form.shipperAddress1} placeholder="Address1" onChange={handleChange} />
+          <input name="shipperAddress2" placeholder="Address2" value={form.shipperAddress2} onChange={handleChange} />
+          <input name="shipperAddress3" placeholder="Address3" value={form.shipperAddress3} onChange={handleChange} />
+          <input name="shipperPincode" placeholder="Pincode" value={form.shipperPincode} onChange={handleChange} />
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <input name="shipperTelephone" placeholder="Telephone No" onChange={handleChange} />
-          <input name="shipperMobile" placeholder="Mobile No" onChange={handleChange} />
+          <input name="shipperTelephone" placeholder="Telephone No" value={form.shipperTelephone} onChange={handleChange} />
+          <input name="shipperMobile" placeholder="Mobile No" value={form.shipperMobile} onChange={handleChange} />
         </div>
       </fieldset>
+      <fieldset className="border p-3">
+        <legend>Diff. Return Address?</legend>
+        <div className="flex items-center gap-1">
+       <label>Yes <input type="radio"  
+       name="isReturnAddressDiffrent" 
+       checked={isReturnAddressDiffrent===true}
+       onChange={()=>setIsReturnAddressDiffrent(true)}
+       /></label>
+       <label>No <input type="radio" 
+       name="isReturnAddressDiffrent"
+      checked={isReturnAddressDiffrent===false}
+      onChange={()=>setIsReturnAddressDiffrent(false)} />
+      </label>
+       </div>
+       {isReturnAddressDiffrent && (
+        <fieldset className="border p-3">
+        <legend className="px-2">Return Address</legend>
+
+        <div className="grid grid-cols-4 gap-3 mb-3">
+          <input name="returnAddress1" placeholder="Address1" onChange={handleChange} />
+          <input name="returnAddress2" placeholder="Address2" onChange={handleChange} />
+          <input name="returnAddress3" placeholder="Address3" onChange={handleChange} />
+          <input name="returnPincode" placeholder="Pincode"   onChange={handleChange} />
+
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <input name="returnContact" placeholder="Return Contact" onChange={handleChange} />
+          <input name="returnMobile" placeholder="Return Mobile" onChange={handleChange} />
+          </div>
+      </fieldset>
+       )}
+    </fieldset>
     </fieldset>
 
     {/* ================= CONSIGNEE ================= */}
@@ -474,7 +469,11 @@ return (
         </div>
         
         <input name="pieceCount" value={form.pieceCount} placeholder="No Of Box" onChange={handleChange} />
-        <input name="declaredValue" placeholder="Dec. Value" onChange={handleChange} />
+
+        {isDuts && (
+          <input name="declaredValue" placeholder="Dec. Value" onChange={handleChange} />
+        )}
+        
         <input name="weight" placeholder="Weight" onChange={handleChange} />
           <div className="flex items-center gap-1">
           <label className="text-xs whitespace-nowrap font-bold">PickupDt : </label>
@@ -549,10 +548,6 @@ return (
     </div>
   </fieldset>
 )}
-
-
-
-
       </div>
     </fieldset>
 
@@ -563,8 +558,9 @@ return (
       <div className="grid grid-cols-4 gap-3">
         {/* <input name="refNo" placeholder="Ref No" /> */}
         <input name="itemName" placeholder="Item Name" onChange={handleChange} />
-        <input name="commodity1" placeholder="Product Desc1" onChange={handleChange} />
-        <input name="commodity2" placeholder="Product Desc2" onChange={handleChange} />
+        <input name="comodityDetails1" placeholder="comodityDetails1" onChange={handleChange} />
+         <input name="comodityDetails2" placeholder="comodityDetails2" onChange={handleChange} />
+        <input name="comodityDetails3" placeholder="comodityDetails3" onChange={handleChange} />
       </div>
     </fieldset>
 
@@ -594,7 +590,7 @@ return (
 
       
 
-      <fieldset className="border p-2">
+      {/* <fieldset className="border p-2">
         <legend>IsToPay</legend>
         <label className="mr-2">
           <input type="radio" name="isTopay" checked={form.isTopay===true} onChange={()=>setForm({...form,isTopay:true})} /> Yes
@@ -602,7 +598,34 @@ return (
         <label>
           <input type="radio" name="isTopay" checked={form.isTopay===false} onChange={()=>setForm({...form,isTopay:false})} /> No
         </label>
-      </fieldset>
+      </fieldset> */}
+
+<fieldset className="border p-2">
+  <legend>IsToPay</legend>
+
+  <label className="mr-2">
+    <input
+      type="radio"
+      name="isTopay"
+      value="yes"
+      checked={form.isTopay === true}
+      onChange={() => setForm({ ...form, isTopay: true })}
+    />
+    Yes
+  </label>
+
+  <label>
+    <input
+      type="radio"
+      name="isTopay"
+      value="no"
+      checked={form.isTopay === false}
+      onChange={() => setForm({ ...form, isTopay: false })}
+    />
+    No
+  </label>
+</fieldset>
+
 
       <fieldset className="border p-2">
         <legend>Label Size</legend>
@@ -617,21 +640,30 @@ return (
 
       <fieldset className="border p-2">
         <legend>ShipmentType</legend>
-        <select>
-          <option value="DOC">DOC</option>
-          <option value="NDOX">NDOX</option>
+        <select name="productType" onChange={handleChange}>
+          <option value="0">DOX</option>
+          <option value="1">NDOX</option>
         </select>
       </fieldset>
 
       <fieldset className="border p-2 flex gap-2 items-center">
         <legend>Action</legend>
-        <button
+        {/* <button
           onClick={generateWaybill}
           disabled={loading}
           className="bg-blue-600 text-white px-3 py-1 rounded"
         >
           {loading ? "Generating..." : "Submit" }
-        </button>
+        </button> */}
+
+        <button
+  type="submit"
+  disabled={loading}
+  className="bg-blue-600 text-white px-3 py-1 rounded"
+>
+  {loading ? "Generating..." : "Submit"}
+</button>
+
         <button className="bg-gray-400 text-white px-3 py-1 rounded">
           Reset
         </button>
@@ -663,7 +695,7 @@ return (
         </p>
       )}
     </fieldset>
-  </main>
+  </form>
 );
 
 }
