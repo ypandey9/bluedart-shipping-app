@@ -11,7 +11,10 @@ export default function Home() {
   const [isReturnAddressDiffrent,setIsReturnAddressDiffrent]=useState(false);
 
   const refs = useRef<(HTMLInputElement | HTMLSelectElement | null)[]>([]);
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  //const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  const inputRefs = useRef<(HTMLElement | null)[]>([]);
+
 
   const [form, setForm] = useState({
     // Shipper
@@ -282,32 +285,39 @@ useEffect(() => {
     }
   };
 
+
 // const handleKeyDown = (
-//   e: React.KeyboardEvent<
-//     HTMLInputElement | HTMLSelectElement
-//   >,
+//   e: React.KeyboardEvent<HTMLInputElement | HTMLSelectElement>,
 //   index: number
 // ) => {
 //   if (e.key === "Enter") {
 //     e.preventDefault();
-
-//     const next = refs.current[index + 1];
-//     if (next) {
-//       next.focus();
-//     }
+//     const next = inputRefs.current[index + 1];
+//     next?.focus();
 //   }
 // };
 
+
 const handleKeyDown = (
-  e: React.KeyboardEvent<HTMLInputElement | HTMLSelectElement>,
-  index: number
+  e: React.KeyboardEvent,
+  currentIndex: number
 ) => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    const next = inputRefs.current[index + 1];
-    next?.focus();
+  if (e.key !== "Enter") return;
+
+  e.preventDefault();
+
+  let nextIndex = currentIndex + 1;
+
+  while (nextIndex < inputRefs.current.length) {
+    const nextEl = inputRefs.current[nextIndex];
+    if (nextEl && !nextEl.disabled) {
+      nextEl.focus();
+      return;
+    }
+    nextIndex++;
   }
 };
+
 
 
 
@@ -384,26 +394,69 @@ return (
         <legend className="px-2">Pickup Address</legend>
 
         <div className="grid grid-cols-4 gap-3 mb-3">
-          <input name="shipperAddress1" value={form.shipperAddress1} placeholder="Address1" onChange={handleChange} />
-          <input name="shipperAddress2" placeholder="Address2" value={form.shipperAddress2} onChange={handleChange} />
-          <input name="shipperAddress3" placeholder="Address3" value={form.shipperAddress3} onChange={handleChange} />
-          <input name="shipperPincode" placeholder="Pincode" value={form.shipperPincode} onChange={handleChange} />
+          <input 
+                 ref={(el) => {
+    inputRefs.current[3] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 3)}
+          name="shipperAddress1" value={form.shipperAddress1} placeholder="Address1" onChange={handleChange} />
+
+          <input 
+                 ref={(el) => {
+    inputRefs.current[4] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 4)}
+          name="shipperAddress2" placeholder="Address2" value={form.shipperAddress2} onChange={handleChange} />
+
+          <input        ref={(el) => {
+    inputRefs.current[5] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 5)}
+  name="shipperAddress3" placeholder="Address3" value={form.shipperAddress3} onChange={handleChange} />
+
+          <input
+                 ref={(el) => {
+    inputRefs.current[6] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 6)}
+          name="shipperPincode" placeholder="Pincode" value={form.shipperPincode} onChange={handleChange} />
+
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <input name="shipperTelephone" placeholder="Telephone No" value={form.shipperTelephone} onChange={handleChange} />
-          <input name="shipperMobile" placeholder="Mobile No" value={form.shipperMobile} onChange={handleChange} />
+          <input 
+                 ref={(el) => {
+    inputRefs.current[7] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 7)}
+          name="shipperTelephone" placeholder="Telephone No" value={form.shipperTelephone} onChange={handleChange} />
+
+          <input
+                 ref={(el) => {
+    inputRefs.current[8] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 8)}
+          name="shipperMobile" placeholder="Mobile No" value={form.shipperMobile} onChange={handleChange} />
         </div>
       </fieldset>
       <fieldset className="border p-3">
         <legend>Diff. Return Address?</legend>
         <div className="flex items-center gap-1">
-       <label>Yes <input type="radio"  
+       <label>Yes <input        
+       ref={(el) => {
+    inputRefs.current[9] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 9)} type="radio"  
        name="isReturnAddressDiffrent" 
        checked={isReturnAddressDiffrent===true}
        onChange={()=>setIsReturnAddressDiffrent(true)}
        /></label>
-       <label>No <input type="radio" 
+       <label>No <input 
+              ref={(el) => {
+    inputRefs.current[10] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 10)}
+       type="radio" 
        name="isReturnAddressDiffrent"
       checked={isReturnAddressDiffrent===false}
       onChange={()=>setIsReturnAddressDiffrent(false)} />
@@ -414,16 +467,50 @@ return (
         <legend className="px-2">Return Address</legend>
 
         <div className="grid grid-cols-4 gap-3 mb-3">
-          <input name="returnAddress1" placeholder="Address1" onChange={handleChange} />
-          <input name="returnAddress2" placeholder="Address2" onChange={handleChange} />
-          <input name="returnAddress3" placeholder="Address3" onChange={handleChange} />
-          <input name="returnPincode" placeholder="Pincode"   onChange={handleChange} />
+          <input 
+                 ref={(el) => {
+    inputRefs.current[11] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 11)}
+          name="returnAddress1" placeholder="Address1" onChange={handleChange} />
+
+          <input 
+                 ref={(el) => {
+    inputRefs.current[12] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 12)}
+          name="returnAddress2" placeholder="Address2" onChange={handleChange} />
+
+          <input 
+                 ref={(el) => {
+    inputRefs.current[13] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 13)}
+          name="returnAddress3" placeholder="Address3" onChange={handleChange} />
+
+          <input 
+                 ref={(el) => {
+    inputRefs.current[14] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 14)}
+          name="returnPincode" placeholder="Pincode"   onChange={handleChange} />
 
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <input name="returnContact" placeholder="Return Contact" onChange={handleChange} />
-          <input name="returnMobile" placeholder="Return Mobile" onChange={handleChange} />
+          <input 
+                 ref={(el) => {
+    inputRefs.current[15] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 15)}
+          name="returnContact" placeholder="Return Contact" onChange={handleChange} />
+
+          <input 
+                 ref={(el) => {
+    inputRefs.current[16] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 16)}
+          name="returnMobile" placeholder="Return Mobile" onChange={handleChange} />
           </div>
       </fieldset>
        )}
@@ -435,23 +522,66 @@ return (
       <legend className="font-semibold px-2">Consignee</legend>
 
       <div className="grid grid-cols-2 gap-3 mb-3">
-        <input name="consigneeName" placeholder="Consignee Name" onChange={handleChange} />
-        <input name="receiver" placeholder="Receiver Name" onChange={handleChange}/>
+        <input 
+               ref={(el) => {
+    inputRefs.current[17] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 17)}
+        name="consigneeName" placeholder="Consignee Name" onChange={handleChange} />
+        <input 
+               ref={(el) => {
+    inputRefs.current[18] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 18)}
+        name="receiver" placeholder="Receiver Name" onChange={handleChange}/>
       </div>
 
       <fieldset className="border p-3">
         <legend className="px-2">Delivery Address</legend>
 
         <div className="grid grid-cols-4 gap-3 mb-3">
-          <input name="consigneeAddr1" placeholder="Address1" onChange={handleChange} />
-          <input name="consigneeAddr2" placeholder="Address2" onChange={handleChange} />
-          <input name="consigneeAddr3" placeholder="Address3" onChange={handleChange} />
-          <input name="consigneePincode" placeholder="Pincode" onChange={handleChange} />
+          <input
+          ref={(el) => {
+    inputRefs.current[19] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 19)}
+          name="consigneeAddr1" placeholder="Address1" onChange={handleChange} />
+          <input 
+          ref={(el) => {
+    inputRefs.current[20] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 20)}
+          name="consigneeAddr2" placeholder="Address2" onChange={handleChange} />
+
+
+          <input 
+          ref={(el) => {
+    inputRefs.current[21] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 21)}
+          name="consigneeAddr3" placeholder="Address3" onChange={handleChange} />
+
+          <input
+          ref={(el) => {
+    inputRefs.current[22] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 22)}
+          name="consigneePincode" placeholder="Pincode" onChange={handleChange} />
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <input name="consigneeTelephone" placeholder="Telephone No" onChange={handleChange}/>
-          <input name="consigneeMobile" placeholder="Mobile No" onChange={handleChange} />
+          <input 
+          ref={(el) => {
+    inputRefs.current[23] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 23)}
+          name="consigneeTelephone" placeholder="Telephone No" onChange={handleChange}/>
+          <input
+          ref={(el) => {
+    inputRefs.current[24] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 24)}
+          name="consigneeMobile" placeholder="Mobile No" onChange={handleChange} />
         </div>
       </fieldset>
     </fieldset>
@@ -461,28 +591,63 @@ return (
       <legend className="font-semibold px-2">Shipment Details</legend>
 
       <div className="grid grid-cols-7 gap-2 items-center">
-        <input name="creditReferenceNo" placeholder="Ref No" onChange={handleChange}/>
-        <input name="invoiceNumber" placeholder="Invoice No" onChange={handleChange} />
+        <input 
+        ref={(el) => {
+    inputRefs.current[25] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 25)}
+        name="creditReferenceNo" placeholder="Ref No" onChange={handleChange}/>
+
+        <input 
+        ref={(el) => {
+    inputRefs.current[26] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 26)}
+        name="invoiceNumber" placeholder="Invoice No" onChange={handleChange} />
         <div className="flex items-center gap-1">
           <label className="text-xs whitespace-nowrap font-bold">InvDt : </label>
-          <input name="invoiceDate" type="date" id="invDt" onChange={handleChange}/>
+          <input 
+          ref={(el) => {
+    inputRefs.current[27] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 27)}
+          name="invoiceDate" type="date" id="invDt" onChange={handleChange}/>
         </div>
         
         <input name="pieceCount" value={form.pieceCount} placeholder="No Of Box" onChange={handleChange} />
 
         {isDuts && (
-          <input name="declaredValue" placeholder="Dec. Value" onChange={handleChange} />
+          <input 
+          ref={(el) => {
+    inputRefs.current[28] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 28)}
+          name="declaredValue" placeholder="Dec. Value" onChange={handleChange} />
         )}
         
-        <input name="weight" placeholder="Weight" onChange={handleChange} />
+        <input
+        ref={(el) => {
+    inputRefs.current[29] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 29)}
+        name="weight" placeholder="Weight" onChange={handleChange} />
           <div className="flex items-center gap-1">
           <label className="text-xs whitespace-nowrap font-bold">PickupDt : </label>
-          <input name="pickupDate" type="date" onChange={handleChange} />
+          <input
+          ref={(el) => {
+    inputRefs.current[30] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 30)}
+          name="pickupDate" type="date" onChange={handleChange} />
           </div>
         
 
              {needsCollectable && (
           <input
+          ref={(el) => {
+    inputRefs.current[31] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 31)}
             name="codAmount"
             type="number"
             min="1"
@@ -503,6 +668,10 @@ return (
     <div className="items-center flex items-center gap-1">
       {/* Favouring Name */}
       <input
+      ref={(el) => {
+    inputRefs.current[32] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 32)}
         name="favouringName"
         placeholder="Favouring Name"
         value={form.favouringName}
@@ -515,6 +684,10 @@ return (
       <div className="flex gap-3 items-center">
         <label className="flex items-center gap-1">
           <input
+          ref={(el) => {
+    inputRefs.current[33] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 33)}
             type="radio"
             name="isChequeDD"
             value="Q"
@@ -526,6 +699,10 @@ return (
 
         <label className="flex items-center gap-1">
           <input
+          ref={(el) => {
+    inputRefs.current[34] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 34)}
             type="radio"
             name="isChequeDD"
             value="D"
@@ -538,6 +715,10 @@ return (
 
       {/* Payable At */}
       <input
+      ref={(el) => {
+    inputRefs.current[35] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 35)}
         name="payableAt"
         placeholder="Payable At"
         value={form.payableAt}
@@ -557,10 +738,31 @@ return (
 
       <div className="grid grid-cols-4 gap-3">
         {/* <input name="refNo" placeholder="Ref No" /> */}
-        <input name="itemName" placeholder="Item Name" onChange={handleChange} />
-        <input name="comodityDetails1" placeholder="comodityDetails1" onChange={handleChange} />
-         <input name="comodityDetails2" placeholder="comodityDetails2" onChange={handleChange} />
-        <input name="comodityDetails3" placeholder="comodityDetails3" onChange={handleChange} />
+        <input 
+        ref={(el) => {
+    inputRefs.current[36] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 36)}
+        name="itemName" placeholder="Item Name" onChange={handleChange} />
+
+        <input
+        ref={(el) => {
+    inputRefs.current[37] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 37)}
+        name="comodityDetails1" placeholder="comodityDetails1" onChange={handleChange} />
+         <input 
+         ref={(el) => {
+    inputRefs.current[38] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 38)}
+         name="comodityDetails2" placeholder="comodityDetails2" onChange={handleChange} />
+        <input 
+        ref={(el) => {
+    inputRefs.current[39] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 39)}
+        name="comodityDetails3" placeholder="comodityDetails3" onChange={handleChange} />
       </div>
     </fieldset>
 
@@ -569,7 +771,12 @@ return (
 
       <fieldset className="border p-2">
         <legend>Product Code</legend>
-        <select name="productCode" onChange={handleChange}>
+        <select 
+        ref={(el) => {
+    inputRefs.current[40] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 40)}
+        name="productCode" onChange={handleChange} value={form.productCode}>
           <option value="">Select</option>
           <option value="A">A – Air</option>
           <option value="E">E – Road</option>
@@ -579,7 +786,12 @@ return (
 
       <fieldset className="border p-2">
         <legend>SubProduct Code</legend>
-        <select name="subProductCode" value={form.subProductCode} onChange={handleChange}>
+        <select
+               ref={(el) => {
+    inputRefs.current[41] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 41)}
+        name="subProductCode" value={form.subProductCode} onChange={handleChange}>
           <option value="">Select</option>
           <option value="P">P-PREPAID</option>
           <option value="C">C-COD</option>
@@ -605,6 +817,10 @@ return (
 
   <label className="mr-2">
     <input
+           ref={(el) => {
+    inputRefs.current[42] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 42)}
       type="radio"
       name="isTopay"
       value="yes"
@@ -616,6 +832,11 @@ return (
 
   <label>
     <input
+
+           ref={(el) => {
+    inputRefs.current[43] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 43)}
       type="radio"
       name="isTopay"
       value="no"
@@ -629,7 +850,12 @@ return (
 
       <fieldset className="border p-2">
         <legend>Label Size</legend>
-        <select name="labelSize"
+        <select 
+               ref={(el) => {
+    inputRefs.current[44] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 44)}
+        name="labelSize"
         value={form.labelSize}
         onChange={handleChange}
         >
@@ -640,7 +866,12 @@ return (
 
       <fieldset className="border p-2">
         <legend>ShipmentType</legend>
-        <select name="productType" onChange={handleChange}>
+        <select 
+               ref={(el) => {
+    inputRefs.current[45] = el;
+  }}
+  onKeyDown={(e) => handleKeyDown(e, 45)}
+        name="productType" onChange={handleChange}>
           <option value="0">DOX</option>
           <option value="1">NDOX</option>
         </select>
@@ -657,6 +888,10 @@ return (
         </button> */}
 
         <button
+        ref={(el) => {
+    inputRefs.current[46] = el;
+  }}
+  // onKeyDown={(e) => handleKeyDown(e, 46)}
   type="submit"
   disabled={loading}
   className="bg-blue-600 text-white px-3 py-1 rounded"
@@ -664,7 +899,8 @@ return (
   {loading ? "Generating..." : "Submit"}
 </button>
 
-        <button className="bg-gray-400 text-white px-3 py-1 rounded">
+        <button 
+        className="bg-gray-400 text-white px-3 py-1 rounded">
           Reset
         </button>
       </fieldset>
