@@ -148,7 +148,7 @@ useEffect(() => {
     if (Number(form.weight) <= 0) return "Weight must be greater than 0";
     if (form.productType==="1" && Number(form.declaredValue) <= 0) return "Declared value must be greater than 0";
 
-    if (!form.itemName) return "Item name is required";
+    if (form.productType==="1" && !form.itemName) return "Item name is required";
 
     // ✅ COD validation
     if (form.subProductCode === "C") {
@@ -257,7 +257,7 @@ useEffect(() => {
 
           itemdtl: [
             {
-              ItemName: form.itemName,
+              ItemName: form.itemName || "Documents",
               Itemquantity: Number(form.itemQty),
               ItemValue: Number(form.itemValue),
               TotalValue: Number(form.itemValue),
@@ -542,17 +542,7 @@ return (
   onKeyDown={handleKeyDown}
         name="creditReferenceNo" placeholder="Ref No" onChange={handleChange}/>
 
-        <input 
-                    ref={registerRef}
-  onKeyDown={handleKeyDown}
-        name="invoiceNumber" placeholder="Invoice No" onChange={handleChange} />
-        <div className="flex items-center gap-1">
-          <label className="text-xs whitespace-nowrap font-bold">InvDt : </label>
-          <input 
-                      ref={registerRef}
-  onKeyDown={handleKeyDown}
-          name="invoiceDate" type="date" id="invDt" onChange={handleChange}/>
-        </div>
+
         
         <input ref={registerRef}
   onKeyDown={handleKeyDown}
@@ -564,6 +554,24 @@ return (
   onKeyDown={handleKeyDown}
           name="declaredValue" placeholder="Dec. Value" onChange={handleChange} />
         )}
+
+        {isDuts && (
+          <input 
+                    ref={registerRef}
+  onKeyDown={handleKeyDown}
+        name="invoiceNumber" placeholder="Invoice No" onChange={handleChange} />
+        )}
+
+        {isDuts && (
+          <div>
+          <label className="text-xs whitespace-nowrap font-bold">InvDt : </label>
+          <input 
+                      ref={registerRef}
+  onKeyDown={handleKeyDown}
+          name="invoiceDate" type="date" id="invDt" onChange={handleChange}/>
+          </div>
+        )
+        }
         
         <input
                     ref={registerRef}
@@ -659,9 +667,10 @@ return (
     </fieldset>
 
     {/* ================= ITEM DETAILS ================= */}
+    {isDuts &&
     <fieldset className="border p-4 mb-4">
       <legend className="font-semibold px-2">Item Details</legend>
-
+       
       <div className="grid grid-cols-4 gap-3">
         {/* <input name="refNo" placeholder="Ref No" /> */}
         <input 
@@ -682,7 +691,9 @@ return (
   onKeyDown={handleKeyDown}
         name="comodityDetails3" placeholder="comodityDetails3" onChange={handleChange} />
       </div>
+
     </fieldset>
+    }
 
     {/* ================= OPTIONS ROW ================= */}
     <div className="grid grid-cols-6 gap-3 mb-4">
@@ -767,6 +778,7 @@ return (
                            ref={registerRef}
   onKeyDown={handleKeyDown}
         name="productType" onChange={handleChange}>
+          <option value="">Select</option>
           <option value="0">DOX</option>
           <option value="1">NDOX</option>
         </select>
