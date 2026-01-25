@@ -6265,4 +6265,130 @@
       "TransactionAmount" : 0
     }
   }
+}, {
+  "awbNo" : "20472091371",
+  "creditReferenceNo" : "CR-1769331695741",
+  "createdAt" : "2026-01-25T14:31:42.647546",
+  "request" : {
+    "Request" : {
+      "Consignee" : {
+        "AvailableDays" : "",
+        "AvailableTiming" : "",
+        "ConsigneeAddress1" : "this is my test address 1",
+        "ConsigneeAddress2" : "this is my test address 2",
+        "ConsigneeAddress3" : "this is my test address 3",
+        "ConsigneeAttention" : "Yogesh Kumar PNDEY",
+        "ConsigneeEmailID" : "",
+        "ConsigneeMobile" : "9528013045",
+        "ConsigneeName" : "Yogesh Kumar PNDEY",
+        "ConsigneePincode" : "110020",
+        "ConsigneeTelephone" : ""
+      },
+      "Returnadds" : {
+        "ReturnAddress1" : "123, 2nd Floor, Sai Residency",
+        "ReturnAddress2" : "4th Cross, 5th Main, Koramangala 4th Block",
+        "ReturnAddress3" : "Gurgaon, Haryana – 122001",
+        "ReturnContact" : "XYZ Compnay.com",
+        "ReturnMobile" : "9996665554",
+        "ReturnPincode" : "122001"
+      },
+      "Services" : {
+        "AWBNo" : "",
+        "ActualWeight" : "10",
+        "CollectableAmount" : 0,
+        "Commodity" : {
+          "CommodityDetail1" : "",
+          "CommodityDetail2" : "",
+          "CommodityDetail3" : ""
+        },
+        "CreditReferenceNo" : "CR-1769331695741",
+        "DeclaredValue" : 100,
+        "Dimensions" : [ {
+          "Length" : 50,
+          "Breadth" : 20,
+          "Height" : 70,
+          "Count" : 1
+        }, {
+          "Length" : 80,
+          "Breadth" : 90,
+          "Height" : 100,
+          "Count" : 1
+        } ],
+        "IsReversePickup" : false,
+        "ItemCount" : 1,
+        "PDFOutputNotRequired" : true,
+        "PackType" : "",
+        "PickupDate" : "/Date(1769299200000)/",
+        "PickupTime" : "1600",
+        "PieceCount" : "2",
+        "ProductCode" : "D",
+        "ProductType" : 1,
+        "RegisterPickup" : true,
+        "SubProductCode" : "",
+        "FavouringName" : "",
+        "IsChequeDD" : "",
+        "PayableAt" : "",
+        "InvoiceDate" : "/Date(1769299200000)/",
+        "InvoiceNumber" : "inv2020",
+        "itemdtl" : [ {
+          "ItemName" : "tewst",
+          "Itemquantity" : 1,
+          "ItemValue" : 0,
+          "TotalValue" : 0
+        } ],
+        "noOfDCGiven" : 0
+      },
+      "Shipper" : {
+        "CustomerAddress1" : "123, 2nd Floor, Sai Residency",
+        "CustomerAddress2" : "4th Cross, 5th Main, Koramangala 4th Block",
+        "CustomerAddress3" : "Gurgaon, Haryana – 122001",
+        "CustomerCode" : "940111",
+        "CustomerMobile" : "9996665554",
+        "CustomerTelephone" : "",
+        "CustomerName" : "XYZ Compnay.com",
+        "CustomerPincode" : "122001",
+        "IsToPayCustomer" : false,
+        "OriginArea" : "GGN",
+        "Sender" : "Mr. Rahul Sharma"
+      }
+    },
+    "Profile" : {
+      "LoginID" : "GG940111",
+      "LicenceKey" : "kh7mnhqkmgegoksipxr0urmqesesseup",
+      "Api_type" : "S"
+    }
+  },
+  "response" : {
+    "GenerateWayBillResult" : {
+      "AWBNo" : "20472091371",
+      "AWBPrintContent" : null,
+      "AvailableAmountForBooking" : 0,
+      "AvailableBalance" : 0,
+      "CCRCRDREF" : "CR-1769331695741",
+      "ClusterCode" : "",
+      "DestinationArea" : "DEL",
+      "DestinationLocation" : "OKH",
+      "InvoicePrintContent" : null,
+      "IsError" : false,
+      "IsErrorInPU" : false,
+      "MPSDetails" : [ {
+        "MPSNumber" : "20472091371-0001",
+        "MPSRefNumber" : null
+      }, {
+        "MPSNumber" : "20472091371-0002",
+        "MPSRefNumber" : null
+      } ],
+      "MPSLabelPrintContent" : null,
+      "ShipmentPickupDate" : "/Date(1769279400000+0530)/",
+      "Status" : [ {
+        "StatusCode" : "Valid",
+        "StatusInformation" : "Waybill Generation Successful"
+      }, {
+        "StatusCode" : "Pickup Registration:InsertFailure",
+        "StatusInformation" : "PickupIsAlreadyRegister"
+      } ],
+      "TokenNumber" : "31407037DEMO",
+      "TransactionAmount" : 0
+    }
+  }
 } ]

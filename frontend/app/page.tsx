@@ -10,6 +10,13 @@ export default function Home() {
   const [labelSize, setLabelSize] = useState<Record<string, string>>({});
   const [isReturnAddressDiffrent,setIsReturnAddressDiffrent]=useState(false);
 
+  // form dimensions
+  const [dimensions, setDimensions] = useState([
+  { length: "", breadth: "", height: "", count: "1" }
+]);
+
+
+
   const refs = useRef<(HTMLInputElement | HTMLSelectElement | null)[]>([]);
 // Supports input, select, radio, button
 const inputRefs = useRef<
@@ -157,6 +164,21 @@ useEffect(() => {
         return "COD amount must be greater than 0";
     }
 
+// Dimension validation
+    for (let i = 0; i < dimensions.length; i++) {
+  const d = dimensions[i];
+
+  if (!d.length || !d.breadth || !d.height) {
+    return `All dimensions required for box ${i + 1}`;
+  }
+
+  if (Number(d.count) <= 0) {
+    return `Box count must be greater than 0 (row ${i + 1})`;
+  }
+}
+
+
+
     return null;
   };
 
@@ -229,14 +251,13 @@ useEffect(() => {
           CreditReferenceNo: form.creditReferenceNo || "CR-" + Date.now(),
           DeclaredValue: Number(form.declaredValue),
 
-          Dimensions: [
-            {
-              Breadth: 32.7,
-              Count: 1,
-              Height: 3.2,
-              Length: 28.9,
-            },
-          ],
+  Dimensions: dimensions.map(d => ({
+  Length: Number(d.length),
+  Breadth: Number(d.breadth),
+  Height: Number(d.height),
+  Count: Number(d.count)
+})),
+
 
           IsReversePickup: false,
           ItemCount: 1,
@@ -312,6 +333,31 @@ useEffect(() => {
       setLoading(false);
     }
   };
+
+
+  const addDimension = () => {
+  setDimensions(prev => [
+    ...prev,
+    { length: "", breadth: "", height: "", count: "1" }
+  ]);
+};
+
+const removeDimension = (index: number) => {
+  setDimensions(prev => prev.filter((_, i) => i !== index));
+};
+
+const updateDimension = (
+  index: number,
+  field: "length" | "breadth" | "height" | "count",
+  value: string
+) => {
+  setDimensions(prev =>
+    prev.map((dim, i) =>
+      i === index ? { ...dim, [field]: value } : dim
+    )
+  );
+};
+
 
 
   /* ---------------- UI ---------------- */
@@ -665,6 +711,91 @@ return (
 )}
       </div>
     </fieldset>
+
+
+{/* ================= DIMENSIONS ================= */}
+<fieldset className="border p-4 mb-4">
+  <legend className="font-semibold px-2">Package Dimensions</legend>
+
+  {dimensions.map((dim, index) => (
+    <div
+      key={index}
+      className="grid grid-cols-5 gap-3 mb-2 items-center"
+    >
+      <input
+      ref={registerRef}
+      onKeyDown={handleKeyDown}
+        type="number"
+        placeholder="Length (cm)"
+        value={dim.length}
+        onChange={(e) =>
+          updateDimension(index, "length", e.target.value)
+        }
+        className="border px-2 py-1 rounded"
+      />
+
+      <input
+      ref={registerRef}
+      onKeyDown={handleKeyDown}
+        type="number"
+        placeholder="Breadth (cm)"
+        value={dim.breadth}
+        onChange={(e) =>
+          updateDimension(index, "breadth", e.target.value)
+        }
+        className="border px-2 py-1 rounded"
+      />
+
+      <input
+      ref={registerRef}
+      onKeyDown={handleKeyDown}
+        type="number"
+        placeholder="Height (cm)"
+        value={dim.height}
+        onChange={(e) =>
+          updateDimension(index, "height", e.target.value)
+        }
+        className="border px-2 py-1 rounded"
+      />
+
+      <input
+      ref={registerRef}
+      onKeyDown={handleKeyDown}
+        type="number"
+        placeholder="Boxes"
+        value={dim.count}
+        min={1}
+        onChange={(e) =>
+          updateDimension(index, "count", e.target.value)
+        }
+        className="border px-2 py-1 rounded"
+      />
+
+      {/* Remove row */}
+      {dimensions.length > 1 && (
+        <button
+          type="button"
+          onClick={() => removeDimension(index)}
+          className="text-red-600 text-sm"
+        >
+          ✕
+        </button>
+      )}
+    </div>
+  ))}
+
+  <button
+  ref={registerRef}
+  onKeyDown={handleKeyDown}
+    type="button"
+    onClick={addDimension}
+    className="mt-2 text-blue-600 underline text-sm"
+  >
+    + Add Another Box
+  </button>
+</fieldset>
+
+
 
     {/* ================= ITEM DETAILS ================= */}
     {isDuts &&
