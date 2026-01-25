@@ -88,9 +88,9 @@ const handleKeyDown = (e: React.KeyboardEvent) => {
     receiver: "",
 
     // Shipment
-    productCode: "",
-    subProductCode: "",
-    packType: "",
+    //productCode: "",
+    //subProductCode: "",
+    //packType: "",
     weight: "",
     declaredValue: "",
     pickupTime: "1600",
@@ -108,6 +108,8 @@ const handleKeyDown = (e: React.KeyboardEvent) => {
     comodityDetails2:"",
     comodityDetails3:"",
     productType:"",
+    serviceType: "",
+
     
 
 
@@ -148,8 +150,8 @@ useEffect(() => {
     if (!/^\d{6}$/.test(form.consigneePincode))
       return "Consignee pincode must be 6 digits";
     if (!form.consigneeAddr1) return "Consignee address is required";
+if (!form.serviceType) return "Select Service Type";
 
-    if (!form.productCode) return "Select Product Code";
     //if (!form.subProductCode) return "Select Sub Product Code";
 
     if (Number(form.weight) <= 0) return "Weight must be greater than 0";
@@ -158,7 +160,7 @@ useEffect(() => {
     if (form.productType==="1" && !form.itemName) return "Item name is required";
 
     // ✅ COD validation
-    if (form.subProductCode === "C") {
+    if (subProductCode === "C") {
       if (!form.codAmount) return "COD amount is required";
       if (Number(form.codAmount) <= 0)
         return "COD amount must be greater than 0";
@@ -195,6 +197,22 @@ useEffect(() => {
     setError(null);
     setAwb(null);
 
+    const selectedService = SERVICE_MAP[form.serviceType];
+
+  if (!selectedService) {
+    setError("Please select a valid service type");
+    return;
+  }
+
+  const { productCode, subProductCode, packType } = selectedService;
+
+  const needsCollectable =
+  ["C", "D", "B"].includes(subProductCode || "");
+
+const needsChequeDetails =
+  ["D", "B"].includes(subProductCode || "");
+
+
     const Returnadds = isReturnAddressDiffrent
   ? {
       ReturnAddress1: form.returnAddress1,
@@ -212,7 +230,6 @@ useEffect(() => {
       ReturnMobile: form.shipperMobile,
       ReturnPincode: form.shipperPincode,
     };
-
     
     const payload = {
       Request: {
@@ -238,7 +255,7 @@ useEffect(() => {
 
           // ✅ COD logic here
           CollectableAmount:
-            form.subProductCode === "C" || form.subProductCode === "B" || form.subProductCode === "D" 
+            subProductCode === "C" || subProductCode === "B" || subProductCode === "D" 
               ? Number(form.codAmount)
               : 0,
 
@@ -262,14 +279,14 @@ useEffect(() => {
           IsReversePickup: false,
           ItemCount: 1,
           PDFOutputNotRequired: true,
-          PackType: form.packType,
+          PackType: packType || "",
           PickupDate: toBluedartDate(form.pickupDate),
           PickupTime: form.pickupTime,
           PieceCount: form.pieceCount,
-          ProductCode: form.productCode,
+          ProductCode: productCode,
           ProductType: Number(form.productType),
           RegisterPickup: true,
-          SubProductCode: form.subProductCode,
+          SubProductCode: subProductCode || "",
           FavouringName:form.favouringName,
           IsChequeDD:form.isChequeDD,
           PayableAt:form.payableAt,
@@ -311,27 +328,58 @@ useEffect(() => {
     
 
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bluedart/waybill`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        }
-        
-      );
-
-      
-
-      if (!res.ok) throw new Error(await res.text());
-
-      const data = await res.json();
-      setAwb(data.GenerateWayBillResult.AWBNo);
-    } catch {
-      setError("Bluedart rejected the request. Please check details.");
-    } finally {
-      setLoading(false);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bluedart/waybill`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
     }
+  );
+
+  const data = await res.json();
+
+  // 🔴 Handle backend-wrapped Bluedart errors
+  if (!res.ok) {
+    const backendError =
+      data?.["error-response"]?.[0]?.Status?.[0]?.StatusInformation ||
+      data?.message ||
+      data?.title ||
+      "Bluedart rejected the request";
+
+    //throw new Error(backendError);
+    setError(backendError);
+    setLoading(false);
+    return;
+
+    
+  }
+
+  // 🔴 Handle Bluedart business errors (success HTTP but error flag)
+  if (data?.GenerateWayBillResult?.IsError) {
+    const bluedartError =
+      data.GenerateWayBillResult?.ErrorMessage ||
+      data.GenerateWayBillResult?.ErrorDescription ||
+      "Bluedart rejected the request";
+
+    throw new Error(bluedartError);
+
+  }
+
+  // ✅ Success
+  setAwb(data.GenerateWayBillResult.AWBNo);
+
+} catch (err: any) {
+  console.error("Waybill error:", err);
+
+  setError(
+    err?.message ||
+    "Bluedart rejected the request. Please check details."
+  );
+} finally {
+  setLoading(false);
+}
+
   };
 
 
@@ -359,17 +407,71 @@ const updateDimension = (
 };
 
 
+const SERVICE_MAP: Record<
+  string,
+  { productCode: string; subProductCode?: string; packType?: string }
+> = {
+  // Etail
+  ETAIL_APEX_COD:        { productCode: "A", subProductCode: "C" },
+  ETAIL_APEX_PREPAID:   { productCode: "A", subProductCode: "P" },
+  ETAIL_SURFACE_COD:    { productCode: "E", subProductCode: "C" },
+  ETAIL_SURFACE_PREPAID:{ productCode: "E", subProductCode: "P" },
+
+  // Dart Plus / Bharat Dart
+  DARTPLUS_COD:         { productCode: "A", subProductCode: "C", packType: "L" },
+  DARTPLUS_PREPAID:    { productCode: "A", subProductCode: "P", packType: "L" },
+
+  // B2B
+  APEX_B2B:             { productCode: "A" },
+  SURFACE_B2B:          { productCode: "E" },
+
+  // Priority
+  DOMESTIC_PRIORITY:   { productCode: "D" },
+
+  // DOD / FOD
+  APEX_DOD:             { productCode: "A", subProductCode: "D" },
+  APEX_FOD:             { productCode: "A", subProductCode: "A" },
+  SURFACE_DOD:          { productCode: "E", subProductCode: "D" },
+  SURFACE_FOD:          { productCode: "E", subProductCode: "A" },
+
+  // DODFOD
+  APEX_DODFOD:          { productCode: "A", subProductCode: "B" },
+  SURFACE_DODFOD:       { productCode: "E", subProductCode: "B" },
+};
+
+
+   
 
   /* ---------------- UI ---------------- */
 
 
-const isCOD = form.subProductCode === "C";
-const isDOD = form.subProductCode === "D";
-const isFODDOD = form.subProductCode === "B";
+
+
+// const isCOD = form.subProductCode === "C";
+// const isDOD = form.subProductCode === "D";
+// const isFODDOD = form.subProductCode === "B";
 const isDuts=form.productType==="1";
 
-const needsCollectable = isCOD || isDOD || isFODDOD;
-const needsChequeDetails = isDOD || isFODDOD;
+// const needsCollectable = isCOD || isDOD || isFODDOD;
+// const needsChequeDetails = isDOD || isFODDOD;
+
+// const needsCollectable =
+//   ["C", "D", "B"].includes(subProductCode || "");
+
+// const needsChequeDetails =
+//   ["D", "B"].includes(subProductCode || "");
+
+
+const selectedService = form.serviceType
+  ? SERVICE_MAP[form.serviceType]
+  : null;
+
+const subProductCode = selectedService?.subProductCode ?? "";
+
+const needsCollectable = ["C", "D", "B"].includes(subProductCode);
+const needsChequeDetails = ["D", "B"].includes(subProductCode);
+
+
 
 return (
   <form
@@ -579,138 +681,155 @@ return (
     </fieldset>
 
     {/* ================= SHIPMENT DETAILS ================= */}
+    
     <fieldset className="border p-4 mb-4">
-      <legend className="font-semibold px-2">Shipment Details</legend>
+  <legend className="font-semibold px-2">Shipment Details</legend>
 
-      <div className="grid grid-cols-7 gap-2 items-center">
-        <input 
-                    ref={registerRef}
-  onKeyDown={handleKeyDown}
-        name="creditReferenceNo" placeholder="Ref No" onChange={handleChange}/>
+  {/* ---------- MAIN ROW ---------- */}
+  <div className="grid grid-cols-7 gap-2 items-center">
 
+    <input
+      ref={registerRef}
+      onKeyDown={handleKeyDown}
+      name="creditReferenceNo"
+      placeholder="Ref No"
+      className="border h-8 px-2 text-sm rounded"
+      onChange={handleChange}
+    />
 
-        
-        <input ref={registerRef}
-  onKeyDown={handleKeyDown}
-   name="pieceCount" value={form.pieceCount} placeholder="No Of Box" onChange={handleChange} />
+    <input
+      ref={registerRef}
+      onKeyDown={handleKeyDown}
+      name="pieceCount"
+      placeholder="No Of Box"
+      className="border h-8 px-2 text-sm rounded"
+      onChange={handleChange}
+    />
 
-        {isDuts && (
-          <input 
-                      ref={registerRef}
-  onKeyDown={handleKeyDown}
-          name="declaredValue" placeholder="Dec. Value" onChange={handleChange} />
-        )}
-
-        {isDuts && (
-          <input 
-                    ref={registerRef}
-  onKeyDown={handleKeyDown}
-        name="invoiceNumber" placeholder="Invoice No" onChange={handleChange} />
-        )}
-
-        {isDuts && (
-          <div>
-          <label className="text-xs whitespace-nowrap font-bold">InvDt : </label>
-          <input 
-                      ref={registerRef}
-  onKeyDown={handleKeyDown}
-          name="invoiceDate" type="date" id="invDt" onChange={handleChange}/>
-          </div>
-        )
-        }
-        
-        <input
-                    ref={registerRef}
-  onKeyDown={handleKeyDown}
-        name="weight" placeholder="Weight" onChange={handleChange} />
-          <div className="flex items-center gap-1">
-          <label className="text-xs whitespace-nowrap font-bold">PickupDt : </label>
-          <input
-                      ref={registerRef}
-  onKeyDown={handleKeyDown}
-          name="pickupDate" type="date" onChange={handleChange} />
-          </div>
-        
-
-             {needsCollectable && (
-          <input
-                      ref={registerRef}
-  onKeyDown={handleKeyDown}
-            name="codAmount"
-            type="number"
-            min="1"
-            value={form.codAmount}
-            placeholder="COD Amount"
-            onChange={handleChange}
-            required
-            className="border px-2 py-1 rounded"
-          />
-        )}
-
-        {needsChequeDetails && (
-  <fieldset className="border p-3 rounded flex flex-col gap-2">
-    <legend className="font-semibold px-2">
-      DOD / FOD Details
-    </legend>
-
-    <div className="items-center flex items-center gap-1">
-      {/* Favouring Name */}
+    {isDuts && (
       <input
-                  ref={registerRef}
-  onKeyDown={handleKeyDown} 
-   name="favouringName"
-        placeholder="Favouring Name"
-        value={form.favouringName}
+        ref={registerRef}
+        onKeyDown={handleKeyDown}
+        name="declaredValue"
+        placeholder="Dec. Value"
+        className="border h-8 px-2 text-sm rounded"
         onChange={handleChange}
-        required
-        className="border px-2 py-1 rounded"
       />
+    )}
 
-      {/* Cheque / DD */}
-      <div className="flex gap-3 items-center">
-        <label className="flex items-center gap-1">
-          <input
-                      ref={registerRef}
-  onKeyDown={handleKeyDown}
-            type="radio"
-            name="isChequeDD"
-            value="Q"
-            checked={form.isChequeDD === "Q"}
-            onChange={handleChange}
-          />
-          Cheque
-        </label>
-
-        <label className="flex items-center gap-1">
-          <input
-                      ref={registerRef}
-  onKeyDown={handleKeyDown}
-            type="radio"
-            name="isChequeDD"
-            value="D"
-            checked={form.isChequeDD === "D"}
-            onChange={handleChange}
-          />
-          DD
-        </label>
-      </div>
-
-      {/* Payable At */}
+    {isDuts && (
       <input
-                  ref={registerRef}
-  onKeyDown={handleKeyDown}
-        name="payableAt"
-        placeholder="Payable At"
-        value={form.payableAt}
+        ref={registerRef}
+        onKeyDown={handleKeyDown}
+        name="invoiceNumber"
+        placeholder="Invoice No"
+        className="border h-8 px-2 text-sm rounded"
         onChange={handleChange}
-        required
-        className="border px-2 py-1 rounded flex items-center gap-1"
+      />
+    )}
+
+    {/* Invoice Date */}
+    {isDuts && (
+      <div className="flex items-center gap-1">
+        <span className="text-xs font-semibold">InvDt</span>
+        <input
+          ref={registerRef}
+          onKeyDown={handleKeyDown}
+          type="date"
+          name="invoiceDate"
+          className="border h-8 px-1 text-xs rounded w-[135px]"
+          onChange={handleChange}
+        />
+      </div>
+    )}
+
+    <input
+      ref={registerRef}
+      onKeyDown={handleKeyDown}
+      name="weight"
+      placeholder="Weight"
+      className="border h-8 px-2 text-sm rounded"
+      onChange={handleChange}
+    />
+
+    {/* Pickup Date */}
+    <div className="flex items-center gap-1">
+      <span className="text-xs font-semibold">PickupDt</span>
+      <input
+        ref={registerRef}
+        onKeyDown={handleKeyDown}
+        type="date"
+        name="pickupDate"
+        className="border h-8 px-1 text-xs rounded w-[135px]"
+        onChange={handleChange}
       />
     </div>
-  </fieldset>
-)}
+
+    {/* COD */}
+    {needsCollectable && (
+      <input
+        ref={registerRef}
+        onKeyDown={handleKeyDown}
+        name="codAmount"
+        type="number"
+        placeholder="COD Amount"
+        className="border h-8 px-2 text-sm rounded col-span-2"
+        onChange={handleChange}
+      />
+    )}
+  </div>
+
+  {/* ---------- DOD / FOD ROW ---------- */}
+  {needsChequeDetails && (
+    <fieldset className="border mt-3 p-3 rounded">
+      <legend className="font-semibold px-2">DOD / FOD Details</legend>
+
+      <div className="grid grid-cols-3 gap-3 items-center">
+        <input
+          ref={registerRef}
+          onKeyDown={handleKeyDown}
+          name="favouringName"
+          placeholder="Favouring Name"
+          className="border h-8 px-2 text-sm rounded"
+          onChange={handleChange}
+        />
+
+        <div className="flex gap-4 items-center text-sm">
+          <label className="flex gap-1 items-center">
+            <input
+              type="radio"
+              name="isChequeDD"
+              value="Q"
+              checked={form.isChequeDD === "Q"}
+              onChange={handleChange}
+            />
+            Cheque
+          </label>
+
+          <label className="flex gap-1 items-center">
+            <input
+              type="radio"
+              name="isChequeDD"
+              value="D"
+              checked={form.isChequeDD === "D"}
+              onChange={handleChange}
+            />
+            DD
+          </label>
+        </div>
+
+        <input
+          ref={registerRef}
+          onKeyDown={handleKeyDown}
+          name="payableAt"
+          placeholder="Payable At"
+          className="border h-8 px-2 text-sm rounded"
+          onChange={handleChange}
+        />
       </div>
     </fieldset>
+  )}
+</fieldset>
 
 
 {/* ================= DIMENSIONS ================= */}
@@ -830,31 +949,50 @@ return (
     <div className="grid grid-cols-6 gap-3 mb-4">
 
       <fieldset className="border p-2">
-        <legend>Product Code</legend>
-        <select 
-                    ref={registerRef}
-  onKeyDown={handleKeyDown}
-        name="productCode" onChange={handleChange} value={form.productCode}>
-          <option value="">Select</option>
-          <option value="A">A – Air</option>
-          <option value="E">E – Road</option>
-          <option value="D">D – Priority</option>
-        </select>
-      </fieldset>
+  <legend>Service Type</legend>
 
-      <fieldset className="border p-2">
-        <legend>SubProduct Code</legend>
-        <select
-                           ref={registerRef}
-  onKeyDown={handleKeyDown}
-        name="subProductCode" value={form.subProductCode} onChange={handleChange}>
-          <option value="">Select</option>
-          <option value="P">P-PREPAID</option>
-          <option value="C">C-COD</option>
-          <option value="B">B-FODDOD</option>
-          <option value="D">D-DOD</option>
-        </select>
-      </fieldset>
+  <select
+    name="serviceType"
+    value={form.serviceType}
+    onChange={handleChange}
+    className="border px-2 py-1 rounded w-full"
+  >
+    <option value="">Select Service</option>
+
+    <optgroup label="Etail">
+      <option value="ETAIL_APEX_COD">Etail Apex COD</option>
+      <option value="ETAIL_APEX_PREPAID">Etail Apex Prepaid</option>
+      <option value="ETAIL_SURFACE_COD">Etail Surface COD</option>
+      <option value="ETAIL_SURFACE_PREPAID">Etail Surface Prepaid</option>
+    </optgroup>
+
+    <optgroup label="Dart Plus / Bharat Dart">
+      <option value="DARTPLUS_COD">Dart Plus COD</option>
+      <option value="DARTPLUS_PREPAID">Dart Plus Prepaid</option>
+    </optgroup>
+
+    <optgroup label="B2B">
+      <option value="APEX_B2B">Apex B2B</option>
+      <option value="SURFACE_B2B">Surface B2B</option>
+    </optgroup>
+
+    <optgroup label="Priority">
+      <option value="DOMESTIC_PRIORITY">Domestic Priority</option>
+    </optgroup>
+
+    <optgroup label="DOD / FOD">
+      <option value="APEX_DOD">Apex DOD</option>
+      <option value="APEX_FOD">Apex FOD</option>
+      <option value="SURFACE_DOD">Surface DOD</option>
+      <option value="SURFACE_FOD">Surface FOD</option>
+    </optgroup>
+
+    <optgroup label="DODFOD">
+      <option value="APEX_DODFOD">Apex DODFOD</option>
+      <option value="SURFACE_DODFOD">Surface DODFOD</option>
+    </optgroup>
+  </select>
+</fieldset>
 
 
 <fieldset className="border p-2">

@@ -12,27 +12,52 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(HttpStatusCodeException.class)
-    public ResponseEntity<Map<String, Object>> handleHttpError(HttpStatusCodeException ex) {
-        Map<String, Object> error = new HashMap<>();
-        error.put("success", false);
-        error.put("message", "Bluedart API error");
-        error.put("details", ex.getResponseBodyAsString());
+    // @ExceptionHandler(HttpStatusCodeException.class)
+    // public ResponseEntity<Map<String, Object>> handleHttpError(HttpStatusCodeException ex) {
+    //     Map<String, Object> error = new HashMap<>();
+    //     error.put("success", false);
+    //     error.put("message", "Bluedart API error");
+    //     error.put("details", ex.getResponseBodyAsString());
+
+    //     return ResponseEntity
+    //             .status(ex.getStatusCode())
+    //             .body(error);
+    // }
+
+    // @ExceptionHandler(Exception.class)
+    // public ResponseEntity<Map<String, Object>> handleGenericError(Exception ex) {
+    //     Map<String, Object> error = new HashMap<>();
+    //     error.put("success", false);
+    //     error.put("message", "Internal server error");
+    //     error.put("details", ex.getMessage());
+
+    //     return ResponseEntity
+    //             .status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //             .body(error);
+    // }
+
+    @ExceptionHandler(BluedartApiException.class)
+    public ResponseEntity<Map<String, Object>> handleBluedartError(
+            BluedartApiException ex) {
 
         return ResponseEntity
-                .status(ex.getStatusCode())
-                .body(error);
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of(
+                        "success", false,
+                        "message", ex.getUserMessage(),
+                        "source", "BLUEDART"
+                ));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleGenericError(Exception ex) {
-        Map<String, Object> error = new HashMap<>();
-        error.put("success", false);
-        error.put("message", "Internal server error");
-        error.put("details", ex.getMessage());
-
+    public ResponseEntity<Map<String, Object>> handleGeneric(Exception ex) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(error);
+                .body(Map.of(
+                        "success", false,
+                        "message", "Internal server error"
+                ));
     }
 }
+
+

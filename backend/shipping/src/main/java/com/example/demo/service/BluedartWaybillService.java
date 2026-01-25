@@ -7,13 +7,14 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import com.example.demo.dto.FailureRow;
+import com.example.demo.exception.BluedartApiException;
+
 import org.springframework.web.client.HttpStatusCodeException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
 
 @Service
 public class BluedartWaybillService {
@@ -68,14 +69,6 @@ try {
         if (responseBody == null) {
             throw new RuntimeException("Empty response from Bluedart");
         }
-
-    // } catch (Exception e) {
-    //     System.err.println("❌ Bluedart API FAILED");
-    //     System.err.println("➡️ Payload that caused failure:");
-    //     System.err.println(requestBody);
-    //     e.printStackTrace();
-    //     throw new RuntimeException("Bluedart API error", e);
-    // }
     } catch (HttpStatusCodeException ex) {
 
     String errorBody = ex.getResponseBodyAsString();
@@ -86,7 +79,7 @@ try {
 
     String message = extractBluedartErrorMessage(errorBody);
 
-    throw new RuntimeException(message);
+    throw new BluedartApiException(message,errorBody);
 
 } catch (Exception e) {
     throw new RuntimeException("Unexpected error while calling Bluedart", e);
@@ -127,7 +120,7 @@ try {
     return responseBody;
 }
 
-
+    @SuppressWarnings("unchecked")
     private String extractCreditRef(Map<String, Object> requestBody) {
         try {
             Map<String, Object> req =
@@ -140,6 +133,7 @@ try {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public BulkWaybillResult generateBulkWaybills(List<Map<String,Object>> requests) {
 
         BulkWaybillResult result=new BulkWaybillResult();
