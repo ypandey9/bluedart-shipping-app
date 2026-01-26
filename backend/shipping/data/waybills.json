@@ -7085,4 +7085,123 @@
       "TransactionAmount" : 0
     }
   }
+}, {
+  "awbNo" : "80149518234",
+  "creditReferenceNo" : "111ZZ",
+  "createdAt" : "2026-01-26T22:50:26.8963165",
+  "request" : {
+    "Request" : {
+      "Consignee" : {
+        "ConsigneeName" : "Surndra Kumar",
+        "ConsigneeAttention" : "Surndra Kumar",
+        "ConsigneeMobile" : "7060756956",
+        "ConsigneeTelephone" : "",
+        "ConsigneeAddress1" : "this is my test address 1",
+        "ConsigneeAddress2" : "this is my test address 2",
+        "ConsigneeAddress3" : "this is my test address 3",
+        "ConsigneePincode" : "110020"
+      },
+      "Returnadds" : {
+        "ReturnAddress1" : "123, 2nd Floor, Sai Residency",
+        "ReturnAddress2" : "4th Cross, 5th Main, Koramangala 4th Block",
+        "ReturnAddress3" : "Gurgaon, Haryana",
+        "ReturnContact" : "XYZ Company.com",
+        "ReturnMobile" : "9999885544",
+        "ReturnPincode" : "122001"
+      },
+      "Services" : {
+        "ProductCode" : "A",
+        "SubProductCode" : "C",
+        "PackType" : "",
+        "ProductType" : 1,
+        "PieceCount" : 2,
+        "ActualWeight" : 1,
+        "DeclaredValue" : 1001,
+        "CollectableAmount" : 100,
+        "PickupDate" : "/Date(1769385600000)/",
+        "PickupTime" : "1600",
+        "CreditReferenceNo" : "111ZZ",
+        "InvoiceNumber" : "1111",
+        "InvoiceDate" : "/Date(1769385600000)/",
+        "FavouringName" : "",
+        "IsChequeDD" : "",
+        "PayableAt" : "",
+        "Dimensions" : [ {
+          "Length" : 20,
+          "Breadth" : 25,
+          "Height" : 35,
+          "Count" : 1
+        }, {
+          "Length" : 30,
+          "Breadth" : 20,
+          "Height" : 40,
+          "Count" : 1
+        } ],
+        "Commodity" : {
+          "CommodityDetail1" : "comd1",
+          "CommodityDetail2" : "condt2",
+          "CommodityDetail3" : "commdt3"
+        },
+        "itemdtl" : [ {
+          "ItemName" : "tewst",
+          "Itemquantity" : 10,
+          "ItemValue" : 1000,
+          "TotalValue" : 1000
+        } ],
+        "RegisterPickup" : true,
+        "PDFOutputNotRequired" : true
+      },
+      "Shipper" : {
+        "CustomerCode" : "940111",
+        "CustomerName" : "XYZ Company.com",
+        "Sender" : "",
+        "OriginArea" : "GGN",
+        "CustomerMobile" : "9999885544",
+        "CustomerTelephone" : "",
+        "CustomerAddress1" : "123, 2nd Floor, Sai Residency",
+        "CustomerAddress2" : "4th Cross, 5th Main, Koramangala 4th Block",
+        "CustomerAddress3" : "Gurgaon, Haryana",
+        "CustomerPincode" : "122001",
+        "IsToPayCustomer" : false
+      }
+    },
+    "Profile" : {
+      "LoginID" : "GG940111",
+      "LicenceKey" : "kh7mnhqkmgegoksipxr0urmqesesseup",
+      "Api_type" : "S"
+    }
+  },
+  "response" : {
+    "GenerateWayBillResult" : {
+      "AWBNo" : "80149518234",
+      "AWBPrintContent" : null,
+      "AvailableAmountForBooking" : 0,
+      "AvailableBalance" : 0,
+      "CCRCRDREF" : "111ZZ",
+      "ClusterCode" : "NFC",
+      "DestinationArea" : "DEL",
+      "DestinationLocation" : "NFC",
+      "InvoicePrintContent" : null,
+      "IsError" : false,
+      "IsErrorInPU" : false,
+      "MPSDetails" : [ {
+        "MPSNumber" : "80149518234-0001",
+        "MPSRefNumber" : null
+      }, {
+        "MPSNumber" : "80149518234-0002",
+        "MPSRefNumber" : null
+      } ],
+      "MPSLabelPrintContent" : null,
+      "ShipmentPickupDate" : "/Date(1769452200000+0530)/",
+      "Status" : [ {
+        "StatusCode" : "Valid",
+        "StatusInformation" : "Waybill Generation Successful"
+      }, {
+        "StatusCode" : "Pickup Registration:Valid",
+        "StatusInformation" : "31446747DEMO"
+      } ],
+      "TokenNumber" : "31446747DEMO",
+      "TransactionAmount" : 0
+    }
+  }
 } ]

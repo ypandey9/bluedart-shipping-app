@@ -89,7 +89,7 @@ export default function Home() {
     payableAt: "",
 
     itemName: "",
-    itemQty: "1",
+    itemQty: "",
     itemValue: "",
     comodityDetails1: "",
     comodityDetails2: "",
@@ -704,8 +704,8 @@ const updateDimension = (
     </div>
 
     {/* Label Size */}
-    <div>
-      <label className="text-xs font-semibold">Label Size</label>
+    <div className="relative">
+      <label className="absolute -top-2 left-2 bg-white px-1 text-xs font-semibold">Label Size</label>
       <select
         ref={registerRef}
         onKeyDown={handleKeyDown}
@@ -760,16 +760,39 @@ const updateDimension = (
         />
       )}
 
-      {isDuts && (
-        <input
-          ref={registerRef}
-          onKeyDown={handleKeyDown}
-          type="date"
-          name="invoiceDate"
-          className="border h-8 px-1 text-xs rounded w-[135px]"
-          onChange={handleChange}
-        />
-      )}
+          {/* Invoice Date */}
+    {isDuts && (
+      <>
+<div className="relative">
+  <label className="absolute -top-2 left-2 bg-white px-1 text-xs font-semibold">
+    Invoice Date
+  </label>
+  <input
+    type="date"
+    name="invoiceDate"
+    ref={registerRef}
+    onKeyDown={handleKeyDown}
+    onChange={handleChange}
+    className="border h-8 px-2 text-sm rounded w-full"
+  />
+</div>
+
+<div className="relative">
+  <label className="absolute -top-2 left-2 bg-white px-1 text-xs font-semibold">
+    Pickup Date
+  </label>
+  <input
+    type="date"
+    name="pickupDate"
+    ref={registerRef}
+    onKeyDown={handleKeyDown}
+    onChange={handleChange}
+    className="border h-8 px-2 text-sm rounded w-full"
+  />
+</div>
+
+</>
+    )}
 
       <input ref={registerRef} onKeyDown={handleKeyDown}
         name="weight"
@@ -777,15 +800,7 @@ const updateDimension = (
         onChange={handleChange}
         className={fieldClass("weight")}
       />
-
-      <input
-        ref={registerRef}
-        onKeyDown={handleKeyDown}
-        type="date"
-        name="pickupDate"
-        className="border h-8 px-1 text-xs rounded w-[135px]"
-        onChange={handleChange}
-      />
+    
     </div>
 
     {needsCollectable && (
