@@ -125,7 +125,7 @@ public class WaybillPdfService {
 
         /* ---------- Title ---------- */
         PdfPCell titleCell = new PdfPCell(
-                new Paragraph("SHIPPING WAYBILL", titleFont)
+                new Paragraph("SHIPPING LABEL", titleFont)
         );
         titleCell.setHorizontalAlignment(Element.ALIGN_CENTER);
         titleCell.setPadding(4);
@@ -139,6 +139,12 @@ public class WaybillPdfService {
         Map<String, Object> consignee = (Map<String, Object>) request.get("Consignee");
         Map<String, Object> services = (Map<String, Object>) request.get("Services");
         Map<String, Object> returnadds = (Map<String, Object>) request.get("Returnadds");
+        Map<String, Object> response = record.getResponse();
+
+
+
+        System.out.println("\nRoot Request Data: " + request);
+        System.out.println("Response Data: " + response);
 
         /* ---------- Meta ---------- */
         PdfPTable meta = new PdfPTable(2);
@@ -173,9 +179,16 @@ public class WaybillPdfService {
         PdfPTable service = new PdfPTable(1);
         service.setWidthPercentage(100);
 
-        service.addCell(sectionCell("SHIPMENT DETAILS", sectionFont));
-        service.addCell(serviceDetailsCell(services, valueFont));
+        // service.addCell(sectionCell("SHIPMENT DETAILS", sectionFont));
+        // service.addCell(serviceDetailsCell(services, valueFont));
 
+service.addCell(sectionCell("SHIPMENT DETAILS", sectionFont));
+service.addCell(serviceDetailsCell(services, valueFont));
+
+PdfPCell routingCell = shipmentRoutingCell(record, valueFont);
+if (routingCell != null) {
+    service.addCell(routingCell);
+}
         block.addCell(service);
 
         block.addCell(getCODAmountMessageCell(services, valueFont));
@@ -230,6 +243,25 @@ public class WaybillPdfService {
         cell.setBackgroundColor(BaseColor.LIGHT_GRAY);
         return cell;
     }
+
+    private PdfPCell shipmentRoutingCell(WaybillRecord record, Font font) {
+
+    String routingText = getRoutingText(record);
+    if (routingText.isEmpty()) {
+        return null;
+    }
+
+    Phrase phrase = new Phrase(routingText, font);
+
+
+    PdfPCell cell = new PdfPCell(phrase);
+    cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+    cell.setPadding(4);
+    cell.setBorder(Rectangle.NO_BORDER);
+
+    return cell;
+}
+
 
     private PdfPCell shipperDetailsCell(Map<String, Object> shipper, Font font) {
     String text =
@@ -396,4 +428,47 @@ private String getOrderType(Map<String, Object> services) {
             return new Document(PageSize.A4, 20, 20, 20, 20);
         }
     }
+
+    @SuppressWarnings("unchecked")
+private Map<String, Object> getWaybillResult(WaybillRecord record) {
+    Object responseObj = record.getResponse();
+    if (!(responseObj instanceof Map)) return null;
+
+    Map<String, Object> response = (Map<String, Object>) responseObj;
+    Object resultObj = response.get("GenerateWayBillResult");
+
+    if (!(resultObj instanceof Map)) return null;
+    return (Map<String, Object>) resultObj;
+}
+
+private String getClusterCode(WaybillRecord record) {
+    Map<String, Object> result = getWaybillResult(record);
+    return result == null ? "NA" : safe(result, "ClusterCode");
+}
+
+private String getDestinationArea(WaybillRecord record) {
+    Map<String, Object> result = getWaybillResult(record);
+    return result == null ? "NA" : safe(result, "DestinationArea");
+}
+
+private String getDestinationCode(WaybillRecord record) {
+    Map<String, Object> result = getWaybillResult(record);
+    return result == null ? "NA" : safe(result, "DestinationLocation");
+}
+
+private String getRoutingText(WaybillRecord record) {
+    String area = getDestinationArea(record);
+    String destCode = getDestinationCode(record);
+    String cluster = getClusterCode(record);
+
+    // If all are NA, don’t print anything
+    if ("NA".equals(area) && "NA".equals(destCode) && "NA".equals(cluster)) {
+        return "";
+    }
+
+    return area + " / " + destCode + " / " + cluster;
+}
+
+
+
 }
