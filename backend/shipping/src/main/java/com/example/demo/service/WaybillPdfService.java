@@ -151,8 +151,11 @@ public class WaybillPdfService {
         meta.setWidthPercentage(100);
         meta.setWidths(new float[]{1f, 2f});
 
-        addCell(meta, "OrderType", labelFont);
-        addCell(meta, getOrderType(services).equals("C") ? "COD" : "Prepaid", valueFont);
+        // addCell(meta, "OrderType", labelFont);
+        // addCell(meta, getOrderType(services).equals("C") ? "COD" : "Prepaid", valueFont);
+        addCell(meta, "Order Type", labelFont);
+        addCell(meta, getOrderTypeLabel(services), valueFont);
+
         addCell(meta, "Reference", labelFont);
         addCell(meta, record.getCreditReferenceNo(), valueFont);
         addCell(meta, "Pickup Date", labelFont);
@@ -176,22 +179,20 @@ public class WaybillPdfService {
         block.addCell(party);
 
         /* ---------- Services ---------- */
-        PdfPTable service = new PdfPTable(1);
-        service.setWidthPercentage(100);
+PdfPTable service = new PdfPTable(1);
+service.setWidthPercentage(100);
 
-        // service.addCell(sectionCell("SHIPMENT DETAILS", sectionFont));
-        // service.addCell(serviceDetailsCell(services, valueFont));
+// Shipment header with routing on the SAME LINE
+service.addCell(shipmentHeaderCell(record, sectionFont, valueFont));
 
-service.addCell(sectionCell("SHIPMENT DETAILS", sectionFont));
+// Shipment details below
 service.addCell(serviceDetailsCell(services, valueFont));
 
-PdfPCell routingCell = shipmentRoutingCell(record, valueFont);
-if (routingCell != null) {
-    service.addCell(routingCell);
-}
-        block.addCell(service);
+block.addCell(service);
 
-        block.addCell(getCODAmountMessageCell(services, valueFont));
+// COD message (separate row below shipment details)
+block.addCell(getCODAmountMessageCell(services, valueFont));
+block.addCell(getCollectionMode(services).equals("NA") ? new PdfPCell(new Phrase("", valueFont)) : new PdfPCell(new Phrase("Collection Mode : " + getCollectionMode(services), valueFont)));
 
 
         /* ---------- Barcode ---------- */
@@ -244,24 +245,70 @@ if (routingCell != null) {
         return cell;
     }
 
-    private PdfPCell shipmentRoutingCell(WaybillRecord record, Font font) {
+    // private PdfPCell shipmentRoutingCell(WaybillRecord record, Font font) {
 
-    String routingText = getRoutingText(record);
-    if (routingText.isEmpty()) {
-        return null;
+    // String routingText = getRoutingText(record);
+    // if (routingText.isEmpty()) {
+    //     return null;
+    // }
+
+    // Phrase phrase = new Phrase(routingText, font);
+
+
+//     PdfPCell cell = new PdfPCell(phrase);
+//     cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+//     cell.setPadding(4);
+//     cell.setBorder(Rectangle.NO_BORDER);
+
+//     return cell;
+// }
+
+
+private String getOrderTypeLabel(Map<String, Object> services) {
+
+    String orderType = getOrderType(services); // SubProductCode
+
+    if (orderType == null) {
+        return "PREPAID";
     }
 
-    Phrase phrase = new Phrase(routingText, font);
-
-
-    PdfPCell cell = new PdfPCell(phrase);
-    cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-    cell.setPadding(4);
-    cell.setBorder(Rectangle.NO_BORDER);
-
-    return cell;
+    switch (orderType.toUpperCase()) {
+        case "C":
+            return "COD";
+        case "A":
+            return "FOD";
+        case "D":
+            return "DOD";
+        case "B":
+            return "FOD + DOD";
+        default:
+            return "PREPAID";
+    }
 }
 
+private String getCollectionMode(Map<String, Object> services) {
+
+    String orderType = getOrderType(services);
+
+    // Collection mode NOT applicable for COD or Prepaid
+    if ("C".equalsIgnoreCase(orderType)) {
+        return "Cash";
+    }
+
+    if ("P".equalsIgnoreCase(orderType)) {
+        return "NA";
+    }
+
+    Object isChequeDD = services.get("IsChequeDD");
+
+    if ("D".equalsIgnoreCase(String.valueOf(isChequeDD))) {
+        return "DD";
+    } else if ("Q".equalsIgnoreCase(String.valueOf(isChequeDD))) {
+        return "Cheque";
+    }
+
+    return "NA";
+}
 
     private PdfPCell shipperDetailsCell(Map<String, Object> shipper, Font font) {
     String text =
@@ -326,18 +373,20 @@ if (routingCell != null) {
     double codAmount = parseDoubleSafe(services.get("CollectableAmount"));
 
     boolean isCOD = "C".equalsIgnoreCase(orderType) && codAmount > 0;
+    boolean isDOD = "D".equalsIgnoreCase(orderType) && codAmount > 0;
+    boolean isFODDOD = "B".equalsIgnoreCase(orderType) && codAmount > 0;
 
-    if (!isCOD) {
-        return new PdfPCell(new Phrase("", font));
-    }
-
-    Font fontBold = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 9);
-
-    //String text = "Amount to be collected : ₹" + codAmount;
-
-    PdfPCell cell = new PdfPCell(new Phrase("Amount to be collected : ₹" + codAmount, fontBold));
+    if (isCOD || isDOD || isFODDOD) {
+        Font fontBold = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 9);
+            PdfPCell cell = new PdfPCell(new Phrase("Amount to be collected : ₹" + codAmount, fontBold));
     cell.setPadding(4);
     return cell;
+        
+    }
+
+    return new PdfPCell(new Phrase("", font));
+
+
 }
 
 
@@ -469,6 +518,36 @@ private String getRoutingText(WaybillRecord record) {
     return area + " / " + destCode + " / " + cluster;
 }
 
+private PdfPCell shipmentHeaderCell(
+        WaybillRecord record,
+        Font sectionFont,
+        Font valueFont
+) throws DocumentException {
+    PdfPTable header = new PdfPTable(2);
+    header.setWidthPercentage(100);
+    header.setWidths(new float[]{3f, 2f});
 
+    // LEFT: SHIPMENT DETAILS
+    PdfPCell left = new PdfPCell(new Phrase("SHIPMENT DETAILS", sectionFont));
+    left.setBorder(Rectangle.NO_BORDER);
+    left.setPadding(4);
+    left.setHorizontalAlignment(Element.ALIGN_LEFT);
+
+    // RIGHT: Routing codes
+    String routingText = getRoutingText(record);
+    PdfPCell right = new PdfPCell(new Phrase(routingText, valueFont));
+    right.setBorder(Rectangle.NO_BORDER);
+    right.setPadding(4);
+    right.setHorizontalAlignment(Element.ALIGN_RIGHT);
+
+    header.addCell(left);
+    header.addCell(right);
+
+    // Wrap header row with gray background
+    PdfPCell wrapper = new PdfPCell(header);
+    wrapper.setBackgroundColor(BaseColor.LIGHT_GRAY);
+    wrapper.setPadding(0);
+    return wrapper;
+}
 
 }
