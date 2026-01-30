@@ -486,26 +486,6 @@ private String getDestinationCode(WaybillRecord record) {
     return result == null ? "NA" : safe(result, "DestinationLocation");
 }
 
-// private String getRoutingText(WaybillRecord record) {
-//     String area = getDestinationArea(record);
-//     String destCode = getDestinationCode(record);
-//     String cluster = getClusterCode(record);
-//     String completeRoute="";
-
-//     // If all are NA, don’t print anything
-//     if ("NA".equals(area) && "NA".equals(destCode) && "NA".equals(cluster)) {
-//         return "";
-//     }
-
-//     completeRoute=area + " / " + destCode;
-
-//     if(!"NA".equals(cluster)){
-//         completeRoute += " / " + cluster;
-//     }
-
-//     return completeRoute;
-// }
-
 
 private String getRoutingText(WaybillRecord record) {
 
