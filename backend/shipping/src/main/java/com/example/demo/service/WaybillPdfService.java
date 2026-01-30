@@ -245,25 +245,6 @@ block.addCell(getCollectionMode(services).equals("NA") ? new PdfPCell(new Phrase
         return cell;
     }
 
-    // private PdfPCell shipmentRoutingCell(WaybillRecord record, Font font) {
-
-    // String routingText = getRoutingText(record);
-    // if (routingText.isEmpty()) {
-    //     return null;
-    // }
-
-    // Phrase phrase = new Phrase(routingText, font);
-
-
-//     PdfPCell cell = new PdfPCell(phrase);
-//     cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-//     cell.setPadding(4);
-//     cell.setBorder(Rectangle.NO_BORDER);
-
-//     return cell;
-// }
-
-
 private String getOrderTypeLabel(Map<String, Object> services) {
 
     String orderType = getOrderType(services); // SubProductCode
@@ -505,17 +486,56 @@ private String getDestinationCode(WaybillRecord record) {
     return result == null ? "NA" : safe(result, "DestinationLocation");
 }
 
-private String getRoutingText(WaybillRecord record) {
-    String area = getDestinationArea(record);
-    String destCode = getDestinationCode(record);
-    String cluster = getClusterCode(record);
+// private String getRoutingText(WaybillRecord record) {
+//     String area = getDestinationArea(record);
+//     String destCode = getDestinationCode(record);
+//     String cluster = getClusterCode(record);
+//     String completeRoute="";
 
-    // If all are NA, don’t print anything
-    if ("NA".equals(area) && "NA".equals(destCode) && "NA".equals(cluster)) {
-        return "";
+//     // If all are NA, don’t print anything
+//     if ("NA".equals(area) && "NA".equals(destCode) && "NA".equals(cluster)) {
+//         return "";
+//     }
+
+//     completeRoute=area + " / " + destCode;
+
+//     if(!"NA".equals(cluster)){
+//         completeRoute += " / " + cluster;
+//     }
+
+//     return completeRoute;
+// }
+
+
+private String getRoutingText(WaybillRecord record) {
+
+    String area = normalize(getDestinationArea(record));
+    String destCode = normalize(getDestinationCode(record));
+    String cluster = normalize(getClusterCode(record));
+
+    StringBuilder route = new StringBuilder();
+
+    if (!area.isEmpty()) {
+        route.append(area);
     }
 
-    return area + " / " + destCode + " / " + cluster;
+    if (!destCode.isEmpty()) {
+        if (route.length() > 0) route.append(" / ");
+        route.append(destCode);
+    }
+
+    if (!cluster.isEmpty()) {
+        if (route.length() > 0) route.append(" / ");
+        route.append(cluster);
+    }
+
+    return route.toString();
+}
+
+private String normalize(String value) {
+    if (value == null) return "";
+    value = value.trim();
+    return value.equalsIgnoreCase("NA") ? "" : value;
 }
 
 private PdfPCell shipmentHeaderCell(
@@ -535,6 +555,9 @@ private PdfPCell shipmentHeaderCell(
 
     // RIGHT: Routing codes
     String routingText = getRoutingText(record);
+
+    System.out.println("\n\nRouting Text: " + routingText+"\n\n");
+
     PdfPCell right = new PdfPCell(new Phrase(routingText, valueFont));
     right.setBorder(Rectangle.NO_BORDER);
     right.setPadding(4);
