@@ -9702,4 +9702,115 @@
       "TransactionAmount" : 0
     }
   }
+}, {
+  "awbNo" : "20472093283",
+  "creditReferenceNo" : "CR-1769885665919",
+  "createdAt" : "2026-02-01T00:24:27.9169062",
+  "request" : {
+    "Request" : {
+      "Consignee" : {
+        "ConsigneeName" : "Surndra Kumar",
+        "ConsigneeAttention" : "Surndra Kumar",
+        "ConsigneeMobile" : "9528013045",
+        "ConsigneeTelephone" : "",
+        "ConsigneeAddress1" : "this is my test address 1 this is my test address 1",
+        "ConsigneeAddress2" : "this is my test address 2",
+        "ConsigneeAddress3" : "this is my test address 3",
+        "ConsigneePincode" : "110020"
+      },
+      "Returnadds" : {
+        "ReturnAddress1" : "kh no 546",
+        "ReturnAddress2" : "Rama road ",
+        "ReturnAddress3" : "new delhi road ggn",
+        "ReturnContact" : "XYZ Company.com",
+        "ReturnMobile" : "9999885544",
+        "ReturnPincode" : "122001"
+      },
+      "Services" : {
+        "ProductCode" : "D",
+        "SubProductCode" : "",
+        "PackType" : "",
+        "ProductType" : 1,
+        "PieceCount" : 1,
+        "ActualWeight" : 1,
+        "DeclaredValue" : 100,
+        "CollectableAmount" : 0,
+        "PickupDate" : "/Date(1769904000000)/",
+        "PickupTime" : "1600",
+        "CreditReferenceNo" : "CR-1769885665919",
+        "InvoiceNumber" : "inv2020",
+        "InvoiceDate" : "/Date(1769904000000)/",
+        "FavouringName" : "",
+        "IsChequeDD" : "",
+        "PayableAt" : "",
+        "Dimensions" : [ {
+          "Length" : 3,
+          "Breadth" : 4,
+          "Height" : 1,
+          "Count" : 1
+        } ],
+        "Commodity" : {
+          "CommodityDetail1" : "",
+          "CommodityDetail2" : "",
+          "CommodityDetail3" : ""
+        },
+        "itemdtl" : [ {
+          "ItemName" : "tewst",
+          "Itemquantity" : 1,
+          "ItemValue" : 0,
+          "TotalValue" : 0
+        } ],
+        "RegisterPickup" : true,
+        "PDFOutputNotRequired" : true
+      },
+      "Shipper" : {
+        "CustomerCode" : "940111",
+        "CustomerName" : "XYZ Company.com",
+        "Sender" : "",
+        "OriginArea" : "GGN",
+        "CustomerMobile" : "9999885544",
+        "CustomerTelephone" : "",
+        "CustomerAddress1" : "kh no 546",
+        "CustomerAddress2" : "Rama road ",
+        "CustomerAddress3" : "new delhi road ggn",
+        "CustomerPincode" : "122001",
+        "IsToPayCustomer" : false
+      }
+    },
+    "Profile" : {
+      "LoginID" : "GG940111",
+      "LicenceKey" : "kh7mnhqkmgegoksipxr0urmqesesseup",
+      "Api_type" : "S"
+    }
+  },
+  "response" : {
+    "GenerateWayBillResult" : {
+      "AWBNo" : "20472093283",
+      "AWBPrintContent" : null,
+      "AvailableAmountForBooking" : 0,
+      "AvailableBalance" : 0,
+      "CCRCRDREF" : "CR-1769885665919",
+      "ClusterCode" : "",
+      "DestinationArea" : "DEL",
+      "DestinationLocation" : "OKH",
+      "InvoicePrintContent" : null,
+      "IsError" : false,
+      "IsErrorInPU" : false,
+      "MPSDetails" : [ {
+        "MPSNumber" : "20472093283-0001",
+        "MPSRefNumber" : null
+      } ],
+      "MPSLabelPrintContent" : null,
+      "ShipmentPickupDate" : "/Date(1769884200000+0530)/",
+      "Status" : [ {
+        "StatusCode" : "Valid",
+        "StatusInformation" : "Waybill Generation Successful"
+      }, {
+        "StatusCode" : "Pickup Registration:Valid",
+        "StatusInformation" : "31475090DEMO"
+      } ],
+      "TokenNumber" : "31475090DEMO",
+      "TransactionAmount" : 0
+    }
+  }
 } ]

@@ -175,10 +175,16 @@ public ResponseEntity<?> cancelWaybill(@RequestParam String awbNo) {
 
     CancelWaybillResponse response = cancellationService.cancelWaybillInternal(awbNo);
 
+    String message="Cancellation processed";
+    if (response.getCancelWaybillResult() !=null && response.getCancelWaybillResult().getStatus()!=null && !response.getCancelWaybillResult().getStatus().isEmpty() ) {
+        
+        message=response.getCancelWaybillResult().getStatus().get(0).getStatusInformation();
+
+    }
+
     boolean isError=response.getCancelWaybillResult().getIsError();
 
-    String message=response.getCancelWaybillResult().getStatus().get(0).getStatusInformation();
-
+    
     CancelStatus status=isError ? CancelStatus.FAILED : CancelStatus.SUCCESS;
 
     System.out.println("Saving records to the file...");
