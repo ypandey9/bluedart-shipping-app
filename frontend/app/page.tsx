@@ -614,6 +614,7 @@ if (!profile) {
             placeholder="Return Pincode"
             onChange={handleChange}
             className="border h-8 px-2 rounded"
+            maxLength={6}
           />
         </div>
       )}
