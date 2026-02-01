@@ -11034,4 +11034,1401 @@
       "TransactionAmount" : 0
     }
   }
+}, {
+  "awbNo" : "90001537091",
+  "creditReferenceNo" : "CR176996649126",
+  "createdAt" : "2026-02-01T22:54:27.0786741",
+  "request" : {
+    "Request" : {
+      "Consignee" : {
+        "ConsigneeName" : "Test Consignee",
+        "ConsigneeAddress2" : "",
+        "ConsigneeAddress1" : "Test Cngee Addr1",
+        "ConsigneeAddressinfo" : "",
+        "ConsigneeAddress3" : "",
+        "AvailableTiming" : "",
+        "ConsigneePincode" : "110027",
+        "ConsigneeTelephone" : "",
+        "ConsigneeAttention" : "Bulk",
+        "AvailableDays" : "",
+        "ConsigneeEmailID" : "test@bd.com",
+        "ConsigneeMobile" : "9995554441"
+      },
+      "Services" : {
+        "SpecialInstruction" : "",
+        "IsReversePickup" : true,
+        "CreditReferenceNo3" : "",
+        "PieceCount" : 1,
+        "PickupTime" : "1600",
+        "ActualWeight" : 0.5,
+        "RegisterPickup" : true,
+        "PackType" : "",
+        "PDFOutputNotRequired" : true,
+        "ProductFeature" : "",
+        "CollectableAmount" : 0.0,
+        "itemdtl" : [ {
+          "Itemquantity" : 1,
+          "TotalValue" : 100.0,
+          "ItemValue" : 100.0,
+          "ItemName" : "Test Item1",
+          "InvoiceNumber" : "",
+          "InvoiceDate" : "/Date(1769884200000)/"
+        } ],
+        "DeliveryTimeSlot" : "",
+        "noOfDCGiven" : 0,
+        "AWBNo" : "",
+        "PayableAt" : "",
+        "Commodity" : {
+          "CommodityDetail2" : "",
+          "CommodityDetail3" : "",
+          "CommodityDetail1" : "General Goods"
+        },
+        "PickupMode" : "",
+        "ItemCount" : 1,
+        "ParcelShopCode" : "",
+        "PreferredPickupTimeSlot" : "",
+        "DeclaredValue" : 100.0,
+        "CreditReferenceNo" : "CR176996649126",
+        "IsPartialPickup" : false,
+        "ProductCode" : "A",
+        "IsDedicatedDeliveryNetwork" : false,
+        "ProductType" : 1,
+        "IsDutyTaxPaidByShipper" : false,
+        "Dimensions" : [ {
+          "Length" : 10.0,
+          "Height" : 10.0,
+          "Count" : 1,
+          "Breadth" : 10.0
+        } ],
+        "PickupDate" : "/Date(1769884200000)/",
+        "Officecutofftime" : "",
+        "IsForcePickup" : false,
+        "SubProductCode" : "P",
+        "PickupType" : "",
+        "TotalCashPaytoCustomer" : 0,
+        "CreditReferenceNo2" : ""
+      },
+      "Shipper" : {
+        "CustomerAddressinfo" : "",
+        "CustomerMobile" : "9996665554",
+        "CustomerCode" : "940111",
+        "OriginArea" : "GGN",
+        "Sender" : "BulkUpload",
+        "CustomerPincode" : "122002",
+        "CustomerTelephone" : "",
+        "CustomerEmailID" : "test@bd.com",
+        "IsToPayCustomer" : true,
+        "CustomerAddress3" : "",
+        "CustomerAddress2" : "",
+        "VendorCode" : "",
+        "CustomerName" : "Test Cust Name",
+        "CustomerAddress1" : "Test Cust Addr1"
+      }
+    },
+    "Profile" : {
+      "LoginID" : "GG940111",
+      "Api_type" : "S",
+      "LicenceKey" : "kh7mnhqkmgegoksipxr0urmqesesseup"
+    }
+  },
+  "response" : {
+    "GenerateWayBillResult" : {
+      "AWBNo" : "90001537091",
+      "AWBPrintContent" : null,
+      "AvailableAmountForBooking" : 0,
+      "AvailableBalance" : 0,
+      "CCRCRDREF" : "CR176996649126",
+      "ClusterCode" : "NRA",
+      "DestinationArea" : "DEL",
+      "DestinationLocation" : "NRA",
+      "InvoicePrintContent" : null,
+      "IsError" : false,
+      "IsErrorInPU" : false,
+      "MPSDetails" : [ {
+        "MPSNumber" : "90001537091-0001",
+        "MPSRefNumber" : null
+      } ],
+      "MPSLabelPrintContent" : null,
+      "ShipmentPickupDate" : "/Date(1769970600000+0530)/",
+      "Status" : [ {
+        "StatusCode" : "Valid",
+        "StatusInformation" : "Waybill Generation Successful"
+      }, {
+        "StatusCode" : "Pickup Registration:Valid",
+        "StatusInformation" : "31477243DEMO"
+      } ],
+      "TokenNumber" : "31477243DEMO",
+      "TransactionAmount" : 0
+    }
+  }
+}, {
+  "awbNo" : "90001537102",
+  "creditReferenceNo" : "CR176996649127",
+  "createdAt" : "2026-02-01T22:54:27.5852414",
+  "request" : {
+    "Request" : {
+      "Consignee" : {
+        "ConsigneeName" : "Test Consignee",
+        "ConsigneeAddress2" : "",
+        "ConsigneeAddress1" : "Test Cngee Addr1",
+        "ConsigneeAddressinfo" : "",
+        "ConsigneeAddress3" : "",
+        "AvailableTiming" : "",
+        "ConsigneePincode" : "110027",
+        "ConsigneeTelephone" : "",
+        "ConsigneeAttention" : "Bulk",
+        "AvailableDays" : "",
+        "ConsigneeEmailID" : "test@bd.com",
+        "ConsigneeMobile" : "9995554441"
+      },
+      "Services" : {
+        "SpecialInstruction" : "",
+        "IsReversePickup" : true,
+        "CreditReferenceNo3" : "",
+        "PieceCount" : 1,
+        "PickupTime" : "1600",
+        "ActualWeight" : 0.5,
+        "RegisterPickup" : true,
+        "PackType" : "",
+        "PDFOutputNotRequired" : true,
+        "ProductFeature" : "",
+        "CollectableAmount" : 0.0,
+        "itemdtl" : [ {
+          "Itemquantity" : 1,
+          "TotalValue" : 100.0,
+          "ItemValue" : 100.0,
+          "ItemName" : "Test Item1",
+          "InvoiceNumber" : "",
+          "InvoiceDate" : "/Date(1769884200000)/"
+        } ],
+        "DeliveryTimeSlot" : "",
+        "noOfDCGiven" : 0,
+        "AWBNo" : "",
+        "PayableAt" : "",
+        "Commodity" : {
+          "CommodityDetail2" : "",
+          "CommodityDetail3" : "",
+          "CommodityDetail1" : "General Goods"
+        },
+        "PickupMode" : "",
+        "ItemCount" : 1,
+        "ParcelShopCode" : "",
+        "PreferredPickupTimeSlot" : "",
+        "DeclaredValue" : 100.0,
+        "CreditReferenceNo" : "CR176996649127",
+        "IsPartialPickup" : false,
+        "ProductCode" : "A",
+        "IsDedicatedDeliveryNetwork" : false,
+        "ProductType" : 1,
+        "IsDutyTaxPaidByShipper" : false,
+        "Dimensions" : [ {
+          "Length" : 10.0,
+          "Height" : 10.0,
+          "Count" : 1,
+          "Breadth" : 10.0
+        } ],
+        "PickupDate" : "/Date(1769884200000)/",
+        "Officecutofftime" : "",
+        "IsForcePickup" : false,
+        "SubProductCode" : "P",
+        "PickupType" : "",
+        "TotalCashPaytoCustomer" : 0,
+        "CreditReferenceNo2" : ""
+      },
+      "Shipper" : {
+        "CustomerAddressinfo" : "",
+        "CustomerMobile" : "9996665554",
+        "CustomerCode" : "940111",
+        "OriginArea" : "GGN",
+        "Sender" : "BulkUpload",
+        "CustomerPincode" : "122002",
+        "CustomerTelephone" : "",
+        "CustomerEmailID" : "test@bd.com",
+        "IsToPayCustomer" : true,
+        "CustomerAddress3" : "",
+        "CustomerAddress2" : "",
+        "VendorCode" : "",
+        "CustomerName" : "Test Cust Name",
+        "CustomerAddress1" : "Test Cust Addr1"
+      }
+    },
+    "Profile" : {
+      "LoginID" : "GG940111",
+      "Api_type" : "S",
+      "LicenceKey" : "kh7mnhqkmgegoksipxr0urmqesesseup"
+    }
+  },
+  "response" : {
+    "GenerateWayBillResult" : {
+      "AWBNo" : "90001537102",
+      "AWBPrintContent" : null,
+      "AvailableAmountForBooking" : 0,
+      "AvailableBalance" : 0,
+      "CCRCRDREF" : "CR176996649127",
+      "ClusterCode" : "NRA",
+      "DestinationArea" : "DEL",
+      "DestinationLocation" : "NRA",
+      "InvoicePrintContent" : null,
+      "IsError" : false,
+      "IsErrorInPU" : false,
+      "MPSDetails" : [ {
+        "MPSNumber" : "90001537102-0001",
+        "MPSRefNumber" : null
+      } ],
+      "MPSLabelPrintContent" : null,
+      "ShipmentPickupDate" : "/Date(1769970600000+0530)/",
+      "Status" : [ {
+        "StatusCode" : "Valid",
+        "StatusInformation" : "Waybill Generation Successful"
+      }, {
+        "StatusCode" : "Pickup Registration:Valid",
+        "StatusInformation" : "31477244DEMO"
+      } ],
+      "TokenNumber" : "31477244DEMO",
+      "TransactionAmount" : 0
+    }
+  }
+}, {
+  "awbNo" : "90001537113",
+  "creditReferenceNo" : "CR176996649128",
+  "createdAt" : "2026-02-01T22:54:27.9946893",
+  "request" : {
+    "Request" : {
+      "Consignee" : {
+        "ConsigneeName" : "Test Consignee",
+        "ConsigneeAddress2" : "",
+        "ConsigneeAddress1" : "Test Cngee Addr1",
+        "ConsigneeAddressinfo" : "",
+        "ConsigneeAddress3" : "",
+        "AvailableTiming" : "",
+        "ConsigneePincode" : "110027",
+        "ConsigneeTelephone" : "",
+        "ConsigneeAttention" : "Bulk",
+        "AvailableDays" : "",
+        "ConsigneeEmailID" : "test@bd.com",
+        "ConsigneeMobile" : "9995554441"
+      },
+      "Services" : {
+        "SpecialInstruction" : "",
+        "IsReversePickup" : true,
+        "CreditReferenceNo3" : "",
+        "PieceCount" : 1,
+        "PickupTime" : "1600",
+        "ActualWeight" : 0.5,
+        "RegisterPickup" : true,
+        "PackType" : "",
+        "PDFOutputNotRequired" : true,
+        "ProductFeature" : "",
+        "CollectableAmount" : 0.0,
+        "itemdtl" : [ {
+          "Itemquantity" : 1,
+          "TotalValue" : 100.0,
+          "ItemValue" : 100.0,
+          "ItemName" : "Test Item1",
+          "InvoiceNumber" : "",
+          "InvoiceDate" : "/Date(1769884200000)/"
+        } ],
+        "DeliveryTimeSlot" : "",
+        "noOfDCGiven" : 0,
+        "AWBNo" : "",
+        "PayableAt" : "",
+        "Commodity" : {
+          "CommodityDetail2" : "",
+          "CommodityDetail3" : "",
+          "CommodityDetail1" : "General Goods"
+        },
+        "PickupMode" : "",
+        "ItemCount" : 1,
+        "ParcelShopCode" : "",
+        "PreferredPickupTimeSlot" : "",
+        "DeclaredValue" : 100.0,
+        "CreditReferenceNo" : "CR176996649128",
+        "IsPartialPickup" : false,
+        "ProductCode" : "A",
+        "IsDedicatedDeliveryNetwork" : false,
+        "ProductType" : 1,
+        "IsDutyTaxPaidByShipper" : false,
+        "Dimensions" : [ {
+          "Length" : 10.0,
+          "Height" : 10.0,
+          "Count" : 1,
+          "Breadth" : 10.0
+        } ],
+        "PickupDate" : "/Date(1769884200000)/",
+        "Officecutofftime" : "",
+        "IsForcePickup" : false,
+        "SubProductCode" : "P",
+        "PickupType" : "",
+        "TotalCashPaytoCustomer" : 0,
+        "CreditReferenceNo2" : ""
+      },
+      "Shipper" : {
+        "CustomerAddressinfo" : "",
+        "CustomerMobile" : "9996665554",
+        "CustomerCode" : "940111",
+        "OriginArea" : "GGN",
+        "Sender" : "BulkUpload",
+        "CustomerPincode" : "122002",
+        "CustomerTelephone" : "",
+        "CustomerEmailID" : "test@bd.com",
+        "IsToPayCustomer" : true,
+        "CustomerAddress3" : "",
+        "CustomerAddress2" : "",
+        "VendorCode" : "",
+        "CustomerName" : "Test Cust Name",
+        "CustomerAddress1" : "Test Cust Addr1"
+      }
+    },
+    "Profile" : {
+      "LoginID" : "GG940111",
+      "Api_type" : "S",
+      "LicenceKey" : "kh7mnhqkmgegoksipxr0urmqesesseup"
+    }
+  },
+  "response" : {
+    "GenerateWayBillResult" : {
+      "AWBNo" : "90001537113",
+      "AWBPrintContent" : null,
+      "AvailableAmountForBooking" : 0,
+      "AvailableBalance" : 0,
+      "CCRCRDREF" : "CR176996649128",
+      "ClusterCode" : "NRA",
+      "DestinationArea" : "DEL",
+      "DestinationLocation" : "NRA",
+      "InvoicePrintContent" : null,
+      "IsError" : false,
+      "IsErrorInPU" : false,
+      "MPSDetails" : [ {
+        "MPSNumber" : "90001537113-0001",
+        "MPSRefNumber" : null
+      } ],
+      "MPSLabelPrintContent" : null,
+      "ShipmentPickupDate" : "/Date(1769970600000+0530)/",
+      "Status" : [ {
+        "StatusCode" : "Valid",
+        "StatusInformation" : "Waybill Generation Successful"
+      }, {
+        "StatusCode" : "Pickup Registration:Valid",
+        "StatusInformation" : "31477245DEMO"
+      } ],
+      "TokenNumber" : "31477245DEMO",
+      "TransactionAmount" : 0
+    }
+  }
+}, {
+  "awbNo" : "90001537124",
+  "creditReferenceNo" : "CR176996649129",
+  "createdAt" : "2026-02-01T22:54:28.5059072",
+  "request" : {
+    "Request" : {
+      "Consignee" : {
+        "ConsigneeName" : "Test Consignee",
+        "ConsigneeAddress2" : "",
+        "ConsigneeAddress1" : "Test Cngee Addr1",
+        "ConsigneeAddressinfo" : "",
+        "ConsigneeAddress3" : "",
+        "AvailableTiming" : "",
+        "ConsigneePincode" : "110027",
+        "ConsigneeTelephone" : "",
+        "ConsigneeAttention" : "Bulk",
+        "AvailableDays" : "",
+        "ConsigneeEmailID" : "test@bd.com",
+        "ConsigneeMobile" : "9995554441"
+      },
+      "Services" : {
+        "SpecialInstruction" : "",
+        "IsReversePickup" : true,
+        "CreditReferenceNo3" : "",
+        "PieceCount" : 1,
+        "PickupTime" : "1600",
+        "ActualWeight" : 0.5,
+        "RegisterPickup" : true,
+        "PackType" : "",
+        "PDFOutputNotRequired" : true,
+        "ProductFeature" : "",
+        "CollectableAmount" : 0.0,
+        "itemdtl" : [ {
+          "Itemquantity" : 1,
+          "TotalValue" : 100.0,
+          "ItemValue" : 100.0,
+          "ItemName" : "Test Item1",
+          "InvoiceNumber" : "",
+          "InvoiceDate" : "/Date(1769884200000)/"
+        } ],
+        "DeliveryTimeSlot" : "",
+        "noOfDCGiven" : 0,
+        "AWBNo" : "",
+        "PayableAt" : "",
+        "Commodity" : {
+          "CommodityDetail2" : "",
+          "CommodityDetail3" : "",
+          "CommodityDetail1" : "General Goods"
+        },
+        "PickupMode" : "",
+        "ItemCount" : 1,
+        "ParcelShopCode" : "",
+        "PreferredPickupTimeSlot" : "",
+        "DeclaredValue" : 100.0,
+        "CreditReferenceNo" : "CR176996649129",
+        "IsPartialPickup" : false,
+        "ProductCode" : "A",
+        "IsDedicatedDeliveryNetwork" : false,
+        "ProductType" : 1,
+        "IsDutyTaxPaidByShipper" : false,
+        "Dimensions" : [ {
+          "Length" : 10.0,
+          "Height" : 10.0,
+          "Count" : 1,
+          "Breadth" : 10.0
+        } ],
+        "PickupDate" : "/Date(1769884200000)/",
+        "Officecutofftime" : "",
+        "IsForcePickup" : false,
+        "SubProductCode" : "P",
+        "PickupType" : "",
+        "TotalCashPaytoCustomer" : 0,
+        "CreditReferenceNo2" : ""
+      },
+      "Shipper" : {
+        "CustomerAddressinfo" : "",
+        "CustomerMobile" : "9996665554",
+        "CustomerCode" : "940111",
+        "OriginArea" : "GGN",
+        "Sender" : "BulkUpload",
+        "CustomerPincode" : "122002",
+        "CustomerTelephone" : "",
+        "CustomerEmailID" : "test@bd.com",
+        "IsToPayCustomer" : true,
+        "CustomerAddress3" : "",
+        "CustomerAddress2" : "",
+        "VendorCode" : "",
+        "CustomerName" : "Test Cust Name",
+        "CustomerAddress1" : "Test Cust Addr1"
+      }
+    },
+    "Profile" : {
+      "LoginID" : "GG940111",
+      "Api_type" : "S",
+      "LicenceKey" : "kh7mnhqkmgegoksipxr0urmqesesseup"
+    }
+  },
+  "response" : {
+    "GenerateWayBillResult" : {
+      "AWBNo" : "90001537124",
+      "AWBPrintContent" : null,
+      "AvailableAmountForBooking" : 0,
+      "AvailableBalance" : 0,
+      "CCRCRDREF" : "CR176996649129",
+      "ClusterCode" : "NRA",
+      "DestinationArea" : "DEL",
+      "DestinationLocation" : "NRA",
+      "InvoicePrintContent" : null,
+      "IsError" : false,
+      "IsErrorInPU" : false,
+      "MPSDetails" : [ {
+        "MPSNumber" : "90001537124-0001",
+        "MPSRefNumber" : null
+      } ],
+      "MPSLabelPrintContent" : null,
+      "ShipmentPickupDate" : "/Date(1769970600000+0530)/",
+      "Status" : [ {
+        "StatusCode" : "Valid",
+        "StatusInformation" : "Waybill Generation Successful"
+      }, {
+        "StatusCode" : "Pickup Registration:Valid",
+        "StatusInformation" : "31477246DEMO"
+      } ],
+      "TokenNumber" : "31477246DEMO",
+      "TransactionAmount" : 0
+    }
+  }
+}, {
+  "awbNo" : "90001537135",
+  "creditReferenceNo" : "CR176996649130",
+  "createdAt" : "2026-02-01T22:54:28.9151529",
+  "request" : {
+    "Request" : {
+      "Consignee" : {
+        "ConsigneeName" : "Test Consignee",
+        "ConsigneeAddress2" : "",
+        "ConsigneeAddress1" : "Test Cngee Addr1",
+        "ConsigneeAddressinfo" : "",
+        "ConsigneeAddress3" : "",
+        "AvailableTiming" : "",
+        "ConsigneePincode" : "110027",
+        "ConsigneeTelephone" : "",
+        "ConsigneeAttention" : "Bulk",
+        "AvailableDays" : "",
+        "ConsigneeEmailID" : "test@bd.com",
+        "ConsigneeMobile" : "9995554441"
+      },
+      "Services" : {
+        "SpecialInstruction" : "",
+        "IsReversePickup" : true,
+        "CreditReferenceNo3" : "",
+        "PieceCount" : 1,
+        "PickupTime" : "1600",
+        "ActualWeight" : 0.5,
+        "RegisterPickup" : true,
+        "PackType" : "",
+        "PDFOutputNotRequired" : true,
+        "ProductFeature" : "",
+        "CollectableAmount" : 0.0,
+        "itemdtl" : [ {
+          "Itemquantity" : 1,
+          "TotalValue" : 100.0,
+          "ItemValue" : 100.0,
+          "ItemName" : "Test Item1",
+          "InvoiceNumber" : "",
+          "InvoiceDate" : "/Date(1769884200000)/"
+        } ],
+        "DeliveryTimeSlot" : "",
+        "noOfDCGiven" : 0,
+        "AWBNo" : "",
+        "PayableAt" : "",
+        "Commodity" : {
+          "CommodityDetail2" : "",
+          "CommodityDetail3" : "",
+          "CommodityDetail1" : "General Goods"
+        },
+        "PickupMode" : "",
+        "ItemCount" : 1,
+        "ParcelShopCode" : "",
+        "PreferredPickupTimeSlot" : "",
+        "DeclaredValue" : 100.0,
+        "CreditReferenceNo" : "CR176996649130",
+        "IsPartialPickup" : false,
+        "ProductCode" : "A",
+        "IsDedicatedDeliveryNetwork" : false,
+        "ProductType" : 1,
+        "IsDutyTaxPaidByShipper" : false,
+        "Dimensions" : [ {
+          "Length" : 10.0,
+          "Height" : 10.0,
+          "Count" : 1,
+          "Breadth" : 10.0
+        } ],
+        "PickupDate" : "/Date(1769884200000)/",
+        "Officecutofftime" : "",
+        "IsForcePickup" : false,
+        "SubProductCode" : "P",
+        "PickupType" : "",
+        "TotalCashPaytoCustomer" : 0,
+        "CreditReferenceNo2" : ""
+      },
+      "Shipper" : {
+        "CustomerAddressinfo" : "",
+        "CustomerMobile" : "9996665554",
+        "CustomerCode" : "940111",
+        "OriginArea" : "GGN",
+        "Sender" : "BulkUpload",
+        "CustomerPincode" : "122002",
+        "CustomerTelephone" : "",
+        "CustomerEmailID" : "test@bd.com",
+        "IsToPayCustomer" : true,
+        "CustomerAddress3" : "",
+        "CustomerAddress2" : "",
+        "VendorCode" : "",
+        "CustomerName" : "Test Cust Name",
+        "CustomerAddress1" : "Test Cust Addr1"
+      }
+    },
+    "Profile" : {
+      "LoginID" : "GG940111",
+      "Api_type" : "S",
+      "LicenceKey" : "kh7mnhqkmgegoksipxr0urmqesesseup"
+    }
+  },
+  "response" : {
+    "GenerateWayBillResult" : {
+      "AWBNo" : "90001537135",
+      "AWBPrintContent" : null,
+      "AvailableAmountForBooking" : 0,
+      "AvailableBalance" : 0,
+      "CCRCRDREF" : "CR176996649130",
+      "ClusterCode" : "NRA",
+      "DestinationArea" : "DEL",
+      "DestinationLocation" : "NRA",
+      "InvoicePrintContent" : null,
+      "IsError" : false,
+      "IsErrorInPU" : false,
+      "MPSDetails" : [ {
+        "MPSNumber" : "90001537135-0001",
+        "MPSRefNumber" : null
+      } ],
+      "MPSLabelPrintContent" : null,
+      "ShipmentPickupDate" : "/Date(1769970600000+0530)/",
+      "Status" : [ {
+        "StatusCode" : "Valid",
+        "StatusInformation" : "Waybill Generation Successful"
+      }, {
+        "StatusCode" : "Pickup Registration:Valid",
+        "StatusInformation" : "31477247DEMO"
+      } ],
+      "TokenNumber" : "31477247DEMO",
+      "TransactionAmount" : 0
+    }
+  }
+}, {
+  "awbNo" : "90001537146",
+  "creditReferenceNo" : "CR176996649131",
+  "createdAt" : "2026-02-01T22:54:29.2521145",
+  "request" : {
+    "Request" : {
+      "Consignee" : {
+        "ConsigneeName" : "Test Consignee",
+        "ConsigneeAddress2" : "",
+        "ConsigneeAddress1" : "Test Cngee Addr1",
+        "ConsigneeAddressinfo" : "",
+        "ConsigneeAddress3" : "",
+        "AvailableTiming" : "",
+        "ConsigneePincode" : "110027",
+        "ConsigneeTelephone" : "",
+        "ConsigneeAttention" : "Bulk",
+        "AvailableDays" : "",
+        "ConsigneeEmailID" : "test@bd.com",
+        "ConsigneeMobile" : "9995554441"
+      },
+      "Services" : {
+        "SpecialInstruction" : "",
+        "IsReversePickup" : true,
+        "CreditReferenceNo3" : "",
+        "PieceCount" : 1,
+        "PickupTime" : "1600",
+        "ActualWeight" : 0.5,
+        "RegisterPickup" : true,
+        "PackType" : "",
+        "PDFOutputNotRequired" : true,
+        "ProductFeature" : "",
+        "CollectableAmount" : 0.0,
+        "itemdtl" : [ {
+          "Itemquantity" : 1,
+          "TotalValue" : 100.0,
+          "ItemValue" : 100.0,
+          "ItemName" : "Test Item1",
+          "InvoiceNumber" : "",
+          "InvoiceDate" : "/Date(1769884200000)/"
+        } ],
+        "DeliveryTimeSlot" : "",
+        "noOfDCGiven" : 0,
+        "AWBNo" : "",
+        "PayableAt" : "",
+        "Commodity" : {
+          "CommodityDetail2" : "",
+          "CommodityDetail3" : "",
+          "CommodityDetail1" : "General Goods"
+        },
+        "PickupMode" : "",
+        "ItemCount" : 1,
+        "ParcelShopCode" : "",
+        "PreferredPickupTimeSlot" : "",
+        "DeclaredValue" : 100.0,
+        "CreditReferenceNo" : "CR176996649131",
+        "IsPartialPickup" : false,
+        "ProductCode" : "A",
+        "IsDedicatedDeliveryNetwork" : false,
+        "ProductType" : 1,
+        "IsDutyTaxPaidByShipper" : false,
+        "Dimensions" : [ {
+          "Length" : 10.0,
+          "Height" : 10.0,
+          "Count" : 1,
+          "Breadth" : 10.0
+        } ],
+        "PickupDate" : "/Date(1769884200000)/",
+        "Officecutofftime" : "",
+        "IsForcePickup" : false,
+        "SubProductCode" : "P",
+        "PickupType" : "",
+        "TotalCashPaytoCustomer" : 0,
+        "CreditReferenceNo2" : ""
+      },
+      "Shipper" : {
+        "CustomerAddressinfo" : "",
+        "CustomerMobile" : "9996665554",
+        "CustomerCode" : "940111",
+        "OriginArea" : "GGN",
+        "Sender" : "BulkUpload",
+        "CustomerPincode" : "122002",
+        "CustomerTelephone" : "",
+        "CustomerEmailID" : "test@bd.com",
+        "IsToPayCustomer" : true,
+        "CustomerAddress3" : "",
+        "CustomerAddress2" : "",
+        "VendorCode" : "",
+        "CustomerName" : "Test Cust Name",
+        "CustomerAddress1" : "Test Cust Addr1"
+      }
+    },
+    "Profile" : {
+      "LoginID" : "GG940111",
+      "Api_type" : "S",
+      "LicenceKey" : "kh7mnhqkmgegoksipxr0urmqesesseup"
+    }
+  },
+  "response" : {
+    "GenerateWayBillResult" : {
+      "AWBNo" : "90001537146",
+      "AWBPrintContent" : null,
+      "AvailableAmountForBooking" : 0,
+      "AvailableBalance" : 0,
+      "CCRCRDREF" : "CR176996649131",
+      "ClusterCode" : "NRA",
+      "DestinationArea" : "DEL",
+      "DestinationLocation" : "NRA",
+      "InvoicePrintContent" : null,
+      "IsError" : false,
+      "IsErrorInPU" : false,
+      "MPSDetails" : [ {
+        "MPSNumber" : "90001537146-0001",
+        "MPSRefNumber" : null
+      } ],
+      "MPSLabelPrintContent" : null,
+      "ShipmentPickupDate" : "/Date(1769970600000+0530)/",
+      "Status" : [ {
+        "StatusCode" : "Valid",
+        "StatusInformation" : "Waybill Generation Successful"
+      }, {
+        "StatusCode" : "Pickup Registration:Valid",
+        "StatusInformation" : "31477248DEMO"
+      } ],
+      "TokenNumber" : "31477248DEMO",
+      "TransactionAmount" : 0
+    }
+  }
+}, {
+  "awbNo" : "90001537150",
+  "creditReferenceNo" : "CR176996649132",
+  "createdAt" : "2026-02-01T23:15:04.5170741",
+  "request" : {
+    "Request" : {
+      "Consignee" : {
+        "ConsigneeName" : "Test Consignee",
+        "ConsigneeAddress2" : "",
+        "ConsigneeAddress1" : "Test Cngee Addr1",
+        "ConsigneeAddressinfo" : "",
+        "ConsigneeAddress3" : "",
+        "AvailableTiming" : "",
+        "ConsigneePincode" : "110027",
+        "ConsigneeTelephone" : "",
+        "ConsigneeAttention" : "Bulk",
+        "AvailableDays" : "",
+        "ConsigneeEmailID" : "test@bd.com",
+        "ConsigneeMobile" : "9995554441"
+      },
+      "Services" : {
+        "SpecialInstruction" : "",
+        "IsReversePickup" : true,
+        "CreditReferenceNo3" : "",
+        "PieceCount" : 1,
+        "PickupTime" : "1600",
+        "ActualWeight" : 0.5,
+        "RegisterPickup" : true,
+        "PackType" : "",
+        "PDFOutputNotRequired" : true,
+        "ProductFeature" : "",
+        "CollectableAmount" : 0.0,
+        "itemdtl" : [ {
+          "Itemquantity" : 1,
+          "TotalValue" : 100.0,
+          "ItemValue" : 100.0,
+          "ItemName" : "Test Item1",
+          "InvoiceNumber" : "",
+          "InvoiceDate" : "/Date(1769884200000)/"
+        } ],
+        "DeliveryTimeSlot" : "",
+        "noOfDCGiven" : 0,
+        "AWBNo" : "",
+        "PayableAt" : "",
+        "Commodity" : {
+          "CommodityDetail2" : "",
+          "CommodityDetail3" : "",
+          "CommodityDetail1" : "General Goods"
+        },
+        "PickupMode" : "",
+        "ItemCount" : 1,
+        "ParcelShopCode" : "",
+        "PreferredPickupTimeSlot" : "",
+        "DeclaredValue" : 100.0,
+        "CreditReferenceNo" : "CR176996649132",
+        "IsPartialPickup" : false,
+        "ProductCode" : "A",
+        "IsDedicatedDeliveryNetwork" : false,
+        "ProductType" : 1,
+        "IsDutyTaxPaidByShipper" : false,
+        "Dimensions" : [ {
+          "Length" : 10.0,
+          "Height" : 10.0,
+          "Count" : 1,
+          "Breadth" : 10.0
+        } ],
+        "PickupDate" : "/Date(1769884200000)/",
+        "Officecutofftime" : "",
+        "IsForcePickup" : false,
+        "SubProductCode" : "P",
+        "PickupType" : "",
+        "TotalCashPaytoCustomer" : 0,
+        "CreditReferenceNo2" : ""
+      },
+      "Shipper" : {
+        "CustomerAddressinfo" : "",
+        "CustomerMobile" : "9996665554",
+        "CustomerCode" : "940111",
+        "OriginArea" : "GGN",
+        "Sender" : "BulkUpload",
+        "CustomerPincode" : "122002",
+        "CustomerTelephone" : "",
+        "CustomerEmailID" : "test@bd.com",
+        "IsToPayCustomer" : true,
+        "CustomerAddress3" : "",
+        "CustomerAddress2" : "",
+        "VendorCode" : "",
+        "CustomerName" : "Test Cust Name",
+        "CustomerAddress1" : "Test Cust Addr1"
+      }
+    },
+    "Profile" : {
+      "LoginID" : "GG940111",
+      "Api_type" : "S",
+      "LicenceKey" : "kh7mnhqkmgegoksipxr0urmqesesseup"
+    }
+  },
+  "response" : {
+    "GenerateWayBillResult" : {
+      "AWBNo" : "90001537150",
+      "AWBPrintContent" : null,
+      "AvailableAmountForBooking" : 0,
+      "AvailableBalance" : 0,
+      "CCRCRDREF" : "CR176996649132",
+      "ClusterCode" : "NRA",
+      "DestinationArea" : "DEL",
+      "DestinationLocation" : "NRA",
+      "InvoicePrintContent" : null,
+      "IsError" : false,
+      "IsErrorInPU" : false,
+      "MPSDetails" : [ {
+        "MPSNumber" : "90001537150-0001",
+        "MPSRefNumber" : null
+      } ],
+      "MPSLabelPrintContent" : null,
+      "ShipmentPickupDate" : "/Date(1769970600000+0530)/",
+      "Status" : [ {
+        "StatusCode" : "Valid",
+        "StatusInformation" : "Waybill Generation Successful"
+      }, {
+        "StatusCode" : "Pickup Registration:Valid",
+        "StatusInformation" : "31477249DEMO"
+      } ],
+      "TokenNumber" : "31477249DEMO",
+      "TransactionAmount" : 0
+    }
+  }
+}, {
+  "awbNo" : "90001537161",
+  "creditReferenceNo" : "CR176996649134",
+  "createdAt" : "2026-02-01T23:15:05.4296982",
+  "request" : {
+    "Request" : {
+      "Consignee" : {
+        "ConsigneeName" : "Test Consignee",
+        "ConsigneeAddress2" : "",
+        "ConsigneeAddress1" : "Test Cngee Addr1",
+        "ConsigneeAddressinfo" : "",
+        "ConsigneeAddress3" : "",
+        "AvailableTiming" : "",
+        "ConsigneePincode" : "110027",
+        "ConsigneeTelephone" : "",
+        "ConsigneeAttention" : "Bulk",
+        "AvailableDays" : "",
+        "ConsigneeEmailID" : "test@bd.com",
+        "ConsigneeMobile" : "9995554441"
+      },
+      "Services" : {
+        "SpecialInstruction" : "",
+        "IsReversePickup" : true,
+        "CreditReferenceNo3" : "",
+        "PieceCount" : 1,
+        "PickupTime" : "1600",
+        "ActualWeight" : 0.5,
+        "RegisterPickup" : true,
+        "PackType" : "",
+        "PDFOutputNotRequired" : true,
+        "ProductFeature" : "",
+        "CollectableAmount" : 0.0,
+        "itemdtl" : [ {
+          "Itemquantity" : 1,
+          "TotalValue" : 100.0,
+          "ItemValue" : 100.0,
+          "ItemName" : "Test Item1",
+          "InvoiceNumber" : "",
+          "InvoiceDate" : "/Date(1769884200000)/"
+        } ],
+        "DeliveryTimeSlot" : "",
+        "noOfDCGiven" : 0,
+        "AWBNo" : "",
+        "PayableAt" : "",
+        "Commodity" : {
+          "CommodityDetail2" : "",
+          "CommodityDetail3" : "",
+          "CommodityDetail1" : "General Goods"
+        },
+        "PickupMode" : "",
+        "ItemCount" : 1,
+        "ParcelShopCode" : "",
+        "PreferredPickupTimeSlot" : "",
+        "DeclaredValue" : 100.0,
+        "CreditReferenceNo" : "CR176996649134",
+        "IsPartialPickup" : false,
+        "ProductCode" : "A",
+        "IsDedicatedDeliveryNetwork" : false,
+        "ProductType" : 1,
+        "IsDutyTaxPaidByShipper" : false,
+        "Dimensions" : [ {
+          "Length" : 10.0,
+          "Height" : 10.0,
+          "Count" : 1,
+          "Breadth" : 10.0
+        } ],
+        "PickupDate" : "/Date(1769884200000)/",
+        "Officecutofftime" : "",
+        "IsForcePickup" : false,
+        "SubProductCode" : "P",
+        "PickupType" : "",
+        "TotalCashPaytoCustomer" : 0,
+        "CreditReferenceNo2" : ""
+      },
+      "Shipper" : {
+        "CustomerAddressinfo" : "",
+        "CustomerMobile" : "9996665554",
+        "CustomerCode" : "940111",
+        "OriginArea" : "GGN",
+        "Sender" : "BulkUpload",
+        "CustomerPincode" : "122002",
+        "CustomerTelephone" : "",
+        "CustomerEmailID" : "test@bd.com",
+        "IsToPayCustomer" : true,
+        "CustomerAddress3" : "",
+        "CustomerAddress2" : "",
+        "VendorCode" : "",
+        "CustomerName" : "Test Cust Name",
+        "CustomerAddress1" : "Test Cust Addr1"
+      }
+    },
+    "Profile" : {
+      "LoginID" : "GG940111",
+      "Api_type" : "S",
+      "LicenceKey" : "kh7mnhqkmgegoksipxr0urmqesesseup"
+    }
+  },
+  "response" : {
+    "GenerateWayBillResult" : {
+      "AWBNo" : "90001537161",
+      "AWBPrintContent" : null,
+      "AvailableAmountForBooking" : 0,
+      "AvailableBalance" : 0,
+      "CCRCRDREF" : "CR176996649134",
+      "ClusterCode" : "NRA",
+      "DestinationArea" : "DEL",
+      "DestinationLocation" : "NRA",
+      "InvoicePrintContent" : null,
+      "IsError" : false,
+      "IsErrorInPU" : false,
+      "MPSDetails" : [ {
+        "MPSNumber" : "90001537161-0001",
+        "MPSRefNumber" : null
+      } ],
+      "MPSLabelPrintContent" : null,
+      "ShipmentPickupDate" : "/Date(1769970600000+0530)/",
+      "Status" : [ {
+        "StatusCode" : "Valid",
+        "StatusInformation" : "Waybill Generation Successful"
+      }, {
+        "StatusCode" : "Pickup Registration:Valid",
+        "StatusInformation" : "31477250DEMO"
+      } ],
+      "TokenNumber" : "31477250DEMO",
+      "TransactionAmount" : 0
+    }
+  }
+}, {
+  "awbNo" : "90001537172",
+  "creditReferenceNo" : "CR176996649136",
+  "createdAt" : "2026-02-01T23:15:06.0495398",
+  "request" : {
+    "Request" : {
+      "Consignee" : {
+        "ConsigneeName" : "Test Consignee",
+        "ConsigneeAddress2" : "",
+        "ConsigneeAddress1" : "Test Cngee Addr1",
+        "ConsigneeAddressinfo" : "",
+        "ConsigneeAddress3" : "",
+        "AvailableTiming" : "",
+        "ConsigneePincode" : "110027",
+        "ConsigneeTelephone" : "",
+        "ConsigneeAttention" : "Bulk",
+        "AvailableDays" : "",
+        "ConsigneeEmailID" : "test@bd.com",
+        "ConsigneeMobile" : "9995554441"
+      },
+      "Services" : {
+        "SpecialInstruction" : "",
+        "IsReversePickup" : true,
+        "CreditReferenceNo3" : "",
+        "PieceCount" : 1,
+        "PickupTime" : "1600",
+        "ActualWeight" : 0.5,
+        "RegisterPickup" : true,
+        "PackType" : "",
+        "PDFOutputNotRequired" : true,
+        "ProductFeature" : "",
+        "CollectableAmount" : 0.0,
+        "itemdtl" : [ {
+          "Itemquantity" : 1,
+          "TotalValue" : 100.0,
+          "ItemValue" : 100.0,
+          "ItemName" : "Test Item1",
+          "InvoiceNumber" : "",
+          "InvoiceDate" : "/Date(1769884200000)/"
+        } ],
+        "DeliveryTimeSlot" : "",
+        "noOfDCGiven" : 0,
+        "AWBNo" : "",
+        "PayableAt" : "",
+        "Commodity" : {
+          "CommodityDetail2" : "",
+          "CommodityDetail3" : "",
+          "CommodityDetail1" : "General Goods"
+        },
+        "PickupMode" : "",
+        "ItemCount" : 1,
+        "ParcelShopCode" : "",
+        "PreferredPickupTimeSlot" : "",
+        "DeclaredValue" : 100.0,
+        "CreditReferenceNo" : "CR176996649136",
+        "IsPartialPickup" : false,
+        "ProductCode" : "A",
+        "IsDedicatedDeliveryNetwork" : false,
+        "ProductType" : 1,
+        "IsDutyTaxPaidByShipper" : false,
+        "Dimensions" : [ {
+          "Length" : 10.0,
+          "Height" : 10.0,
+          "Count" : 1,
+          "Breadth" : 10.0
+        } ],
+        "PickupDate" : "/Date(1769884200000)/",
+        "Officecutofftime" : "",
+        "IsForcePickup" : false,
+        "SubProductCode" : "P",
+        "PickupType" : "",
+        "TotalCashPaytoCustomer" : 0,
+        "CreditReferenceNo2" : ""
+      },
+      "Shipper" : {
+        "CustomerAddressinfo" : "",
+        "CustomerMobile" : "9996665554",
+        "CustomerCode" : "940111",
+        "OriginArea" : "GGN",
+        "Sender" : "BulkUpload",
+        "CustomerPincode" : "122002",
+        "CustomerTelephone" : "",
+        "CustomerEmailID" : "test@bd.com",
+        "IsToPayCustomer" : true,
+        "CustomerAddress3" : "",
+        "CustomerAddress2" : "",
+        "VendorCode" : "",
+        "CustomerName" : "Test Cust Name",
+        "CustomerAddress1" : "Test Cust Addr1"
+      }
+    },
+    "Profile" : {
+      "LoginID" : "GG940111",
+      "Api_type" : "S",
+      "LicenceKey" : "kh7mnhqkmgegoksipxr0urmqesesseup"
+    }
+  },
+  "response" : {
+    "GenerateWayBillResult" : {
+      "AWBNo" : "90001537172",
+      "AWBPrintContent" : null,
+      "AvailableAmountForBooking" : 0,
+      "AvailableBalance" : 0,
+      "CCRCRDREF" : "CR176996649136",
+      "ClusterCode" : "NRA",
+      "DestinationArea" : "DEL",
+      "DestinationLocation" : "NRA",
+      "InvoicePrintContent" : null,
+      "IsError" : false,
+      "IsErrorInPU" : false,
+      "MPSDetails" : [ {
+        "MPSNumber" : "90001537172-0001",
+        "MPSRefNumber" : null
+      } ],
+      "MPSLabelPrintContent" : null,
+      "ShipmentPickupDate" : "/Date(1769970600000+0530)/",
+      "Status" : [ {
+        "StatusCode" : "Valid",
+        "StatusInformation" : "Waybill Generation Successful"
+      }, {
+        "StatusCode" : "Pickup Registration:Valid",
+        "StatusInformation" : "31477251DEMO"
+      } ],
+      "TokenNumber" : "31477251DEMO",
+      "TransactionAmount" : 0
+    }
+  }
+}, {
+  "awbNo" : "80149521642",
+  "creditReferenceNo" : "CR176996649133",
+  "createdAt" : "2026-02-01T23:23:50.4572223",
+  "request" : {
+    "Request" : {
+      "Consignee" : {
+        "ConsigneeName" : "Test Consignee",
+        "ConsigneeAddress2" : "",
+        "ConsigneeAddress1" : "Test Cngee Addr1",
+        "ConsigneeAddressinfo" : "",
+        "ConsigneeAddress3" : "",
+        "AvailableTiming" : "",
+        "ConsigneePincode" : "110027",
+        "ConsigneeTelephone" : "",
+        "ConsigneeAttention" : "Bulk",
+        "AvailableDays" : "",
+        "ConsigneeEmailID" : "test@bd.com",
+        "ConsigneeMobile" : "9995554441"
+      },
+      "Services" : {
+        "SpecialInstruction" : "",
+        "IsReversePickup" : false,
+        "CreditReferenceNo3" : "",
+        "PieceCount" : 1,
+        "PickupTime" : "1600",
+        "ActualWeight" : 0.5,
+        "RegisterPickup" : true,
+        "PackType" : "",
+        "PDFOutputNotRequired" : true,
+        "ProductFeature" : "",
+        "CollectableAmount" : 100.0,
+        "itemdtl" : [ {
+          "Itemquantity" : 1,
+          "TotalValue" : 100.0,
+          "ItemValue" : 100.0,
+          "ItemName" : "Test Item1",
+          "InvoiceNumber" : "",
+          "InvoiceDate" : "/Date(1769884200000)/"
+        } ],
+        "DeliveryTimeSlot" : "",
+        "noOfDCGiven" : 0,
+        "AWBNo" : "",
+        "PayableAt" : "",
+        "Commodity" : {
+          "CommodityDetail2" : "",
+          "CommodityDetail3" : "",
+          "CommodityDetail1" : "General Goods"
+        },
+        "PickupMode" : "",
+        "ItemCount" : 1,
+        "ParcelShopCode" : "",
+        "PreferredPickupTimeSlot" : "",
+        "DeclaredValue" : 100.0,
+        "CreditReferenceNo" : "CR176996649133",
+        "IsPartialPickup" : false,
+        "ProductCode" : "A",
+        "IsDedicatedDeliveryNetwork" : false,
+        "ProductType" : 1,
+        "IsDutyTaxPaidByShipper" : false,
+        "Dimensions" : [ {
+          "Length" : 10.0,
+          "Height" : 10.0,
+          "Count" : 1,
+          "Breadth" : 10.0
+        } ],
+        "PickupDate" : "/Date(1769884200000)/",
+        "Officecutofftime" : "",
+        "IsForcePickup" : false,
+        "SubProductCode" : "C",
+        "PickupType" : "",
+        "TotalCashPaytoCustomer" : 0,
+        "CreditReferenceNo2" : ""
+      },
+      "Shipper" : {
+        "CustomerAddressinfo" : "",
+        "CustomerMobile" : "9996665554",
+        "CustomerCode" : "940111",
+        "OriginArea" : "GGN",
+        "Sender" : "BulkUpload",
+        "CustomerPincode" : "122002",
+        "CustomerTelephone" : "",
+        "CustomerEmailID" : "test@bd.com",
+        "IsToPayCustomer" : false,
+        "CustomerAddress3" : "",
+        "CustomerAddress2" : "",
+        "VendorCode" : "",
+        "CustomerName" : "Test Cust Name",
+        "CustomerAddress1" : "Test Cust Addr1"
+      }
+    },
+    "Profile" : {
+      "LoginID" : "GG940111",
+      "Api_type" : "S",
+      "LicenceKey" : "kh7mnhqkmgegoksipxr0urmqesesseup"
+    }
+  },
+  "response" : {
+    "GenerateWayBillResult" : {
+      "AWBNo" : "80149521642",
+      "AWBPrintContent" : null,
+      "AvailableAmountForBooking" : 0,
+      "AvailableBalance" : 0,
+      "CCRCRDREF" : "CR176996649133",
+      "ClusterCode" : "NRA",
+      "DestinationArea" : "DEL",
+      "DestinationLocation" : "NRA",
+      "InvoicePrintContent" : null,
+      "IsError" : false,
+      "IsErrorInPU" : false,
+      "MPSDetails" : [ {
+        "MPSNumber" : "80149521642-0001",
+        "MPSRefNumber" : null
+      } ],
+      "MPSLabelPrintContent" : null,
+      "ShipmentPickupDate" : "/Date(1769970600000+0530)/",
+      "Status" : [ {
+        "StatusCode" : "Valid",
+        "StatusInformation" : "Waybill Generation Successful"
+      }, {
+        "StatusCode" : "Pickup Registration:InsertFailure",
+        "StatusInformation" : "PickupIsAlreadyRegister"
+      } ],
+      "TokenNumber" : "31477251DEMO",
+      "TransactionAmount" : 0
+    }
+  }
+}, {
+  "awbNo" : "80149521653",
+  "creditReferenceNo" : "CR176996649137",
+  "createdAt" : "2026-02-01T23:23:51.6315691",
+  "request" : {
+    "Request" : {
+      "Consignee" : {
+        "ConsigneeName" : "Test Consignee",
+        "ConsigneeAddress2" : "",
+        "ConsigneeAddress1" : "Test Cngee Addr1",
+        "ConsigneeAddressinfo" : "",
+        "ConsigneeAddress3" : "",
+        "AvailableTiming" : "",
+        "ConsigneePincode" : "110027",
+        "ConsigneeTelephone" : "",
+        "ConsigneeAttention" : "Bulk",
+        "AvailableDays" : "",
+        "ConsigneeEmailID" : "test@bd.com",
+        "ConsigneeMobile" : "9995554441"
+      },
+      "Services" : {
+        "SpecialInstruction" : "",
+        "IsReversePickup" : false,
+        "CreditReferenceNo3" : "",
+        "PieceCount" : 1,
+        "PickupTime" : "1600",
+        "ActualWeight" : 0.5,
+        "RegisterPickup" : true,
+        "PackType" : "",
+        "PDFOutputNotRequired" : true,
+        "ProductFeature" : "",
+        "CollectableAmount" : 200.0,
+        "itemdtl" : [ {
+          "Itemquantity" : 1,
+          "TotalValue" : 100.0,
+          "ItemValue" : 100.0,
+          "ItemName" : "Test Item1",
+          "InvoiceNumber" : "",
+          "InvoiceDate" : "/Date(1769884200000)/"
+        } ],
+        "DeliveryTimeSlot" : "",
+        "noOfDCGiven" : 0,
+        "AWBNo" : "",
+        "PayableAt" : "",
+        "Commodity" : {
+          "CommodityDetail2" : "",
+          "CommodityDetail3" : "",
+          "CommodityDetail1" : "General Goods"
+        },
+        "PickupMode" : "",
+        "ItemCount" : 1,
+        "ParcelShopCode" : "",
+        "PreferredPickupTimeSlot" : "",
+        "DeclaredValue" : 100.0,
+        "CreditReferenceNo" : "CR176996649137",
+        "IsPartialPickup" : false,
+        "ProductCode" : "A",
+        "IsDedicatedDeliveryNetwork" : false,
+        "ProductType" : 1,
+        "IsDutyTaxPaidByShipper" : false,
+        "Dimensions" : [ {
+          "Length" : 10.0,
+          "Height" : 10.0,
+          "Count" : 1,
+          "Breadth" : 10.0
+        } ],
+        "PickupDate" : "/Date(1769884200000)/",
+        "Officecutofftime" : "",
+        "IsForcePickup" : false,
+        "SubProductCode" : "C",
+        "PickupType" : "",
+        "TotalCashPaytoCustomer" : 0,
+        "CreditReferenceNo2" : ""
+      },
+      "Shipper" : {
+        "CustomerAddressinfo" : "",
+        "CustomerMobile" : "9996665554",
+        "CustomerCode" : "940111",
+        "OriginArea" : "GGN",
+        "Sender" : "BulkUpload",
+        "CustomerPincode" : "122002",
+        "CustomerTelephone" : "",
+        "CustomerEmailID" : "test@bd.com",
+        "IsToPayCustomer" : false,
+        "CustomerAddress3" : "",
+        "CustomerAddress2" : "",
+        "VendorCode" : "",
+        "CustomerName" : "Test Cust Name",
+        "CustomerAddress1" : "Test Cust Addr1"
+      }
+    },
+    "Profile" : {
+      "LoginID" : "GG940111",
+      "Api_type" : "S",
+      "LicenceKey" : "kh7mnhqkmgegoksipxr0urmqesesseup"
+    }
+  },
+  "response" : {
+    "GenerateWayBillResult" : {
+      "AWBNo" : "80149521653",
+      "AWBPrintContent" : null,
+      "AvailableAmountForBooking" : 0,
+      "AvailableBalance" : 0,
+      "CCRCRDREF" : "CR176996649137",
+      "ClusterCode" : "NRA",
+      "DestinationArea" : "DEL",
+      "DestinationLocation" : "NRA",
+      "InvoicePrintContent" : null,
+      "IsError" : false,
+      "IsErrorInPU" : false,
+      "MPSDetails" : [ {
+        "MPSNumber" : "80149521653-0001",
+        "MPSRefNumber" : null
+      } ],
+      "MPSLabelPrintContent" : null,
+      "ShipmentPickupDate" : "/Date(1769970600000+0530)/",
+      "Status" : [ {
+        "StatusCode" : "Valid",
+        "StatusInformation" : "Waybill Generation Successful"
+      }, {
+        "StatusCode" : "Pickup Registration:InsertFailure",
+        "StatusInformation" : "PickupIsAlreadyRegister"
+      } ],
+      "TokenNumber" : "31477251DEMO",
+      "TransactionAmount" : 0
+    }
+  }
 } ]
