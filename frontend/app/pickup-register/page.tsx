@@ -1,180 +1,281 @@
 "use client";
 import { useState } from "react";
 
-export default function PickupRegister() {
+type PickupForm = {
+  customerCode: string;
+  customerPincode: string;
+  contactPersonName: string;
+  customerAddress1:string;
+  customerAddress2:string;
+  customerAddress3:string;
+  shipmentWeight:number;
+  noOfPiece:number;
 
-  const [pickupStatus, setPickupStatus] = useState<string | null>(null);
-const [tokenNumber, setTokenNumber] = useState<string | null>(null);
+};
 
+type PickupResponse = {
+  RegisterPickupResult?: {
+    TokenNumber: string;
+  };
+};
 
-  const [form, setForm] = useState({
+export default function Pickup() {
+  const [form, setForm] = useState<PickupForm>({
     customerCode: "",
-    customerName: "",
-    customerAddress: "",
-    contactNo: "",
-    weight: "",
-    isToPay: false,
-    productCode: "A",
-    packType: "",
-    officeCloseTime: "1800",
-    noOfPieces: "1",
-    pickupDate: "",
-    pickupTime: "1600"
+    customerPincode: "",
+    contactPersonName: "",
+    customerAddress1:"",
+    customerAddress2:"",
+    customerAddress3:"",
+    shipmentWeight:0,
+    noOfPiece:0
   });
 
-  const handleChange = (e: any) => {
-    const { name, value, type, checked } = e.target;
-    setForm({
-      ...form,
-      [name]: type === "checkbox" ? checked : value
-    });
-  };
+  const [loading, setLoading] = useState(false);
 
-  const submitPickup = async () => {
+  async function registerPickup(
+    data: unknown
+  ): Promise<PickupResponse> {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/pickup/register`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
 
-  // ✅ validation
-  if (!form.customerCode || !form.customerName || !form.weight) {
-    alert("Please fill mandatory fields");
-    return;
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw result;
+    }
+
+    return result;
   }
 
-const pickupEpoch = new Date(form.pickupDate + "T00:00:00").getTime();
+  const submit = async () => {
+    if (!form.customerCode || !form.customerPincode) {
+      alert("Customer Code and Pincode are required");
+      return;
+    }
 
-if (isNaN(pickupEpoch)) {
-  alert("Invalid pickup date");
-  return;
-}
+    setLoading(true);
 
+    try {
+      const payload = {
+        request: {
+          AWBNo: [""],
+          AreaCode: "BOM",
+          CISDDN: false,
+          ContactPersonName: form.contactPersonName,
+          CustomerAddress1: form.customerAddress1,
+          CustomerAddress2: form.customerAddress2,
+          CustomerAddress3: form.customerAddress3,
+          CustomerCode: form.customerCode,
+          CustomerName: form.contactPersonName,
+          CustomerPincode:form.customerPincode,
+          CustomerTelephoneNumber: "",
+          DoxNDox: "?",
+          EmailID: "",
+          IsForcePickup: false,
+          IsReversePickup: false,
+          MobileTelNo: "",
+          NumberofPieces: form.noOfPiece,
+          OfficeCloseTime: "1800",
+          PackType: "",
+          ProductCode: "A",
+          ReferenceNo: "xyz01",
+          Remarks: "",
+          RouteCode: "",
+          ShipmentPickupDate: `/Date(${Date.now()})/`,
+          ShipmentPickupTime: "1200",
+          SubProducts: ["E-Tailing"],
+          VolumeWeight: 1,
+          WeightofShipment: form.shipmentWeight,
+          isToPayShipper: false,
+        },
+        profile: {
+          LoginID: "GG940111",
+          LicenceKey: "kh7mnhqkmgegoksipxr0urmqesesseup",
+          Api_type: "S",
+        },
+      };
 
-  // ✅ payload
-  const payload = {
-    request: {
-      AWBNo: [""],
-      AreaCode: "DEL",
-      CISDDN: false,
-      ContactPersonName: form.customerName,
-      CustomerAddress1: form.customerAddress,
-      CustomerAddress2: "Test address 2",
-      CustomerAddress3: "Test address 3",
-      CustomerCode: form.customerCode,
-      CustomerName: form.customerName,
-      CustomerPincode: "110020",
-      CustomerTelephoneNumber: "",
-      DoxNDox: "?",
-      EmailID: "",
-      IsForcePickup: false,
-      IsReversePickup: false,
-      MobileTelNo: form.contactNo,
-      NumberofPieces: form.noOfPieces,
-      OfficeCloseTime: form.officeCloseTime,
-      PackType: form.packType,
-      ProductCode: form.productCode,
-      ReferenceNo: "",
-      Remarks: "",
-      RouteCode: "",
-      ShipmentPickupDate:`/Date(${pickupEpoch})/`,
-      ShipmentPickupTime: "1600", 
-      SubProducts: ["E-Tailing"],
-      VolumeWeight: parseFloat(form.weight),
-      WeightofShipment: parseFloat(form.weight),
-      isToPayShipper: form.isToPay
-    },
-    profile: {
-      LoginID: "GG940111",
-      LicenceKey: "kh7mnhqkmgegoksipxr0urmqesesseup",
-      Api_type: "S"
+      const res = await registerPickup(payload);
+
+      alert(
+        "Pickup Registered. Token: " +
+          res?.RegisterPickupResult?.TokenNumber
+      );
+    } catch (err: any) {
+      alert(
+        err?.["error-response"]?.[0]?.StatusInformation ||
+          err?.message ||
+          "Something went wrong"
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
-  // ✅ API call (THIS WAS MISSING)
-  const response = await fetch("http://localhost:8080/api/pickup/register", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify(payload)
-});
-
-const data = await response.json();
-
-const result = data.RegisterPickupResult;
-
-const statusInfoRaw =
-  result?.Status && result.Status.length > 0
-    ? result.Status[0].StatusInformation
-    : "";
-
-    const statusInfo =
-  statusInfoRaw && statusInfoRaw.trim().length > 0
-    ? statusInfoRaw
-    : "Pickup registered successfully";
-
-const token = result?.TokenNumber ?? "";
-
-setPickupStatus(statusInfo);
-setTokenNumber(token);
-
-
-  // const data = await response.json();
-  // console.log("Pickup Response:", data);
-  // alert("Pickup registered successfully");
-};
-
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Pickup Registration</h2>
+  <div className="mx-auto max-w-xl p-6">
+    {/* PAGE TITLE */}
+    <h1 className="text-3xl font-bold tracking-tight mb-6">
+      Register Pickup
+    </h1>
 
-      <input name="customerCode" placeholder="Customer Code"
-        onChange={handleChange} /><br/>
+    <div className="rounded-lg border bg-white shadow-sm p-6 space-y-5">
 
-      <input name="customerName" placeholder="Customer Name"
-        onChange={handleChange} /><br/>
+      {/* FORM GRID */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-      <textarea name="customerAddress" placeholder="Customer Address"
-        onChange={handleChange} /><br/>
+        {/* Customer Code */}
+        <div className="flex flex-col">
+          <label className="text-sm font-medium text-gray-700 mb-1">
+            Customer Code
+          </label>
+          <input
+            placeholder="Customer Code"
+            value={form.customerCode}
+            onChange={(e) =>
+              setForm({ ...form, customerCode: e.target.value })
+            }
+            className="h-10 rounded-md border border-gray-300 px-3 text-sm shadow-sm outline-none
+                       focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+          />
+        </div>
 
-      <input name="contactNo" placeholder="Contact No"
-        onChange={handleChange} /><br/>
+        {/* Pincode */}
+        <div className="flex flex-col">
+          <label className="text-sm font-medium text-gray-700 mb-1">
+            Pincode
+          </label>
+          <input
+            placeholder="Pincode"
+            value={form.customerPincode}
+            onChange={(e) =>
+              setForm({ ...form, customerPincode: e.target.value })
+            }
+            className="h-10 rounded-md border border-gray-300 px-3 text-sm shadow-sm outline-none
+                       focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+          />
+        </div>
 
-      <input name="weight" placeholder="Weight (kg)"
-        onChange={handleChange} /><br/>
+        {/* Contact Person */}
+        <div className="flex flex-col md:col-span-2">
+          <label className="text-sm font-medium text-gray-700 mb-1">
+            Contact Person Name
+          </label>
+          <input
+            placeholder="Contact Person Name"
+            value={form.contactPersonName}
+            onChange={(e) =>
+              setForm({ ...form, contactPersonName: e.target.value })
+            }
+            className="h-10 rounded-md border border-gray-300 px-3 text-sm shadow-sm outline-none
+                       focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+          />
+        </div>
 
-      <label>
-        <input type="checkbox" name="isToPay"
-          onChange={handleChange} /> Is To Pay
-      </label><br/>
+        {/* Address 1 */}
+        <div className="flex flex-col md:col-span-2">
+          <label className="text-sm font-medium text-gray-700 mb-1">
+            Address Line 1
+          </label>
+          <input
+            placeholder="Address Line 1"
+            value={form.customerAddress1}
+            onChange={(e) =>
+              setForm({ ...form, customerAddress1: e.target.value })
+            }
+            className="h-10 rounded-md border border-gray-300 px-3 text-sm shadow-sm outline-none
+                       focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+          />
+        </div>
 
-      <select name="productCode" onChange={handleChange}>
-        <option value="A">Air</option>
-        <option value="E">Surface</option>
-        <option value="D">DP</option>
-      </select><br/>
+        {/* Address 2 */}
+        <div className="flex flex-col md:col-span-2">
+          <label className="text-sm font-medium text-gray-700 mb-1">
+            Address Line 2
+          </label>
+          <input
+            placeholder="Address Line 2"
+            value={form.customerAddress2}
+            onChange={(e) =>
+              setForm({ ...form, customerAddress2: e.target.value })
+            }
+            className="h-10 rounded-md border border-gray-300 px-3 text-sm shadow-sm outline-none
+                       focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+          />
+        </div>
 
-      <input name="packType" placeholder="Pack Type"
-        onChange={handleChange} /><br/>
+        {/* Address 3 */}
+        <div className="flex flex-col md:col-span-2">
+          <label className="text-sm font-medium text-gray-700 mb-1">
+            Address Line 3
+          </label>
+          <input
+            placeholder="Address Line 3"
+            value={form.customerAddress3}
+            onChange={(e) =>
+              setForm({ ...form, customerAddress3: e.target.value })
+            }
+            className="h-10 rounded-md border border-gray-300 px-3 text-sm shadow-sm outline-none
+                       focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+          />
+        </div>
 
-      <input name="officeCloseTime" placeholder="Office Close Time (HHmm)"
-        onChange={handleChange} /><br/>
+        {/* Shipment Weight */}
+        <div className="flex flex-col">
+          <label className="text-sm font-medium text-gray-700 mb-1">
+            Weight of Shipment (kg)
+          </label>
+          <input
+            placeholder="Weight (kg)"
+            value={form.shipmentWeight}
+            onChange={(e) =>
+              setForm({ ...form, shipmentWeight: parseFloat(e.target.value) })
+            }
+            className="h-10 rounded-md border border-gray-300 px-3 text-sm shadow-sm outline-none
+                       focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+            type="number"
+          />
+        </div>
 
-      <input name="noOfPieces" placeholder="No of Pieces"
-        onChange={handleChange} /><br/>
+        {/* No of Pieces */}
+        <div className="flex flex-col">
+          <label className="text-sm font-medium text-gray-700 mb-1">
+            No. of Pieces
+          </label>
+          <input
+            placeholder="No. of Pieces"
+            value={form.noOfPiece}
+            onChange={(e) =>
+              setForm({ ...form, noOfPiece: Number(e.target.value) })
+            }
+            className="h-10 rounded-md border border-gray-300 px-3 text-sm shadow-sm outline-none
+                       focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+            type="number"
+          />
+        </div>
 
-      <input type="date" name="pickupDate"
-        onChange={handleChange} value={form.pickupDate}/><br/>
+      </div>
 
-      <input type="time" name="pickupTime"
-        onChange={handleChange} /><br/>
-
-      <button onClick={submitPickup}>Register Pickup</button>
-      {pickupStatus && (
-  <div style={{ marginTop: 20, padding: 12, border: "1px solid green" }}>
-    <p><strong>Status:</strong> {pickupStatus}</p>
-    <p><strong>Token Number:</strong> {tokenNumber}</p>
-  </div>
-)}
+      {/* SUBMIT BUTTON */}
+      <button
+        onClick={submit}
+        disabled={loading}
+        className="w-full h-11 bg-green-600 text-white rounded-md text-sm font-semibold shadow
+                   hover:bg-green-700 transition disabled:opacity-50"
+      >
+        {loading ? "Submitting…" : "Submit Pickup"}
+      </button>
 
     </div>
-
-    
-  );
+  </div>
+);
 }

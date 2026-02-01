@@ -264,7 +264,8 @@ const updateDimension = (
   };
 
   const fieldClass = (name: string) =>
-    `border h-8 px-2 rounded ${
+    `h-10 rounded-md border border-gray-300 px-3 text-sm shadow-sm outline-none
+                       focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition ${
       errors[name] ? "border-red-500 bg-red-50" : "border-gray-300"
     }`;
 
@@ -359,7 +360,10 @@ if (!profile) {
             form.creditReferenceNo || "CR-" + Date.now(),
 
           InvoiceNumber: form.invoiceNumber,
-          InvoiceDate: toBluedartDate(form.invoiceDate),
+          InvoiceDate: form.invoiceDate
+  ? toBluedartDate(form.invoiceDate)
+  : `/Date(${Date.now()})/`,
+
 
           FavouringName: form.favouringName,
           IsChequeDD: form.isChequeDD,
@@ -457,7 +461,8 @@ if (!profile) {
     generateWaybill();
   }}
 >
-  <h1 className="text-2xl font-bold text-center mb-3">
+  <div className="max-w-6xl mx-auto p-6">
+  <h1 className="text-3xl font-bold tracking-tight mb-6">
     Book A Shipment
   </h1>
 
@@ -504,7 +509,7 @@ if (!profile) {
         value={form.sender}
         onChange={handleChange}
         placeholder="Sender Name"
-        className="border h-8 px-2 rounded"
+        className={fieldClass("sender")}
       />
     </div>
 
@@ -517,28 +522,28 @@ if (!profile) {
           value={form.shipperAddress1}
           onChange={handleChange}
           placeholder="Address 1"
-          className="border h-8 px-2 rounded"
+          className={fieldClass("shipperAddress1")}
         />
         <input ref={registerRef} onKeyDown={handleKeyDown}
           name="shipperAddress2"
           value={form.shipperAddress2}
           onChange={handleChange}
           placeholder="Address 2"
-          className="border h-8 px-2 rounded"
+          className={fieldClass("shipperAddress2")}
         />
         <input ref={registerRef} onKeyDown={handleKeyDown}
           name="shipperAddress3"
           value={form.shipperAddress3}
           onChange={handleChange}
           placeholder="Address 3"
-          className="border h-8 px-2 rounded"
+          className={fieldClass("shipperAddress3")}
         />
         <input ref={registerRef} onKeyDown={handleKeyDown}
           name="shipperPincode"
           value={form.shipperPincode}
           onChange={handleChange}
           placeholder="Pincode"
-          className="border h-8 px-2 rounded"
+          className={fieldClass("shipperPincode")}
           maxLength={6}
         />
 
@@ -547,7 +552,7 @@ if (!profile) {
           value={form.shipperMobile}
           onChange={handleChange}
           placeholder="Mobile"
-          className="border h-8 px-2 rounded"
+          className={fieldClass("shipperMobile")}
         />
       </div>
     </fieldset>
@@ -582,38 +587,40 @@ if (!profile) {
           name="returnContact" 
           placeholder="Return Contact" 
           onChange={handleChange} 
-          className="border h-8 px-2 rounded"/> 
+          className={fieldClass("returnContact")}
+          /> 
           
           <input ref={registerRef} 
           onKeyDown={handleKeyDown} 
           name="returnMobile" 
           placeholder="Return Mobile" 
           onChange={handleChange} 
-          className="border h-8 px-2 rounded"/> 
+          className={fieldClass("returnMobile")} 
+          /> 
           
           <input ref={registerRef} onKeyDown={handleKeyDown}
             name="returnAddress1"
             placeholder="Return Address 1"
             onChange={handleChange}
-            className="border h-8 px-2 rounded"
+            className={fieldClass("returnAddress1")}
           />
           <input ref={registerRef} onKeyDown={handleKeyDown}
             name="returnAddress2"
             placeholder="Return Address 2"
             onChange={handleChange}
-            className="border h-8 px-2 rounded"
+            className={fieldClass("returnAddress2")}
           />
           <input ref={registerRef} onKeyDown={handleKeyDown}
             name="returnAddress3"
             placeholder="Return Address 3"
             onChange={handleChange}
-            className="border h-8 px-2 rounded"
+            className={fieldClass("returnAddress3")}
           />
           <input ref={registerRef} onKeyDown={handleKeyDown}
             name="returnPincode"
             placeholder="Return Pincode"
             onChange={handleChange}
-            className="border h-8 px-2 rounded"
+            className={fieldClass("returnPincode")}
             maxLength={6}
           />
         </div>
@@ -636,7 +643,7 @@ if (!profile) {
         name="receiver"
         placeholder="Receiver Name"
         onChange={handleChange}
-        className="border h-8 px-2 rounded"
+        className={fieldClass("receiver")}
       />
     </div>
 
@@ -651,13 +658,13 @@ if (!profile) {
         name="consigneeAddr2"
         placeholder="Address 2"
         onChange={handleChange}
-        className="border h-8 px-2 rounded"
+        className={fieldClass("consigneeAddr2")}
       />
       <input ref={registerRef} onKeyDown={handleKeyDown}
         name="consigneeAddr3"
         placeholder="Address 3"
         onChange={handleChange}
-        className="border h-8 px-2 rounded"
+        className={fieldClass("consigneeAddr3")}
       />
       <input ref={registerRef} onKeyDown={handleKeyDown}
         name="consigneePincode"
@@ -772,7 +779,7 @@ if (!profile) {
         name="labelSize"
         value={form.labelSize}
         onChange={handleChange}
-        className="border h-8 px-2 rounded w-full"
+        className={fieldClass("labelSize")}
       >
         <option value="A4">A4</option>
         <option value="LABEL_4X6">4 × 6</option>
@@ -792,14 +799,15 @@ if (!profile) {
         name="creditReferenceNo"
         placeholder="Ref No"
         onChange={handleChange}
-        className="border h-8 px-2 rounded"
+        className={fieldClass("creditReferenceNo")}
+        maxLength={20}
       />
 
       <input ref={registerRef} onKeyDown={handleKeyDown}
         name="pieceCount"
         placeholder="No of Boxes"
         onChange={handleChange}
-        className="border h-8 px-2 rounded"
+        className={fieldClass("pieceCount")}
       />
 
       {isDuts && (
@@ -833,9 +841,11 @@ if (!profile) {
     ref={registerRef}
     onKeyDown={handleKeyDown}
     onChange={handleChange}
-    className="border h-8 px-2 text-sm rounded w-full"
+    className={fieldClass("invoiceDate")}
   />
 </div>
+</>
+    )}
 
 <div className="relative">
   <label className="absolute -top-2 left-2 bg-white px-1 text-xs font-semibold">
@@ -847,12 +857,10 @@ if (!profile) {
     ref={registerRef}
     onKeyDown={handleKeyDown}
     onChange={handleChange}
-    className="border h-8 px-2 text-sm rounded w-full"
+    className={fieldClass("pickupDate")}
   />
 </div>
 
-</>
-    )}
 
       <input ref={registerRef} onKeyDown={handleKeyDown}
         name="weight"
@@ -948,7 +956,7 @@ if (!profile) {
         placeholder="Qty"
         value={form.itemQty}
         onChange={handleChange}
-        className="border h-8 px-2 rounded"
+        className={fieldClass("itemQty")}
       />
 
       {/* Item Value */}
@@ -961,7 +969,7 @@ if (!profile) {
         placeholder="Item Value"
         value={form.itemValue}
         onChange={handleChange}
-        className="border h-8 px-2 rounded"
+        className={fieldClass("itemValue")}
       />
 
       {/* Commodity 1 */}
@@ -972,7 +980,7 @@ if (!profile) {
         placeholder="Commodity Details 1"
         value={form.comodityDetails1}
         onChange={handleChange}
-        className="border h-8 px-2 rounded"
+        className={fieldClass("comodityDetails1")}
       />
 
       {/* Commodity 2 */}
@@ -983,7 +991,7 @@ if (!profile) {
         placeholder="Commodity Details 2"
         value={form.comodityDetails2}
         onChange={handleChange}
-        className="border h-8 px-2 rounded"
+        className={fieldClass("comodityDetails2")}
       />
 
       {/* Commodity 3 */}
@@ -994,7 +1002,7 @@ if (!profile) {
         placeholder="Commodity Details 3"
         value={form.comodityDetails3}
         onChange={handleChange}
-        className="border h-8 px-2 rounded"
+        className={fieldClass("comodityDetails3")}
       />
     </div>
 
@@ -1140,6 +1148,7 @@ if (!profile) {
   >
     {loading ? "Generating..." : "Submit"}
   </button>
+</div>
 </form>
   );
 }
